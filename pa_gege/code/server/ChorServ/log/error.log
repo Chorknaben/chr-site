@@ -1,0 +1,107 @@
+[08/Feb/2014:19:16:02 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[08/Feb/2014:19:16:02 +0100] Error on startup: 
+bind: resource busy (Address already in use)
+[08/Feb/2014:19:16:09 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[08/Feb/2014:19:16:21 +0100] During processing of request from 127.0.0.1:57839
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:57839\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n Host: 0.0.0.0\n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n Accept-Encoding: gzip,deflate,sdch\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: \n    contextpath: /\n    URI: /\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+GHC error:
+
+cannot satisfy -package-id MonadCatchIO-transformers-0.3.1.0-414e2aab4b6e0b9f7abb355c0a1b364f
+    (use -v for more information)
+[08/Feb/2014:19:16:47 +0100] Server.httpServe: SHUTDOWN
+[08/Feb/2014:19:16:47 +0100] Server.httpServe: BACKEND STOPPED
+[08/Feb/2014:19:19:47 +0100] Server.httpServe: START, binding to [http://0.0.0.0:8000/]
+[08/Feb/2014:19:28:02 +0100] Server.httpServe: SHUTDOWN
+[08/Feb/2014:19:28:02 +0100] Server.httpServe: BACKEND STOPPED
+[08/Feb/2014:19:38:03 +0100] Server.httpServe: START, binding to [http://0.0.0.0:8000/]
+[08/Feb/2014:20:29:02 +0100] Server.httpServe: SHUTDOWN
+[08/Feb/2014:20:29:02 +0100] Server.httpServe: BACKEND STOPPED
+[08/Feb/2014:20:29:03 +0100] Server.httpServe: START, binding to [http://0.0.0.0:8000/]
+[08/Feb/2014:20:29:05 +0100] Server.httpServe: SHUTDOWN
+[08/Feb/2014:20:29:05 +0100] Server.httpServe: BACKEND STOPPED
+[08/Feb/2014:20:44:55 +0100] Server.httpServe: START, binding to [http://0.0.0.0:8000/]
+[08/Feb/2014:20:45:31 +0100] During processing of request from 127.0.0.1:33014
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:33014\n    local: 127.0.0.1:8000\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n Host: 0.0.0.0:8000\n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n Accept-Encoding: gzip,deflate,sdch\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: 1400/762/bg\n    contextpath: /\n    URI: /1400/762/bg\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+/home/svt/code/html/chor/pa_gege/code/server/data/1400-1050-chorhintergrund.png: does not exist (No such file or directory)
+[08/Feb/2014:21:21:08 +0100] Server.httpServe: SHUTDOWN
+[08/Feb/2014:21:21:08 +0100] Server.httpServe: BACKEND STOPPED
+[08/Feb/2014:21:21:15 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[08/Feb/2014:21:31:18 +0100] Server.httpServe: SHUTDOWN
+[08/Feb/2014:21:31:18 +0100] Server.httpServe: BACKEND STOPPED
+[08/Feb/2014:21:31:59 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[08/Feb/2014:21:32:03 +0100] During processing of request from 127.0.0.1:58664
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:58664\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n If-Modified-Since: Sat, 08 Feb 2014 18:42:34 GMT\n Host: 0.0.0.0\n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n Accept-Encoding: gzip,deflate,sdch\n Cache-Control: max-age=0\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: \n    contextpath: /\n    URI: /\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+GHC error:
+
+cannot satisfy -package-id IMGGen-0.1.0.0-1d0e1e82e4c79e569c8eb7838cec9e6f
+    (use -v for more information)
+[08/Feb/2014:21:32:20 +0100] Server.httpServe: SHUTDOWN
+[08/Feb/2014:21:32:20 +0100] Server.httpServe: BACKEND STOPPED
+[08/Feb/2014:21:32:35 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[08/Feb/2014:21:32:50 +0100] During processing of request from 127.0.0.1:58675
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:58675\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n Host: 0.0.0.0\n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n Accept-Encoding: gzip,deflate,sdch\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: 1366/768/1\n    contextpath: /\n    URI: /1366/768/1\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+/home/svt/code/html/chor/pa_gege/code/server/data/1366-768-chorhintergrund-1.png: does not exist (No such file or directory)
+[09/Feb/2014:11:48:04 +0100] Server.httpServe: START, binding to [http://0.0.0.0:8000/]
+[09/Feb/2014:11:48:17 +0100] Server.httpServe: SHUTDOWN
+[09/Feb/2014:11:48:17 +0100] Server.httpServe: BACKEND STOPPED
+[09/Feb/2014:11:48:24 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[09/Feb/2014:11:48:48 +0100] During processing of request from 127.0.0.1:48149
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:48149\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n Host: 0.0.0.0\n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n Accept-Encoding: gzip,deflate,sdch\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: a/1/bg\n    contextpath: /\n    URI: /a/1/bg\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+Prelude.read: no parse
+[09/Feb/2014:11:50:40 +0100] Server.httpServe: SHUTDOWN
+[09/Feb/2014:11:50:40 +0100] Server.httpServe: BACKEND STOPPED
+[09/Feb/2014:11:51:50 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[09/Feb/2014:11:52:04 +0100] Server.httpServe: SHUTDOWN
+[09/Feb/2014:11:52:04 +0100] Server.httpServe: BACKEND STOPPED
+[09/Feb/2014:11:52:43 +0100] Server.httpServe: START, binding to [http://0.0.0.0:8000/]
+[09/Feb/2014:11:52:51 +0100] Server.httpServe: SHUTDOWN
+[09/Feb/2014:11:52:51 +0100] Server.httpServe: BACKEND STOPPED
+[09/Feb/2014:11:53:16 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[09/Feb/2014:13:16:02 +0100] During processing of request from 127.0.0.1:49251
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:49251\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n X-Requested-With: XMLHttpRequest\n Host: 0.0.0.0\n Accept: text/html, */*; q=0.01\n Accept-Encoding: gzip,deflate,sdch\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n Referer: http://0.0.0.0/\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: content/bilder.html\n    contextpath: /\n    URI: /content/bilder.html\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+GHC error:
+
+cannot satisfy -package-id IMGGen-0.1.0.0-1d0e1e82e4c79e569c8eb7838cec9e6f
+    (use -v for more information)
+[09/Feb/2014:13:16:11 +0100] During processing of request from 127.0.0.1:49251
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:49251\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n If-Modified-Since: Sat, 08 Feb 2014 21:57:59 GMT\n Host: 0.0.0.0\n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n Accept-Encoding: gzip,deflate,sdch\n Cache-Control: max-age=0\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: \n    contextpath: /\n    URI: /\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+GHC error:
+
+cannot satisfy -package-id IMGGen-0.1.0.0-1d0e1e82e4c79e569c8eb7838cec9e6f
+    (use -v for more information)
+[09/Feb/2014:13:16:13 +0100] During processing of request from 127.0.0.1:49251
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:49251\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n Host: 0.0.0.0\n Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8\n Accept-Encoding: gzip,deflate,sdch\n Cache-Control: max-age=0\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: \n    contextpath: /\n    URI: /\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+GHC error:
+
+cannot satisfy -package-id IMGGen-0.1.0.0-1d0e1e82e4c79e569c8eb7838cec9e6f
+    (use -v for more information)
+[09/Feb/2014:13:16:18 +0100] Server.httpServe: SHUTDOWN
+[09/Feb/2014:13:16:18 +0100] Server.httpServe: BACKEND STOPPED
+[09/Feb/2014:13:16:37 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[09/Feb/2014:14:29:01 +0100] During processing of request from 127.0.0.1:49489
+request:
+"Request <\n    server-name: 0.0.0.0\n    remote: 127.0.0.1:49489\n    local: 127.0.0.1:0\n    Headers:\n      ========================================\n          User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36\n Connection: keep-alive\n Pragma: no-cache\n X-Requested-With: XMLHttpRequest\n Host: 0.0.0.0\n Accept: */*\n Accept-Encoding: gzip,deflate,sdch\n Cache-Control: no-cache\n Accept-Language: en-GB,en;q=0.8,en-US;q=0.6,de;q=0.4\n Referer: http://0.0.0.0/\n      ========================================\n    content-length: Nothing\n    method: GET\n    version: (1,1)\n    cookies:\n      ========================================\n      \n      ========================================\n    pathinfo: handler/images/num\n    contextpath: /\n    URI: /handler/images/num\n    params:\n      ========================================\n      \n      ========================================\n>"
+A web handler threw an exception. Details:
+Prelude.read: no parse
+[09/Feb/2014:14:40:01 +0100] Server.httpServe: SHUTDOWN
+[09/Feb/2014:14:40:01 +0100] Server.httpServe: BACKEND STOPPED
+[09/Feb/2014:14:44:02 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
+[09/Feb/2014:14:50:05 +0100] Server.httpServe: SHUTDOWN
+[09/Feb/2014:14:50:05 +0100] Server.httpServe: BACKEND STOPPED
+[09/Feb/2014:14:50:15 +0100] Server.httpServe: START, binding to [http://0.0.0.0:80/]
