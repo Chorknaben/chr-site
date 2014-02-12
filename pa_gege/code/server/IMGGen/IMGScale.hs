@@ -56,8 +56,9 @@ getImgRatio (width, height) = case () of
       | rfrc (fltDiv width height) == rfrc (16 / 10) -> Ratio R16_10 (width, height )
       | otherwise -> Ratio R16_9 (width, height)
 
+--todo y berücksichtigen
 getCloseMatch :: (Int, Int) -> (Int, Int)
-getCloseMatch (x, y) = availableRes !! (fromJust $ elemIndex (minimum (map abs (map fst $ matchMap))) (map abs (map fst $ matchMap)))
+getCloseMatch (x, y) = availableRes !! (fromJust $ elemIndex (minimum (filter (\x->0<=x) (map fst $ matchMap))) (map abs (map fst $ matchMap)))
   where
     availableRes = res4_3 ++ res16_9 ++ res16_10
     matchMap = map (\(rX,rY) -> (x-rX,y-rY)) availableRes
