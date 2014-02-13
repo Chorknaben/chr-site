@@ -1,3 +1,4 @@
+var CURRENTLY_LOADED="null";
 function withResponseObject(url, callback){
     $.ajax({
         url:url,
@@ -28,6 +29,7 @@ function load(prettyWhat, URLWhat){
         window["load_" + URLWhat]();
         $.getScript("content/" + URLWhat + ".js", function(){
         $.scrollTo("#scrolled", 800, {onAfter: function(){
+            CURRENTLY_LOADED=prettyWhat;
             $(".ctitle").html("Chorknaben // " + prettyWhat);
             $(".ctitle").fadeTo(200,1);
             // Revert loading Animation

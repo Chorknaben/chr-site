@@ -66,33 +66,26 @@ $(document).ready(function(){
         $("#"+indexes[m]).css('background-image','url('+bgSrc+m+')');
         $("#"+indexes[m]).click(tileOnClickHandler(m));
     }
-    $(SELECTOR_NAV).each(function(index,Obj){
+    $(SELECTOR_NAV).not('.hoveroverlay').each(function(index,Obj){
         // Add Hover Effect
         $(Obj).hover(function(){
-            $($(SELECTOR_TILE)[index+1]).stop();
-            //fadeTo(Obj, "red", "blue");
-            //fadeTo($(SELECTOR_TILE)[index+1], "white", "black");
+            $(Obj).children(".hoveroverlay").animate({opacity:'0.7'}, 100);
+            $($(SELECTOR_TILE)[index+1]).children('a').children('.hoveroverlay').animate({opacity:'0.7'},100);
         }, function(){
-            $($(SELECTOR_TILE)[index+1]).stop();
-            //fadeTo(Obj, "black", "blue");
-            //fadeTo($(SELECTOR_TILE)[index+1], "black", "white" );
+            $(Obj).children(".hoveroverlay").animate({opacity:'0'}, 200);
+            $($(SELECTOR_TILE)[index+1]).children('a').children('.hoveroverlay').animate({opacity:'0'},200);
         });
-        // Add OnClick Handler
-        //$(Obj).click(new TileDispatcher(Obj,index+1).getOnClickHandler());
     });
     $(SELECTOR_TILE).each(function(index,Obj){
-        /*$(Obj).blurjs({
-            radius:32,
-            source:'body'
-        });*/
         if (index !== 0){
             $(Obj).hover(function(){
-                $($(SELECTOR_NAV)[index-1]).stop();
-                
+                $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0.7'},100);
+                $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0.7'}, 100);
                 //fadeTo($(SELECTOR_NAV)[index-1], "red", "blue");
                 //fadeTo(Obj, "white" , "black");
             }, function(){
-                $($(SELECTOR_NAV)[index+1]).stop();
+                $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0'},100);
+                $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0'}, 100);
                 /*$(Obj).animate({
                     backgroundColor:'black',
                     opacity:'0.5'
@@ -106,13 +99,17 @@ $(document).ready(function(){
     $(window).scroll(function(){
         scrollFn();
         //todo with settimeout
-        /*if ($(this).scrollTop() < 300 && $('.ctitle').html() != "St.-Martins-Chorknaben Biberach"){
-            animating = true;
-            $(".ctitle").fadeTo(500,0);
-            $(".ctitle").html("St.-Martins-Chorknaben Biberach");
-            $(".ctitle").fadeTo(200,1);
-            animating = false;
-        }*/
+        if ($(this).scrollTop() == 0 && $('.ctitle').html() != "St.-Martins-Chorknaben Biberach"){
+            setTimeout(function(){
+                if ($(window).scrollTop() == 0){
+                    $(".ctitle").fadeTo(500,0);
+                    setTimeout(function(){
+                        $(".ctitle").html("St.-Martins-Chorknaben Biberach");
+                        $(".ctitle").fadeTo(200,1);
+                    },500);
+                } 
+            }, 1000);
+        }
         if ($(this).scrollTop() > 140 && !navVisible){
             navVisible = true;
         } 
@@ -124,6 +121,13 @@ $(document).ready(function(){
         if ($(this).scrollTop() > $(window).height() - 40 && !isScrolledDown){
            $(".header-nav").fadeTo(200,1);
            isScrolledDown = true;
+           if (CURRENTLY_LOADED != "null"){
+               $(".ctitle").fadeTo(200,0);
+               setTimeout(function(){
+                   $(".ctitle").html("Chorknaben // " + CURRENTLY_LOADED);
+                   $(".ctitle").fadeTo(200,1);
+               },200);
+            }
       }
       
         if ($(this).scrollTop() < $(window).height() - 40 && isScrolledDown){
