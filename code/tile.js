@@ -26,6 +26,7 @@ function load(prettyWhat, URLWhat){
     $("#result").load("content/"+ URLWhat +".html", function(){
         //setTimeout("load_" + URLWhat, 0);
         window["load_" + URLWhat]();
+        $.getScript("content/" + URLWhat + ".js", function(){
         $.scrollTo("#scrolled", 800, {onAfter: function(){
             $(".ctitle").html("Chorknaben // " + prettyWhat);
             $(".ctitle").fadeTo(200,1);
@@ -34,6 +35,7 @@ function load(prettyWhat, URLWhat){
             $("#header-img").width(90);
             _ScaleCount = 0;
     }});
+        });
     });
     $(".ctitle").fadeTo(200,0);
 }
@@ -51,7 +53,9 @@ function load_bilder(){
                     $("<div>").addClass("stdtile x-"+x).append(
                         $("<div>").addClass("tile-scaling"),
                         $("<div>").addClass("tile-content test-b").append(
-                            $("<a>").attr("href", "#")
+                            $("<a>").attr("href", "#").append(
+                                $("<div>").addClass("image-thumb")
+                            )
                         )
                     )
                 );
