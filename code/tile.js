@@ -42,7 +42,7 @@ function load(prettyWhat, URLWhat){
 
 function load_bilder(){
     console.log("entered bilder");
-    withResponseObject("http://0.0.0.0/handler/images/num", function(retobj){
+    withResponseObject("http://0.0.0.0/images/num", function(retobj){
          var tcolcount = 0;    
          for(var i = 0; i <= Math.ceil(retobj.numtiles / 5); i++){
             $("#scrolledcontentoff").append(
