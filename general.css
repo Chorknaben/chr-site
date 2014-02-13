@@ -9,6 +9,8 @@ body {
 .x-3{left:0; right:20%;}
 .x-4{left:0; right:0;}
 
+.image-thumb{display:block;height:100%;width:100%}
+
 .test-b{background-color:black;}
 
 .come-in {
