@@ -50,7 +50,7 @@ function scrollFn() {
 $(document).ready(function(){
     var width = $(window).width();
     var height = $(window).height();
-    var bgSrc = "http://0.0.0.0/" + width + "/" + (height - 90) + "/";
+    var bgSrc = "/" + width + "/" + (height - 90) + "/";
     console.log(bgSrc);
     var img = $('<img>', {
         src:bgSrc + "bg"
@@ -77,7 +77,6 @@ $(document).ready(function(){
         });
     });
     $(SELECTOR_TILE).each(function(index,Obj){
-        if (index !== 0){
             $(Obj).hover(function(){
                 $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0.7'},100);
                 $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0.7'}, 100);
@@ -85,11 +84,16 @@ $(document).ready(function(){
                 $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0'},100);
                 $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0'}, 100);
             });
-        }
+        $(Obj).hover(function(){
+            $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0.7'},100);
+            $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0.7'}, 100);
+        }, function(){
+            $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0'},100);
+            $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0'}, 100);
+        });
     });
     $(window).scroll(function(){
         scrollFn();
-        //todo with settimeout
         if ($(this).scrollTop() == 0 && $('.ctitle').html() != "St.-Martins-Chorknaben Biberach"){
             setTimeout(function(){
                 if ($(window).scrollTop() == 0){
@@ -132,12 +136,6 @@ $(document).ready(function(){
     });
 });
 
-/*document.addEventListener('backbutton', function(){
-    console.log("test");
-    $.scrollTo('0', 800);
-});*/
-
 var fadeTo = function(obj, toBG, toText){
     $(obj).animate({backgroundColor : toBG}, 240);
 }
-
