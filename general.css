@@ -271,7 +271,7 @@ border-radius:5px;
 
 
 /* --- START SCROLLING HANDLERS --- */
-#scrolled{
+.scrolled{
     position:absolute;
     overflow:hidden;
     width:100%;

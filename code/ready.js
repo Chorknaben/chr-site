@@ -81,19 +81,10 @@ $(document).ready(function(){
             $(Obj).hover(function(){
                 $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0.7'},100);
                 $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0.7'}, 100);
-                //fadeTo($(SELECTOR_NAV)[index-1], "red", "blue");
-                //fadeTo(Obj, "white" , "black");
             }, function(){
                 $(Obj).children('a').children('.hoveroverlay').animate({opacity:'0'},100);
                 $($(SELECTOR_NAV).not('.hoveroverlay')[index-1]).children(".hoveroverlay").animate({opacity:'0'}, 100);
-                /*$(Obj).animate({
-                    backgroundColor:'black',
-                    opacity:'0.5'
-                });*/
-                //fadeTo($(SELECTOR_NAV)[index-1], "black", "blue");
-                //fadeTo(Obj, "black", "white");
             });
-        //$($(Obj).children("a")[0]).click(new TileDispatcher(Obj,index).getOnClickHandler());
         }
     });
     $(window).scroll(function(){
@@ -102,6 +93,7 @@ $(document).ready(function(){
         if ($(this).scrollTop() == 0 && $('.ctitle').html() != "St.-Martins-Chorknaben Biberach"){
             setTimeout(function(){
                 if ($(window).scrollTop() == 0){
+                    window.location.hash = "#";
                     $(".ctitle").fadeTo(500,0);
                     setTimeout(function(){
                         $(".ctitle").html("St.-Martins-Chorknaben Biberach");
@@ -120,6 +112,9 @@ $(document).ready(function(){
       
         if ($(this).scrollTop() > $(window).height() - 40 && !isScrolledDown){
            $(".header-nav").fadeTo(200,1);
+           if (CURRENTLY_LOADED_URL != "null"){
+               window.location.hash = CURRENTLY_SCROLLED_URL;
+           }
            isScrolledDown = true;
            if (CURRENTLY_LOADED != "null"){
                $(".ctitle").fadeTo(200,0);

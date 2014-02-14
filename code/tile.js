@@ -1,4 +1,5 @@
 var CURRENTLY_LOADED="null";
+var CURRENTLY_LOADED_URL="null";
 function withResponseObject(url, callback){
     $.ajax({
         url:url,
@@ -27,9 +28,12 @@ function load(prettyWhat, URLWhat){
     $("#result").load("content/"+ URLWhat +".html", function(){
         //setTimeout("load_" + URLWhat, 0);
         window["load_" + URLWhat]();
+        window.location.hash = URLWhat;
+        $('.scrolled').attr('id', URLWhat);
         $.getScript("content/" + URLWhat + ".js", function(){
-        $.scrollTo("#scrolled", 800, {onAfter: function(){
+        $.scrollTo(".scrolled", 800, {onAfter: function(){
             CURRENTLY_LOADED=prettyWhat;
+            CURRENTLY_LOADED_URL=URLWhat;
             $(".ctitle").html("Chorknaben // " + prettyWhat);
             $(".ctitle").fadeTo(200,1);
             // Revert loading Animation
@@ -44,7 +48,7 @@ function load(prettyWhat, URLWhat){
 
 function load_bilder(){
     console.log("entered bilder");
-    withResponseObject("http://0.0.0.0/images/num", function(retobj){
+    withResponseObject("/images/num", function(retobj){
          var tcolcount = 0;    
          for(var i = 0; i <= Math.ceil(retobj.numtiles / 5); i++){
             $("#scrolledcontentoff").append(
@@ -65,6 +69,9 @@ function load_bilder(){
             $("#scrolledcontentoff").pullupScroll("#scrolledcontentoff .tile-column");
          }
     });
+}
+
+function load_uberuns(){
 }
 
 function activateLoadingAnimation(){

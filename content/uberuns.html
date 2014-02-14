@@ -1,0 +1,13 @@
+<div style="background-color:#DADCE8" class="scrolled">
+    <div class="allcnt" id="scrollcnt">
+        <div id="scrolledcontentoff" class="contentoffset">
+            <canvas id="circlecanvas" width="75" height="75"></canvas>
+            <script>
+              var canvas = document.getElementById("circlecanvas");
+              var context = canvas.getContext("2d");
+              context.arc(25, 25, 25, 0, Math.PI * 2, false);
+              context.fill()
+            </script>
+        </div>
+    </div>
+</div>
