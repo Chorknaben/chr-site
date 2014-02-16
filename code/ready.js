@@ -55,17 +55,11 @@ $(document).ready(function(){
      * Das indexes Array stimmt mit den serverseitig gelagerten Kachel-Festlegungen überein. (Siehe src/Site.hs)
      * */
     // Array wird populiert
-    var indexes = new Array();
     var i = 13;
     while(i--) {
         $("#"+i).css('background-image','url('+bgSrc+i+')');
         // Onclick-Handler werden zu den Kacheln hinzugefügt (->tile.js)
         $("#"+i).click(tileOnClickHandler(i));
-    }
-    indexes[7] = "bigtile-content";
-    indexes[12] = "nav-last";
-    // Bilder werden hinzugefügt
-    for (var m=1; m<=12; m++){
     }
     /* Der Hover-Effekt wird zu allen Kacheln hinzugefügt
      * */
