@@ -56,7 +56,7 @@ function load_bilder(){
             );
             for (var x = 0; x <= 4; x++){
                 $("#imgcol-"+i).append(
-                    $("<div>").addClass("stdtile x-"+x).append(
+                    $("<div>").addClass("stdtile m10 x-"+x).append(
                         $("<div>").addClass("tile-scaling"),
                         $("<div>").addClass("tile-content test-b").append(
                             $("<a>").attr("href", "#").append(

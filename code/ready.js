@@ -1,6 +1,6 @@
 var SELECTOR_TILE = '.tile-content';
 var SELECTOR_NAV = '.navitem div';
-var _isScrolledDown = false;
+var isScrolledDown = false;
 
 (function ( $ ) {
     $.fn.pullupScroll = function(e) {
@@ -41,9 +41,7 @@ $(document).ready(function(){
     /* Es wird die Bildschirmauflösung ermittelt und an den Server geschickt.
      * Der Server gibt dann ein passendes Hintergrundbild zurück.
      * */
-    var width = $(window).width(),
-        height = $(window).height(),
-        bgSrc = "/" + width + "/" + (height - 90) + "/";
+    var bgSrc = "/" + $(window).width() + "/" + ($(window).height() - 90) + "/";
     console.log(bgSrc);
     // Hinzufügen des Hintergrundbilds zum DOM
     $('<img>', {
@@ -58,14 +56,16 @@ $(document).ready(function(){
      * */
     // Array wird populiert
     var indexes = new Array();
-    for (var i=1; i<=12; i++) indexes[i] = i + "";
+    var i = 13;
+    while(i--) {
+        $("#"+i).css('background-image','url('+bgSrc+i+')');
+        // Onclick-Handler werden zu den Kacheln hinzugefügt (->tile.js)
+        $("#"+i).click(tileOnClickHandler(i));
+    }
     indexes[7] = "bigtile-content";
     indexes[12] = "nav-last";
     // Bilder werden hinzugefügt
     for (var m=1; m<=12; m++){
-        $("#"+indexes[m]).css('background-image','url('+bgSrc+m+')');
-        // Onclick-Handler werden zu den Kacheln hinzugefügt (->tile.js)
-        $("#"+indexes[m]).click(tileOnClickHandler(m));
     }
     /* Der Hover-Effekt wird zu allen Kacheln hinzugefügt
      * */
