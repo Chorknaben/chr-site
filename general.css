@@ -182,6 +182,7 @@ border-radius:5px;
 -webkit-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.8);
 -moz-box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.8);
 box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.8);
+overflow:hidden;
 }
 
 .nav-decl{
