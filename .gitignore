@@ -2,7 +2,5 @@
 *.log
 *.a
 *.hi
-*.png
-*.jpg
 *.swp
 pa_gege/code/server/data/*
