@@ -1,0 +1,106 @@
+div.waypoint{
+    position:absolute;
+    left:133px;
+    top:150px;
+    font-family: 'Exo 2', sans-serif;
+}
+
+div.waypoint img {
+    float:left;
+    display:block;
+    position:relative;
+}
+
+div.wtitle{
+    white-space: nowrap;
+    line-height: 64px;
+    position: relative;
+    left: 30px;
+    font-size: xx-large;
+    font-weight: 900;
+}
+
+div.wimages{
+    position:relative;
+    left:-133px;
+    width:300%;
+    height:200px;
+    background-color:rgb(199,199,199);
+    -webkit-box-shadow: 7px 7px 5px 0px rgba(48, 50, 50, 0.75);
+-moz-box-shadow:    7px 7px 5px 0px rgba(48, 50, 50, 0.75);
+box-shadow:         7px 7px 5px 0px rgba(48, 50, 50, 0.75);
+}
+
+/*img.left{
+    left:-310px;
+}
+
+img.middle{
+    left:-220px;
+}
+
+img.right{
+    left:-160px;
+}*/
+.wimages div{
+    float:left;
+    display:block;
+    position:relative;
+    width:450px;
+    height:200px;
+}
+
+div.left{
+    left:-310px;
+    background-image:url(../img/busajog.jpg);
+}
+div.middle{
+    left:-220px;
+    background-image:url(../img/busaleck.jpg);
+}
+div.right{
+    left:-160px;
+    background: url(../img/busaalt.jpg);
+    background:
+        -webkit-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
+        url(../img/busaalt.jpg);
+    background:
+        -moz-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
+        url(../img/busaalt.jpg);
+    background:
+        -o-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
+        url(../img/busaalt.jpg);
+    background:
+        -ms-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
+        url(../img/busaalt.jpg);
+    background:
+        linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
+        url(../img/busaalt.jpg);
+}
+
+div.wbody{
+    position: relative;
+    /* see title + 64px for img */
+    left: 94px;
+    top:15px;
+    max-width:500px;
+}
+
+#waypoint-0{
+
+}
+
+.connector{
+    /*line width 4px*/
+    position:absolute;
+    left:0;
+    top: 60px;
+    background-image: url(../img/uberuns-connectorbg.png);
+    width: 64px;
+}
+
+.h400{
+    height:400px;
+}
+
+
