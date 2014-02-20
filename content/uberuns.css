@@ -5,6 +5,22 @@ div.waypoint{
     font-family: 'Exo 2', sans-serif;
 }
 
+#uberuns{
+    min-height:4000px;
+}
+
+#waypoint-1{
+    top:714px;
+}
+
+#scroll-upper{
+    position:absolute;
+    left:133px;
+    top:155px;
+    width:64px;
+    background-image: url(../img/uberuns-connectorbg.png);
+}
+
 div.waypoint img {
     float:left;
     display:block;
@@ -27,8 +43,8 @@ div.wimages{
     height:200px;
     background-color:rgb(199,199,199);
     -webkit-box-shadow: 7px 7px 5px 0px rgba(48, 50, 50, 0.75);
--moz-box-shadow:    7px 7px 5px 0px rgba(48, 50, 50, 0.75);
-box-shadow:         7px 7px 5px 0px rgba(48, 50, 50, 0.75);
+    -moz-box-shadow:    7px 7px 5px 0px rgba(48, 50, 50, 0.75);
+    box-shadow:         7px 7px 5px 0px rgba(48, 50, 50, 0.75);
 }
 
 /*img.left{
@@ -52,30 +68,30 @@ img.right{
 
 div.left{
     left:-310px;
-    background-image:url(../img/busajog.jpg);
+}
+.left img,.middle img{
+    display:block;
 }
 div.middle{
     left:-220px;
-    background-image:url(../img/busaleck.jpg);
 }
 div.right{
     left:-160px;
-    background: url(../img/busaalt.jpg);
+    top:-200px;
+}
+.overlay{
+    top:200px;
+    z-index:3;
     background:
-        -webkit-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
-        url(../img/busaalt.jpg);
+        -webkit-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1));
     background:
-        -moz-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
-        url(../img/busaalt.jpg);
+        -moz-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1));
     background:
-        -o-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
-        url(../img/busaalt.jpg);
+        -o-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1));
     background:
-        -ms-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
-        url(../img/busaalt.jpg);
+        -ms-linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1));
     background:
-        linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1)),
-        url(../img/busaalt.jpg);
+        linear-gradient(left, rgba(255,255,255,0), rgba(199,199,199,1));
 }
 
 div.wbody{
@@ -99,8 +115,8 @@ div.wbody{
     width: 64px;
 }
 
-.h400{
-    height:400px;
+.h500{
+    height:500px;
 }
 
 
