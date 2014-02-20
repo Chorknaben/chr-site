@@ -1,5 +1,6 @@
 var CURRENTLY_LOADED="null";
 var CURRENTLY_LOADED_URL="null";
+var SCROLLED_OFFSETY=0;
 
 function withResponseObject(url, callback){
     $.ajax({
@@ -33,12 +34,19 @@ function load(prettyWhat, URLWhat){
         $.scrollTo(".scrolled", 800, {onAfter: function(){
             CURRENTLY_LOADED=prettyWhat;
             CURRENTLY_LOADED_URL=URLWhat;
+            SCROLLED_OFFSETY=$(window).scrollTop();
             $(".ctitle").html("Chorknaben // " + prettyWhat);
             $(".ctitle").fadeTo(200,1);
             // Revert loading Animation
             $("#loading-img").css({visibility:"hidden"});
             $("#header-img").width(90);
             _ScaleCount = 0;
+            var sldLen = afterLoadCallbacks.length;
+            var i = 0;
+            while (i < sldLen){
+                (afterLoadCallbacks[i])();
+                i++;
+            }
     }});
         });
     });
