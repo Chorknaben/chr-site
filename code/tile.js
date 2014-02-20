@@ -1,5 +1,6 @@
 var CURRENTLY_LOADED="null";
 var CURRENTLY_LOADED_URL="null";
+
 function withResponseObject(url, callback){
     $.ajax({
         url:url,
@@ -11,13 +12,11 @@ function withResponseObject(url, callback){
     
 function tileOnClickHandler(tileID){ 
     return function(){
-    var _resolv = [["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Unterstützen","unterstutzen"],["Shop", "shop"],["Kalender", "cal"],["Bilder","bilder"]]
-
     console.log("Tile Click: id="+ tileID);
     if (tileID > 7){
         tileID = tileID - 7;
     }
-    load(_resolv[tileID-1][0], _resolv[tileID-1][1]);
+    load(tileResolver[tileID-1][0], tileResolver[tileID-1][1]);
     }
 };
 var _interval = null; 

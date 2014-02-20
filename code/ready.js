@@ -1,6 +1,7 @@
 var SELECTOR_TILE = '.tile-content';
 var SELECTOR_NAV = '.navitem div';
 var isScrolledDown = false;
+var tileResolver = [["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Unterstützen","unterstutzen"],["Shop", "shop"],["Kalender", "cal"],["Bilder","bilder"]];
 
 (function ( $ ) {
     $.fn.pullupScroll = function(e) {
@@ -38,6 +39,17 @@ function scrollFn() {
 }
 
 $(document).ready(function(){
+    //experimental todo bug click 2 different
+    if (window.location.hash !== ""){
+        console.log("Calling");
+        var id = -1;
+        var tcnt = 7;
+        while(tcnt--){
+            console.log(tcnt);
+            if("#" + tileResolver[tcnt][1] === window.location.hash) break;
+        }
+        (tileOnClickHandler(tcnt+1))();
+    }
     /* Es wird die Bildschirmauflösung ermittelt und an den Server geschickt.
      * Der Server gibt dann ein passendes Hintergrundbild zurück.
      * */
