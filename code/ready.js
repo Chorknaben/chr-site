@@ -2,6 +2,13 @@ var SELECTOR_TILE = '.tile-content';
 var SELECTOR_NAV = '.navitem div';
 var isScrolledDown = false;
 var tileResolver = [["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Unterstützen","unterstutzen"],["Shop", "shop"],["Kalender", "cal"],["Bilder","bilder"]];
+var scrollDelegates = [];
+var afterLoadCallbacks = [];
+var enterScrollCallbacks = [];
+
+//uberuns scroll dilemma
+var eingerastet = false;
+var hwpimg = -1;
 
 (function ( $ ) {
     $.fn.pullupScroll = function(e) {
@@ -104,7 +111,7 @@ $(document).ready(function(){
     });
     /* Es gibt einige Sachen, die beim scrollen erledigt werden müssen
      * */
-    $(window).scroll(function(){
+    $(window).scroll(function(event){
         // Zum einen der Scoll-Handler von jQuery's pullupScroll für die Bilder
         // ([TODO]Outsource ->bilder.js?)
         scrollFn();
@@ -131,6 +138,10 @@ $(document).ready(function(){
             // Navigation einblenden
             // ([TODO] trotz unsichtbar: klickbar -> fix)
             $(".header-nav").fadeTo(200,1);
+
+            //todo
+            $("#waypoint-0").css({position:'fixed'});
+
             if (CURRENTLY_LOADED_URL != "null"){
                 window.location.hash = CURRENTLY_LOADED_URL;
             }
@@ -149,6 +160,29 @@ $(document).ready(function(){
         if ($(this).scrollTop() < $(window).height() - 40 && isScrolledDown){
            $(".header-nav").fadeTo(200,0);
            isScrolledDown = false;
-       }
+        }
+
+        //stay connected between point 0 and 1
+        $('#waypoint-0 .connector').css({height:$('#waypoint-1 img').offset().top - $('#waypoint-0 .connector').offset().top+8});
+
+        var wpLow    = $("#waypoint-0 .wbody"),
+            wpEdge   = wpLow.offset().top + wpLow.height(),
+            disDelta = $("#waypoint-1 img").offset().top - wpEdge,
+            hWp      = 279 + $("#waypoint-0 .wbody").height();
+        if(disDelta <= 0){
+            $("#waypoint-0").css({opacity:1-Math.abs(disDelta) * (1/hWp)});
+        }
+
+        if($("#waypoint-0 .connector").height() === 0 &&!eingerastet) {
+            eingerastet = true;
+            hwpimg = $(window).scrollTop();
+            $("#waypoint-1").css({position:'fixed',top:'150px'});
+        }
+        if (hwpimg !== -1){
+        console.log("scrolltop:"+$(window).scrollTop()+" < hwpimg:"+hwpimg);
+        if ($(window).scrollTop() < hwpimg && eingerastet){
+            $("#waypoint-1").css({position:'absolute', top:'714px'});
+            eingerastet = false;
+        }}
     });
 });
