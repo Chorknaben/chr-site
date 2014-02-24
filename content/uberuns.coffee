@@ -22,8 +22,9 @@ hwpimg = $ ($ "#waypoint-0 img").offset()
 
 $( "body" ).on
     mousewheel: (event) ->
-        if event.originalEvent.wheelDelta >= 0 and $(window).scrollTop() < SCROLLED_OFFSETY
+        if event.originalEvent.wheelDelta >= 0 and $(window).scrollTop() < window.core.state["scrolloff"]
             $("#waypoint-0").css position: "absolute"
 
-scrollDelegates.push -> 
-    $("#waypoint-0").css position: "fixed"
+window.core.registerScrollHandler "waypointfixer", ->
+    if $(window).scrollTop() > $(window).height() - 40 and not window.core.state["scrolledDown"]
+        $("#waypoint-0").css position: "fixed"

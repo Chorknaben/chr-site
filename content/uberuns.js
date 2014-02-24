@@ -47,20 +47,20 @@
   })();
 
 
-  $("body").on({
-    mousewheel: function(event) {
-      if (event.originalEvent.wheelDelta >= 0 && $(window).scrollTop() < SCROLLED_OFFSETY) {
-        return $("#waypoint-0").css({
-          position: "absolute"
-        });
-      }
-    }
-  });
+  //$("body").on({
+  //  mousewheel: function(event) {
+  //    if (event.originalEvent.wheelDelta >= 0 && $(window).scrollTop() < SCROLLED_OFFSETY) {
+  //      return $("#waypoint-0").css({
+  //        position: "absolute"
+  //      });
+  //    }
+  //  }
+  //});
 
-  scrollDelegates.push(function() {
-    return $("#waypoint-0").css({
-      position: "fixed"
-    });
-  });
+  //scrollDelegates.push(function() {
+  //  return $("#waypoint-0").css({
+  //    position: "fixed"
+  //  });
+  //});
 
 }).call(this);
