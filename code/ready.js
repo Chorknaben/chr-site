@@ -94,7 +94,7 @@ $(document).ready(function(){
         }, function(){
             // Maus bewegt aus einer Navigations Kachel heraus
             Obj.children(".hoveroverlay").animate({opacity:'0'}, 200);
-            $(Stl[index+1]).children('a').children('.hoveroverlay').animate({opacity:'0'},200);
+            $(Stl[index+1]).children('a').children('.hoveroverlay').animate({opacity:'0'},100);
         });
     });
     Stl.each(function(index,Obj){
