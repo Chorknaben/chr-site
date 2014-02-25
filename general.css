@@ -77,12 +77,12 @@ border-radius:5px;
 /* --- HEADER -> CONDITIONAL NAVIGATION AREA */
 .header-nav{
     white-space:nowrap;
-    margin-left:50%;
-    width:50%;
-    font-size:1.8em;
+    font-size:1.5em;
     line-height:90px;
-    opacity:0;
     color:white;
+    float:right;
+    position:relative;
+    right:6%;
 }
 
 .imgcontainer{
