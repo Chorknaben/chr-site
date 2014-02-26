@@ -31,11 +31,11 @@ Tile = (function() {
         window["load_" + urlWhat]();
         window.location.hash = urlWhat;
         $(".scrolled").attr("id", urlWhat);
+        _this.core.state["currentPage"] = prettyWhat;
+        _this.core.state["currentURL"] = urlWhat;
         return $.getScript("content/" + urlWhat + ".js").done(function() {
           return $.scrollTo(".scrolled", 800, {
             onAfter: function() {
-              _this.core.state["currentPage"] = prettyWhat;
-              _this.core.state["currentURL"] = urlWhat;
               _this.core.state["scrolloff"] = $(window).scrollTop();
               $(".ctitle").html("Chorknaben // " + prettyWhat);
               $(".ctitle").fadeTo(200, 1);

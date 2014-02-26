@@ -21,11 +21,11 @@ class Tile
             window["load_#{ urlWhat }"]()
             window.location.hash = urlWhat
             $(".scrolled").attr("id", urlWhat)
+            @core.state["currentPage"] = prettyWhat
+            @core.state["currentURL" ] = urlWhat
             $.getScript "content/#{ urlWhat }.js"
                 .done =>
                     $.scrollTo ".scrolled", 800, onAfter: =>
-                        @core.state["currentPage"] = prettyWhat
-                        @core.state["currentURL" ] = urlWhat
                         @core.state["scrolloff"  ] = $(window).scrollTop()
 
                         $(".ctitle").html("Chorknaben // #{ prettyWhat }")
