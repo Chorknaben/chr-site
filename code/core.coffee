@@ -49,6 +49,7 @@ class Core
             $("#" + i).click (tile.onClick)
 
     loadEffects: ->
+        # attach hover effects to all tiles and navigation items
         stl = $( Constants.SELECTOR_TILE )
 
         stl.each (index, obj) ->
@@ -117,7 +118,8 @@ $ ->
     # note that this handler will sonn be unnecessary
     c.registerScrollHandler "scrollUpwards", (event) ->
         if $(window).scrollTop() < $(window).height() - 40 and c.state["scrolledDown"]
-            $(".header-nav").fadeTo(200, 0)
+            #$(".header-nav").fadeTo(200, 0)
+            # todo change to go down item
             c.state["scrolledDown"] = false
 
     # This executes after the page has been fully loaded and is scrolled to
@@ -126,7 +128,8 @@ $ ->
     c.registerScrollHandler "onLoadChild", (event) ->
         if $(window).scrollTop() > $(window).height() - 40 and not c.state["scrolledDown"]
             c.state["scrolledDown"] = true
-            $(".header-nav").fadeTo(200,1)
+            # $(".header-nav").fadeTo(200,1)
+            # todo change to go down item
             if c.state["currentURL"] isnt "null"
                 window.location.hash = c.state["currentURL"]
             if c.state["currentPage"] isnt "null"

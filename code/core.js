@@ -163,14 +163,12 @@ $(function() {
   });
   c.registerScrollHandler("scrollUpwards", function(event) {
     if ($(window).scrollTop() < $(window).height() - 40 && c.state["scrolledDown"]) {
-      $(".header-nav").fadeTo(200, 0);
       return c.state["scrolledDown"] = false;
     }
   });
   return c.registerScrollHandler("onLoadChild", function(event) {
     if ($(window).scrollTop() > $(window).height() - 40 && !c.state["scrolledDown"]) {
       c.state["scrolledDown"] = true;
-      $(".header-nav").fadeTo(200, 1);
       if (c.state["currentURL"] !== "null") {
         window.location.hash = c.state["currentURL"];
       }
