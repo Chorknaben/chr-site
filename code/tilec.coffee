@@ -34,8 +34,7 @@ class Tile
                         # Revert loading Animation
                         $("#loading-img").css visibility:"hidden"
                         $("#header-img").width(90)
-                .fail () ->
-                    alert "fail"
+                        @scaleCount = 0
         $(".ctitle").fadeTo(200, 0)
 
     sclSmaller: =>
