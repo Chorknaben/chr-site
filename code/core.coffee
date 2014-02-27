@@ -97,6 +97,8 @@ $ ->
     c.loadEffects()
     $(window).scroll c.getScrollHandler
 
+    window.onhashchange = c.handleHash
+
     # Basic functionality
     # -------------------
 
@@ -112,7 +114,16 @@ $ ->
                         $(".ctitle").html("St.-Martins-Chorknaben Biberach")
                         $(".ctitle").fadeTo(200,1)
                     , 500
-            , 1000
+
+                    # Also revert the Navigation Item that has slided down
+                    navItems = $('.header-nav').children('a')
+                    currentN = $(navItems[c.state['tileid'] - 1])
+                    currentN.animate({top: '0'}, 500)
+
+                    spans = $('.header-nav').children('span')
+                    currentSpan = $(spans[c.state['tileid'] - 1])
+                    if currentSpan isnt undefined
+                        currentSpan.animate({opacity:'1'}, 700)
 
     # Handle scrolling upwards again after the user has visited a child page
     # note that this handler will sonn be unnecessary

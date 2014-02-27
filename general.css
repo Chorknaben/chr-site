@@ -25,6 +25,15 @@ border-radius:5px;
 
 .test-b{background-color:black;}
 
+/*belongs-to: navigation bar drop down besprechung*/
+.header-nav a {
+    position:relative;
+    background-color:#1a171a;
+    border:10px solid #1a171a;
+    border-bottom-left-radius:15px;
+    border-bottom-right-radius:15px;
+}
+
 .come-in {
   transform: translateY(150px);
   animation: come-in 0.8s ease forwards;

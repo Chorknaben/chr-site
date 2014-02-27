@@ -26,6 +26,7 @@ Tile = (function() {
   Tile.prototype.load = function(prettyWhat, urlWhat) {
     this.interval = setInterval(this.sclSmaller, 10);
     setTimeout(this.activateLoadingAnimation, 30);
+    this.navigationDown();
     $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         window["load_" + urlWhat]();
@@ -33,6 +34,7 @@ Tile = (function() {
         $(".scrolled").attr("id", urlWhat);
         _this.core.state["currentPage"] = prettyWhat;
         _this.core.state["currentURL"] = urlWhat;
+        _this.core.state["tileid"] = _this.tileid;
         return $.getScript("content/" + urlWhat + ".js").done(function() {
           return $.scrollTo(".scrolled", 800, {
             onAfter: function() {
@@ -42,11 +44,10 @@ Tile = (function() {
               $("#loading-img").css({
                 visibility: "hidden"
               });
-              return $("#header-img").width(90);
+              $("#header-img").width(90);
+              return _this.scaleCount = 0;
             }
           });
-        }).fail(function() {
-          return alert("fail");
         });
       };
     })(this));
@@ -66,6 +67,22 @@ Tile = (function() {
     return $("#loading-img").css({
       visibility: "visible"
     });
+  };
+
+  Tile.prototype.navigationDown = function() {
+    var currentN, currentSpan, navItems, spans;
+    navItems = $('.header-nav').children('a');
+    currentN = $(navItems[this.tileid - 1]);
+    currentN.animate({
+      top: '65px'
+    }, 800);
+    spans = $('.header-nav').children('span');
+    currentSpan = $(spans[this.tileid - 1]);
+    if (currentSpan !== void 0) {
+      return currentSpan.animate({
+        opacity: '0'
+      }, 800);
+    }
   };
 
   return Tile;

@@ -147,18 +147,32 @@ $(function() {
   c.injectTileBackgrounds();
   c.loadEffects();
   $(window).scroll(c.getScrollHandler);
+  window.onhashchange = c.handleHash;
   c.registerScrollHandler("onTop", function(event) {
     if ($(window).scrollTop() === 0 && $(".ctitle").html() !== "St.-Martins-Chorknaben Biberach") {
       return setTimeout(function() {
+        var currentN, currentSpan, navItems, spans;
         if ($(window).scrollTop() === 0) {
           window.location.hash = "#";
           $(".ctitle").fadeTo(500, 0);
-          return setTimeout(function() {
+          setTimeout(function() {
             $(".ctitle").html("St.-Martins-Chorknaben Biberach");
             return $(".ctitle").fadeTo(200, 1);
           }, 500);
+          navItems = $('.header-nav').children('a');
+          currentN = $(navItems[c.state['tileid'] - 1]);
+          currentN.animate({
+            top: '0'
+          }, 500);
+          spans = $('.header-nav').children('span');
+          currentSpan = $(spans[c.state['tileid'] - 1]);
+          if (currentSpan !== void 0) {
+            return currentSpan.animate({
+              opacity: '1'
+            }, 700);
+          }
         }
-      }, 1000);
+      });
     }
   });
   c.registerScrollHandler("scrollUpwards", function(event) {

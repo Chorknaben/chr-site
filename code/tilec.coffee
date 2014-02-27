@@ -15,23 +15,31 @@ class Tile
         )
 
     load: (prettyWhat, urlWhat) ->
+        # Animations happening on Click
+        # --------
         @interval = setInterval @sclSmaller, 10
         setTimeout @activateLoadingAnimation, 30
+        @navigationDown()
+
+        # Load content
+        # --------
         $("#result").load "content/#{ urlWhat }.html", =>
             window["load_#{ urlWhat }"]()
             window.location.hash = urlWhat
             $(".scrolled").attr("id", urlWhat)
             @core.state["currentPage"] = prettyWhat
             @core.state["currentURL" ] = urlWhat
+            @core.state["tileid"] = @tileid
             $.getScript "content/#{ urlWhat }.js"
                 .done =>
                     $.scrollTo ".scrolled", 800, onAfter: =>
                         @core.state["scrolloff"  ] = $(window).scrollTop()
 
+                        # Change Title and fade in
                         $(".ctitle").html("Chorknaben // #{ prettyWhat }")
                         $(".ctitle").fadeTo(200, 1)
 
-                        # Revert loading Animation
+                        # Revert state that animations modified
                         $("#loading-img").css visibility:"hidden"
                         $("#header-img").width(90)
                         @scaleCount = 0
@@ -46,6 +54,17 @@ class Tile
 
     activateLoadingAnimation: ->
         $("#loading-img").css visibility: "visible"
+
+    navigationDown: ->
+        navItems = $('.header-nav').children('a')
+        currentN = $(navItems[@tileid - 1])
+        currentN.animate({top: '65px'}, 800)
+
+        spans = $('.header-nav').children('span')
+        currentSpan = $(spans[@tileid - 1])
+        if currentSpan isnt undefined
+            currentSpan.animate({opacity:'0'}, 800)
+
 
 `
 function withResponseObject(url, callback){
