@@ -144,6 +144,17 @@ Core = (function() {
     return delete this.state["tmp" + name];
   };
 
+  Core.prototype.registerTaker = function(name, obj) {
+    return this.state["taker" + name] = obj;
+  };
+
+  Core.prototype.requestTaker = function(name) {
+    var s;
+    s = this.state["taker" + name];
+    delete this.state["taker" + name];
+    return s;
+  };
+
   return Core;
 
 })();
@@ -199,7 +210,7 @@ $(function() {
       if (c.state["currentURL"] !== "null") {
         window.location.hash = c.state["currentURL"];
       }
-      if (c.state["currentPage"] !== "null") {
+      if (c.state["currentPage"] !== "null" && this.core.requestTaker("pageChanged")) {
         $(".ctitle").fadeTo(200, 0);
         return setTimeout(function() {
           return $(".ctitle").html("Chorknaben // " + c.state["currentPage"]).fadeTo(200, 1);

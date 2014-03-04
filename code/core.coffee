@@ -92,6 +92,14 @@ class Core
     rearm: (name) ->
         delete @state["tmp#{name}"]
 
+    registerTaker: (name, obj) ->
+        @state["taker#{name}"] = obj
+
+    requestTaker: (name) ->
+        s = @state["taker#{name}"]
+        delete @state["taker#{name}"]
+        return s
+
 
 # Global Objects, associated to all other
 # objects created due to the modular infrastructure
@@ -153,7 +161,7 @@ $ ->
             # todo change to go down item
             if c.state["currentURL"] isnt "null"
                 window.location.hash = c.state["currentURL"]
-            if c.state["currentPage"] isnt "null"
+            if c.state["currentPage"] isnt "null" and @core.requestTaker("pageChanged")
                 $(".ctitle").fadeTo(200,0)
                 setTimeout ->
                     $(".ctitle").html("Chorknaben // #{ c.state["currentPage"] }")
