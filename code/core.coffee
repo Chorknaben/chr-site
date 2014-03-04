@@ -8,10 +8,10 @@ class Constants
 class Core
     bgSrc : "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
     scrollHandlers: {}
-    state:
-        scrolledDown: false
-        currentURL: "null"
-        currentPage: "null"
+    state: 
+        scrolledDown : false
+        currentURL   : "null"
+        currentPage  : "null"
     
 
     debug = (msg) -> console.log "Core: " + msg
@@ -81,6 +81,16 @@ class Core
         for key in @scrollHandlers
             if key is name
                 delete @scrollHandlers[key]
+
+    executeOnce: (name, func) ->
+        if @state["tmp" + name] is true
+            return
+        else
+            @state["tmp" + name] = true
+            func()
+
+    rearm: (name) ->
+        delete @state["tmp#{name}"]
 
 
 # Global Objects, associated to all other

@@ -131,6 +131,19 @@ Core = (function() {
     return _results;
   };
 
+  Core.prototype.executeOnce = function(name, func) {
+    if (this.state["tmp" + name] === true) {
+
+    } else {
+      this.state["tmp" + name] = true;
+      return func();
+    }
+  };
+
+  Core.prototype.rearm = function(name) {
+    return delete this.state["tmp" + name];
+  };
+
   return Core;
 
 })();
