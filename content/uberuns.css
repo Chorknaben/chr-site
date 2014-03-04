@@ -42,9 +42,9 @@ div.wimages{
     width:300%;
     height:200px;
     background-color:rgb(199,199,199);
-    -webkit-box-shadow: 7px 7px 5px 0px rgba(48, 50, 50, 0.75);
-    -moz-box-shadow:    7px 7px 5px 0px rgba(48, 50, 50, 0.75);
-    box-shadow:         7px 7px 5px 0px rgba(48, 50, 50, 0.75);
+    -webkit-box-shadow: 7px 1px 5px 0px rgba(48, 50, 50, 0.75);
+    -moz-box-shadow:    7px 1px 5px 0px rgba(48, 50, 50, 0.75);
+    box-shadow:         7px 1px 5px 0px rgba(48, 50, 50, 0.75);
 }
 
 /*img.left{
