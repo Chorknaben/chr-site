@@ -35,6 +35,7 @@ Tile = (function() {
         _this.core.state["currentPage"] = prettyWhat;
         _this.core.state["currentURL"] = urlWhat;
         _this.core.state["tileid"] = _this.tileid;
+        _this.core.registerTaker("pageChanged", true);
         return $.getScript("content/" + urlWhat + ".js").done(function() {
           return $.scrollTo(".scrolled", 800, {
             onAfter: function() {

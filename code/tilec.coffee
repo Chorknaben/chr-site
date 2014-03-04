@@ -30,6 +30,7 @@ class Tile
             @core.state["currentPage"] = prettyWhat
             @core.state["currentURL" ] = urlWhat
             @core.state["tileid"] = @tileid
+            @core.registerTaker("pageChanged", true)
             $.getScript "content/#{ urlWhat }.js"
                 .done =>
                     $.scrollTo ".scrolled", 800, onAfter: =>
