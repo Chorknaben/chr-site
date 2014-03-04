@@ -58,7 +58,7 @@ ExperienceHandler = (function() {
   }
 
   ExperienceHandler.prototype.scroll = function() {
-    var absolute, asdstack, distance, fixed, fstDelta, fstEdge, i, st, stackFst, stackFstB, stackFstC, stackHgt, stackSnd, stackSndI, _i, _j, _ref, _ref1, _ref2, _ref3;
+    var asdstack, distance, fstDelta, fstEdge, i, st, stackFst, stackFstB, stackFstC, stackHgt, stackSnd, stackSndI, _i, _j, _ref, _ref1, _ref2, _ref3;
     stackFst = $(this.waypoints[this.stack]);
     stackFstB = stackFst.children('.wbody');
     stackFstC = stackFst.children('.connector');
@@ -67,38 +67,51 @@ ExperienceHandler = (function() {
     stackSnd = $(this.waypoints[this.stack + 1]);
     stackSndI = stackSnd.children('img');
     fstDelta = stackSndI.offset().top - fstEdge;
-    absolute = "absolute";
-    fixed = "fixed";
     st = this.w.scrollTop();
     if (st > this.lastScroll) {
       for (i = _i = 0, _ref = this.waypoints.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
         if (i === 0) {
           if (this.w.scrollTop() < this.originalTops[0]) {
             $(this.waypoints[0]).css({
-              position: absolute
+              position: "absolute"
             });
+            break;
+          }
+        }
+        if (i === this.waypoints.length - 1) {
+          console.log("thats right");
+          if (this.originalTops[i] < this.w.scrollTop()) {
+            $(this.waypoints[i]).css({
+              position: "fixed",
+              top: "150px"
+            });
+            break;
           }
         }
         if ((this.originalTops[i - 1] < (_ref1 = this.w.scrollTop()) && _ref1 < this.originalTops[i])) {
-          $(this.waypoints[i - 1]).css({
-            position: fixed,
-            top: "150px"
-          });
           distance = $(this.waypoints[i]).children('img').offset().top - ($(this.waypoints[i - 1]).children('.wbody').offset().top + $(this.waypoints[i - 1]).children('.wbody').height());
+          console.log(distance);
           asdstack = 279 + $(this.waypoints[i - 1]).children('.wbody').height();
-          $(this.waypoints[i - 1]).css({
-            opacity: 1 - Math.abs(distance) * (1 / asdstack)
-          });
-          $(this.waypoints[i]).css({
-            position: absolute
-          });
-        }
-        if (i === this.waypoints.length - 1) {
-          if (this.originalTops[i] < this.w.scrollTop()) {
-            $(this.waypoints[i]).css({
-              position: fixed
+          if (distance <= 0 && this.w.scrollTop() > this.originalTops[i - 1] + 100) {
+            $(this.waypoints[i - 1]).children().each(function(i, obj) {
+              obj = $(obj);
+              if (!obj.hasClass("connector")) {
+                if (obj.prop("tagName") !== "IMG") {
+                  return obj.css({
+                    opacity: 1 - Math.abs(distance) * (1 / asdstack)
+                  });
+                }
+              }
             });
           }
+          $(this.waypoints[i - 1]).css({
+            position: "fixed",
+            top: "150px"
+          });
+          $(this.waypoints[i]).css({
+            position: "absolute"
+          });
+          break;
         }
       }
     } else {
@@ -111,6 +124,21 @@ ExperienceHandler = (function() {
           }
         }
         if ((this.originalTops[i - 1] < (_ref3 = this.w.scrollTop()) && _ref3 < this.originalTops[i])) {
+          distance = $(this.waypoints[i]).children('img').offset().top - ($(this.waypoints[i - 1]).children('.wbody').offset().top + $(this.waypoints[i - 1]).children('.wbody').height());
+          console.log(distance);
+          asdstack = 279 + $(this.waypoints[i - 1]).children('.wbody').height();
+          if (distance <= 0 && this.w.scrollTop() > this.originalTops[i - 1] + 100) {
+            $(this.waypoints[i - 1]).children().each(function(i, obj) {
+              obj = $(obj);
+              if (!obj.hasClass("connector")) {
+                if (obj.prop("tagName") !== "IMG") {
+                  return obj.css({
+                    opacity: 1 - Math.abs(distance) * (1 / asdstack)
+                  });
+                }
+              }
+            });
+          }
           $(this.waypoints[i]).css({
             position: "absolute",
             top: this.originalTops[i] - $(window).height() + 155

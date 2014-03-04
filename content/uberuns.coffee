@@ -83,26 +83,34 @@ class ExperienceHandler
         #    stackFst.css opacity: 1 - Math.abs(fstDelta) * (1 / stackHgt)
 
         #MAKE THIS CODE PRETTY PLEASE PLESASE PLESASE OMG OMG OMG MOST EMBARASSING GIT COMMIT EVER
-        absolute = "absolute"
-        fixed = "fixed"
         st = @w.scrollTop()
         if st > @lastScroll
             # down
             for i in [0..@waypoints.length - 1]
                 if i is 0
                     if @w.scrollTop() < @originalTops[0]
-                        $(@waypoints[0]).css position:absolute
+                        $(@waypoints[0]).css position:"absolute"
+                        break
+                if i is @waypoints.length - 1
+                    console.log "thats right"
+                    if @originalTops[i] < @w.scrollTop()
+                        $(@waypoints[i]).css position:"fixed", top:"150px"
+                        break
                 if @originalTops[i - 1] < @w.scrollTop() < @originalTops[i]
                     #opacity here 
-                    $(@waypoints[i - 1]).css position:fixed, top:"150px"
-                    #optimize and prettyfy this ffs!
                     distance = $(@waypoints[i]).children('img').offset().top - ($(@waypoints[i-1]).children('.wbody').offset().top + $(@waypoints[i-1]).children('.wbody').height())
+                    console.log distance
                     asdstack = 279 + $(@waypoints[i-1]).children('.wbody').height()
-                    $(@waypoints[i - 1]).css opacity: 1 - Math.abs(distance) * (1 / asdstack)
-                    $(@waypoints[i]).css position:absolute
-                if i is @waypoints.length - 1
-                    if @originalTops[i] < @w.scrollTop()
-                        $(@waypoints[i]).css position:fixed
+                    if distance <= 0 and @w.scrollTop() > @originalTops[i-1] + 100
+                        $(@waypoints[i - 1]).children().each (i, obj) ->
+                            obj = $(obj)
+                            unless obj.hasClass "connector" 
+                                unless obj.prop("tagName") is "IMG"
+                                    obj.css opacity: 1 - Math.abs(distance) * (1 / asdstack)
+                    $(@waypoints[i - 1]).css position:"fixed", top:"150px"
+                    #optimize and prettyfy this ffs!
+                    $(@waypoints[i]).css position:"absolute"
+                    break
 
         else
             for i in [0 .. @waypoints.length - 1]
@@ -111,40 +119,18 @@ class ExperienceHandler
                         $(@waypoints[0]).css position:"absolute"
                 if @originalTops[i - 1] < @w.scrollTop() < @originalTops[i]
                     #same opacity crap here yo!
+                    distance = $(@waypoints[i]).children('img').offset().top - ($(@waypoints[i-1]).children('.wbody').offset().top + $(@waypoints[i-1]).children('.wbody').height())
+                    console.log distance
+                    asdstack = 279 + $(@waypoints[i-1]).children('.wbody').height()
+                    if distance <= 0 and @w.scrollTop() > @originalTops[i-1] + 100
+                        $(@waypoints[i - 1]).children().each (i, obj) ->
+                            obj = $(obj)
+                            unless obj.hasClass "connector" 
+                                unless obj.prop("tagName") is "IMG"
+                                    obj.css opacity: 1 - Math.abs(distance) * (1 / asdstack)
+                        #$(@waypoints[i - 1]).css opacity: 1 - Math.abs(distance) * (1 / asdstack)
                     $(@waypoints[i]).css position:"absolute", top:@originalTops[i]-$(window).height()+155
         @lastScroll = st
-        #if stackFstC.height() is 0 and ((@c.state["eingerastet"][@stack-1] and not @c.state.eingerastet[@stack]) or @stack is 0 )
-        #    fillWith = true
-        #    for i in [0..@c.state["eingerastet"].length - 1]
-        #        if not @c.state.eingerastet[i]
-        #            fillWith = false
-        #        @c.state.eingerastet[i] = fillWith
-        #    @c.state["eingerastet"][@stack] = true
-        #    @stack++
-        #    console.log @c.state.eingerastet
-        #    console.log "Raste nach Down:" + @stack
-        #    @cssOrgTop = $(@waypoints[@stack]).css 'top'
-        #    $(@waypoints[@stack]).css position:'fixed', top:'150px'
-        #    $(@waypoints[@stack-1]).css position:'fixed', top:'150px'
-        #    @topOnRast = $(window).scrollTop()
-        #    return
-
-        #if $(window).scrollTop() < @topOnRast and @c.state["eingerastet"][@stack-1] and not @c.state.eingerastet[@stack]
-        #    for i in [0..@c.state["eingerastet"].length - 1]
-        #        if not @c.state.eingerastet[i+1]
-        #            @c.state.eingerastet[i] = false
-        #            break
-        #        @c.state.eingerastet[i] = true
-
-        #    $(@waypoints[@stack]).css position:'absolute', top:@cssOrgTop
-        #    @stack--
-        #    console.log "Chill0rze nach up: " + @stack
-        #    console.log @c.state.eingerastet
-        #    #console.log @stack
-        #    #todo messed up here
-        #    #stackSnd.css position:'absolute', top:@cssOrgTop
-        #    # see above dis not yet updated technically stackSnd yo
-        #    return
 
     fitConnectors: =>
         @waypoints.each (index, obj) =>
@@ -155,9 +141,6 @@ class ExperienceHandler
             connect.css
                 height: nextImg.offset().top - connect.offset().top + 8
 
-    #onScrollUpwards: ->
-    #    $(@waypoints[@stack]).css position: "absolute"
-            
 expH = new ExperienceHandler()
 $( "body" ).on
     mousewheel: (event) ->
