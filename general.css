@@ -120,6 +120,7 @@ border-radius:5px;
     line-height:90px;
     float:left;
     white-space:nowrap;
+    font-weight:bold;
 }
 
 /* --- HEADER -> CONDITIONAL NAVIGATION AREA */
