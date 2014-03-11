@@ -337,13 +337,13 @@ box-shadow: -1px -1px 30px 0px rgba(0, 0, 0, 1);*/
 }
 
 .tile-content img {
-    height:90%;
+    height:100%;
     width:auto;
     display:block;
     margin-left:auto;
     margin-right:auto;
     position:relative;
-    top:10%;
+    top:0;
 }
 /* $$$ END GENERAL TILE CONTAINER OBJECTS $$$ */
 
