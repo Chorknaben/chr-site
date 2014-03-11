@@ -24,8 +24,6 @@ Tile = (function() {
   };
 
   Tile.prototype.load = function(prettyWhat, urlWhat) {
-    this.interval = setInterval(this.sclSmaller, 10);
-    setTimeout(this.activateLoadingAnimation, 30);
     this.navigationDown();
     $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
@@ -45,7 +43,6 @@ Tile = (function() {
               $("#loading-img").css({
                 visibility: "hidden"
               });
-              $("#header-img").width(90);
               return _this.scaleCount = 0;
             }
           });

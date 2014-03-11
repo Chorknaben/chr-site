@@ -17,8 +17,8 @@ class Tile
     load: (prettyWhat, urlWhat) ->
         # Animations happening on Click
         # --------
-        @interval = setInterval @sclSmaller, 10
-        setTimeout @activateLoadingAnimation, 30
+        #@interval = setInterval @sclSmaller, 10
+        #setTimeout @activateLoadingAnimation, 30
         @navigationDown()
 
         # Load content
@@ -42,7 +42,6 @@ class Tile
 
                         # Revert state that animations modified
                         $("#loading-img").css visibility:"hidden"
-                        $("#header-img").width(90)
                         @scaleCount = 0
         $(".ctitle").fadeTo(200, 0)
 
