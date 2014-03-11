@@ -68,19 +68,15 @@ Tile = (function() {
   };
 
   Tile.prototype.navigationDown = function() {
-    var currentN, currentSpan, navItems, spans;
+    var index, navItems, navLines, toWidth, underLineEl;
     navItems = $('.header-nav').children('a');
-    currentN = $(navItems[this.tileid - 1]);
-    currentN.animate({
-      top: '65px'
+    navLines = $('.header-nav').children('img');
+    index = this.tileid !== 7 ? this.tileid - 1 : 4;
+    underLineEl = $(navLines[index]);
+    toWidth = $(navItems[index]).width();
+    return underLineEl.animate({
+      width: toWidth + 20
     }, 800);
-    spans = $('.header-nav').children('span');
-    currentSpan = $(spans[this.tileid - 1]);
-    if (currentSpan !== void 0) {
-      return currentSpan.animate({
-        opacity: '0'
-      }, 800);
-    }
   };
 
   return Tile;

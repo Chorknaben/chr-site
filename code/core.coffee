@@ -133,15 +133,18 @@ $ ->
                         $(".ctitle").fadeTo(200,1)
                     , 500
 
-                    # Also revert the Navigation Item that has slided down
-                    navItems = $('.header-nav').children('a')
-                    currentN = $(navItems[c.state['tileid'] - 1])
-                    currentN.animate({top: '0'}, 500)
+                    # Also revert the Navigation Item that has slided to left
+                    navItems = $('.header-nav').children('img')
+                    
+                    # See tilec.coffee, because the calendar tile has no onclick (yet!)
+                    index = if c.state['tileid'] isnt 7 then c.state['tileid'] - 1 else 4
 
-                    spans = $('.header-nav').children('span')
-                    currentSpan = $(spans[c.state['tileid'] - 1])
-                    if currentSpan isnt undefined
-                        currentSpan.animate({opacity:'1'}, 700)
+                    # Slide Underline upwards, then, revert the underlines css to its
+                    # original form
+                    currentN = $(navItems[index])
+                    currentN.animate({top: '30px'}, 500, ->
+                        currentN.css top:'50px', width:0
+                    )
 
     # Handle scrolling upwards again after the user has visited a child page
     # note that this handler will sonn be unnecessary

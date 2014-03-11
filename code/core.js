@@ -175,7 +175,7 @@ $(function() {
   c.registerScrollHandler("onTop", function(event) {
     if ($(window).scrollTop() === 0 && $(".ctitle").html() !== "St.-Martins-Chorknaben Biberach") {
       return setTimeout(function() {
-        var currentN, currentSpan, navItems, spans;
+        var currentN, index, navItems;
         if ($(window).scrollTop() === 0) {
           window.location.hash = "#";
           $(".ctitle").fadeTo(500, 0);
@@ -183,18 +183,17 @@ $(function() {
             $(".ctitle").html("St.-Martins-Chorknaben Biberach");
             return $(".ctitle").fadeTo(200, 1);
           }, 500);
-          navItems = $('.header-nav').children('a');
-          currentN = $(navItems[c.state['tileid'] - 1]);
-          currentN.animate({
-            top: '0'
-          }, 500);
-          spans = $('.header-nav').children('span');
-          currentSpan = $(spans[c.state['tileid'] - 1]);
-          if (currentSpan !== void 0) {
-            return currentSpan.animate({
-              opacity: '1'
-            }, 700);
-          }
+          navItems = $('.header-nav').children('img');
+          index = c.state['tileid'] !== 7 ? c.state['tileid'] - 1 : 4;
+          currentN = $(navItems[index]);
+          return currentN.animate({
+            top: '30px'
+          }, 500, function() {
+            return currentN.css({
+              top: '50px',
+              width: 0
+            });
+          });
         }
       });
     }

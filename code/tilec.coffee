@@ -57,13 +57,16 @@ class Tile
 
     navigationDown: ->
         navItems = $('.header-nav').children('a')
-        currentN = $(navItems[@tileid - 1])
-        currentN.animate({top: '65px'}, 800)
-
-        spans = $('.header-nav').children('span')
-        currentSpan = $(spans[@tileid - 1])
-        if currentSpan isnt undefined
-            currentSpan.animate({opacity:'0'}, 800)
+        navLines = $('.header-nav').children('img')
+        
+        # The Calendar tile has no ScrollDown, so delegate to 
+        # big image tile
+        index = if @tileid isnt 7 then @tileid - 1 else 4
+        underLineEl = $(navLines[index])
+        toWidth     = $(navItems[index]).width()
+        
+        # slide in a underline from the left
+        underLineEl.animate({width:toWidth+20}, 800)
 
 
 `
