@@ -146,6 +146,18 @@ b {
     right:6%;
 }
 
+.header .header-nav img{
+    top: 47px;
+    width: 0;
+    height: 10px;
+    margin:0;
+    z-index:-1;
+}
+#ul-1{left:120px;}
+#ul-2{left:233px;}
+#ul-3{left:330px;}
+#ul-4{left:423px;}
+
 .imgcontainer{
     position:absolute;
     top:0;
