@@ -22,6 +22,7 @@ Core = (function() {
 
   function Core() {
     this.getScrollHandler = __bind(this.getScrollHandler, this);
+    this.handleHash = __bind(this.handleHash, this);
   }
 
   Core.prototype.scrollHandlers = {};
@@ -41,9 +42,9 @@ Core = (function() {
   Core.prototype.withAPICall = function(url, callback) {
     return $.ajax({
       url: url
-    }).done(data(function() {
+    }).done(function(data) {
       return callback(JSON.parse(data));
-    }));
+    });
   };
 
   Core.prototype.initializeHashNavigation = function() {
@@ -53,8 +54,13 @@ Core = (function() {
   };
 
   Core.prototype.handleHash = function() {
-    var i, _i, _results;
+    var i, onlySoft, _i, _results;
     if (window.location.hash !== "#!/") {
+      onlySoft = this.requestTaker("softReload");
+      if (onlySoft) {
+        this.state["childPage"].onSoftReload();
+        return;
+      }
       debug("Hash detected");
       _results = [];
       for (i = _i = 0; _i <= 7; i = ++_i) {
@@ -157,6 +163,10 @@ ChildPage = (function() {
 
   ChildPage.prototype.onScrollFinished = function() {
     return notImplemented("onScrollFinished");
+  };
+
+  ChildPage.prototype.onSoftReload = function() {
+    return notImplemented("onSoftReload");
   };
 
   ChildPage.prototype.onScrollUpwards = function() {
@@ -285,6 +295,7 @@ $(function() {
     if ($(window).scrollTop() > $(window).height() - 40 && !c.state["scrolledDown"]) {
       c.state["scrolledDown"] = true;
       if (c.state["currentURL"] !== "null") {
+        c.registerTaker("softReload", true);
         window.location.hash = "!/" + c.state["currentURL"];
       }
       if (c.state["currentPage"] !== "null" && this.core.requestTaker("pageChanged")) {

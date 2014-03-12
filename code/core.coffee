@@ -26,7 +26,7 @@ class Core
         $.ajax({
             url:url,
         })
-          .done data ->
+          .done (data) ->
             callback(JSON.parse(data))
 
     initializeHashNavigation: ->
@@ -34,11 +34,15 @@ class Core
         if window.location.hash is ""
             window.location.hash = "#!/"
 
-    handleHash: ->
+    handleHash: =>
         # If the site gets called and a hash is already set, for example when the
         # user has bookmarked a page and is now clicking on the bookmarked link,
         # trigger the corresponding tile onclick event
         if window.location.hash isnt "#!/"
+            onlySoft = @requestTaker("softReload")
+            if onlySoft
+                @state["childPage"].onSoftReload()
+                return
             debug "Hash detected"
             for i in [0..7]
                 if "#!/" + Constants.tileResolver[i][1] is window.location.hash
@@ -113,6 +117,12 @@ class ChildPage
     # This can be seen as an equivalent to $(document).ready(function(){...})
     onScrollFinished: ->
         notImplemented "onScrollFinished"
+
+    # Executed when the user scrolls to the page again after having scrolled up.
+    # This allows the Child Page to update its content without actually rebuilding
+    # itself, creating an unpleasant user experience.
+    onSoftReload: ->
+        notImplemented "onSoftReload"
 
     # The User has begun to leave the page.
     onScrollUpwards: ->
@@ -243,6 +253,7 @@ $ ->
             # $(".header-nav").fadeTo(200,1)
             # todo change to go down item
             if c.state["currentURL"] isnt "null"
+                c.registerTaker("softReload", true)
                 window.location.hash = "!/" + c.state["currentURL"]
             if c.state["currentPage"] isnt "null" and @core.requestTaker("pageChanged")
                 $(".ctitle").fadeTo(200,0)
