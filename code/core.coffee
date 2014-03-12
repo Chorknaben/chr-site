@@ -5,8 +5,9 @@ class Constants
        ["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Unterstützen","unterstutzen"],["Shop", "shop"],["Kalender", "cal"],["Bilder","bilder"] 
     ]
 
+
+
 class Core
-    bgSrc : "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
     scrollHandlers: {}
     state: 
         scrolledDown : false
@@ -17,6 +18,16 @@ class Core
     debug = (msg) -> console.log "Core: " + msg
         
     construct: ->
+    
+    withAPICall: (url, callback) ->
+        # Execute a Callback on an API call made to the server.
+        # The Server always returns a valid JSON object, even when
+        # a error occurs.
+        $.ajax({
+            url:url,
+        })
+          .done data ->
+            callback(JSON.parse(data))
 
     initializeHashNavigation: ->
         # Initialize the hash
@@ -35,10 +46,102 @@ class Core
                     new Tile(i, Constants).onClick()
                     break
 
+
+    getScrollHandler: (event) =>
+        for key, val of @scrollHandlers
+            val(event)
+
+    registerScrollHandler: (name, callback) ->
+        @scrollHandlers[name] = callback
+
+    deleteScrollHandler: (name) ->
+        for key in @scrollHandlers
+            if key is name
+                delete @scrollHandlers[key]
+
+    executeOnce: (name, func) ->
+        if @state["tmp" + name] is true
+            return
+        else
+            @state["tmp" + name] = true
+            func()
+
+    rearm: (name) ->
+        delete @state["tmp#{name}"]
+
+    registerTaker: (name, obj) ->
+        @state["taker#{name}"] = obj
+
+    requestTaker: (name) ->
+        s = @state["taker#{name}"]
+        delete @state["taker#{name}"]
+        return s
+
+    insertChildPage: (pageObj) ->
+        if @state["childPage"]
+            @state["childPage"].onUnloadChild()
+        @state["childPage"] = pageObj
+        pageObj.onInsertion()
+
+    #needed?
+    #setIndexPage: (indexPage) ->
+
+# Abstract Skeleton Class that any Child Page ought to execute.
+class ChildPage
+    constructor: ->
+        # Associate with core object
+        @c = window.core
+
+    notImplemented = (name) ->
+        console.log "#{name}: not implemented"
+
+    # Any Markup that shall be generated with the aid
+    # of ECMAScript has to be generated here. Other methods
+    # do not guarantee that the markup has finished building
+    # upon execution; this one does.
+    onGenerateMarkup: ->
+        notImplemented "onGenerateMarkup"
+
+    # Executed once the Ajax Page has been successfully requested
+    # from the server, but before the scrolling has initiated.
+    # Please run computationally expensive operations in onScrollFinished,
+    # not here, has the scrolling will lag when executing here.
+    onLoad: ->
+        notImplemented "onLoad"
+
+    # Executed once the scrolling finished (800ms after starting to scroll).
+    # This can be seen as an equivalent to $(document).ready(function(){...})
+    onScrollFinished: ->
+        notImplemented "onScrollFinished"
+
+    # The User has begun to leave the page.
+    onScrollUpwards: ->
+        notImplemented "onScrollUpwards"
+
+    # The Page is being unloaded in favor of a different one.
+    # Please unload all Handlers registered into the core.
+    onUnloadChild: ->
+        notImplemented "onUnloadChild"
+
+    # Executed immediately after insertion. Run time is quite equivalent to
+    # own constructor execution.
+    onInsertion: ->
+        notImplemented "onInsertion"
+
+class IndexPage extends ChildPage
+    constructor: ->
+        super()
+
+    onInsertion: ->
+        @injectBackground()
+        @injectTileBackgrounds()
+        @loadEffects()
+
+    bgSrc : "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
+
     injectBackground: ->
         # Determine the resolution of the client and send it to the server.
         # The server will return a matching background image.
-        debug @bgSrc
         $ "<img>", src: @bgSrc + "bg"
             .appendTo($ "#bg").load ->
                 #$(@).show()
@@ -76,37 +179,6 @@ class Core
                     .children ".hoveroverlay"
                     .animate opacity:"0", 100
 
-    getScrollHandler: (event) =>
-        for key, val of @scrollHandlers
-            val(event)
-
-    registerScrollHandler: (name, callback) ->
-        @scrollHandlers[name] = callback
-
-    deleteScrollHandler: (name) ->
-        for key in @scrollHandlers
-            if key is name
-                delete @scrollHandlers[key]
-
-    executeOnce: (name, func) ->
-        if @state["tmp" + name] is true
-            return
-        else
-            @state["tmp" + name] = true
-            func()
-
-    rearm: (name) ->
-        delete @state["tmp#{name}"]
-
-    registerTaker: (name, obj) ->
-        @state["taker#{name}"] = obj
-
-    requestTaker: (name) ->
-        s = @state["taker#{name}"]
-        delete @state["taker#{name}"]
-        return s
-
-
 # Global Objects, associated to all other
 # objects created due to the modular infrastructure
 window.core = new Core
@@ -117,9 +189,10 @@ $ ->
     c = window.core
     c.initializeHashNavigation()
     c.handleHash()
-    c.injectBackground()
-    c.injectTileBackgrounds()
-    c.loadEffects()
+
+    # Initial Page is the Index Page
+    c.insertChildPage(new IndexPage())
+
     $(window).scroll c.getScrollHandler
 
     window.onhashchange = c.handleHash
