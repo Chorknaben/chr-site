@@ -22,8 +22,9 @@ class Tile
         # Load content
         # --------
         $("#result").load "content/#{ urlWhat }.html", =>
-            window["load_#{ urlWhat }"]()
+            # Set new Hash
             window.location.hash = "!/" + urlWhat
+
             $(".scrolled").attr("id", urlWhat)
             @core.state["currentPage"] = prettyWhat
             @core.state["currentURL" ] = urlWhat
@@ -31,7 +32,12 @@ class Tile
             @core.registerTaker("pageChanged", true)
             $.getScript "content/#{ urlWhat }.js"
                 .done =>
+                    @core.state["childPage"].onGenerateMarkup()
+                    # Execute onLoad of inserted Child Page
+                    @core.state["childPage"].onLoad()
                     $.scrollTo ".scrolled", 800, onAfter: =>
+                        # Execute onScrolledDown of inserted Child Page
+                        @core.state["childPage"].onScrollFinished()
                         @core.state["scrolloff"  ] = $(window).scrollTop()
 
                         # Change Title and fade in
@@ -78,28 +84,6 @@ function withResponseObject(url, callback){
 }
 window["load_bilder"] = function(){
     
-    console.log("entered bilder");
-    withResponseObject("/images/num", function(retobj){
-         var tcolcount = 0;    
-         for(var i = 0; i <= Math.ceil(retobj.numtiles / 5); i++){
-            $("#scrolledcontentoff").append(
-                "<div class=\"tile-column\" id=\"imgcol-"+ i +"\"></div>"
-            );
-            for (var x = 0; x <= 4; x++){
-                $("#imgcol-"+i).append(
-                    $("<div>").addClass("stdtile m10 x-"+x).append(
-                        $("<div>").addClass("tile-scaling"),
-                        $("<div>").addClass("tile-content test-b").append(
-                            $("<a>").attr("href", "#").append(
-                                $("<div>").addClass("image-thumb")
-                            )
-                        )
-                    )
-                );
-            }
-            $("#scrolledcontentoff").pullupScroll("#scrolledcontentoff .tile-column");
-         }
-    });
 }
 window["load_uberuns"] = function(){
     
