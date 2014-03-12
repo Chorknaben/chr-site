@@ -17,15 +17,13 @@ class Tile
     load: (prettyWhat, urlWhat) ->
         # Animations happening on Click
         # --------
-        #@interval = setInterval @sclSmaller, 10
-        #setTimeout @activateLoadingAnimation, 30
         @navigationDown()
 
         # Load content
         # --------
         $("#result").load "content/#{ urlWhat }.html", =>
             window["load_#{ urlWhat }"]()
-            window.location.hash = urlWhat
+            window.location.hash = "!/" + urlWhat
             $(".scrolled").attr("id", urlWhat)
             @core.state["currentPage"] = prettyWhat
             @core.state["currentURL" ] = urlWhat

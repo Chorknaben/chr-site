@@ -17,14 +17,20 @@ class Core
     debug = (msg) -> console.log "Core: " + msg
         
     construct: ->
+
+    initializeHashNavigation: ->
+        # Initialize the hash
+        if window.location.hash is ""
+            window.location.hash = "#!/"
+
     handleHash: ->
         # If the site gets called and a hash is already set, for example when the
         # user has bookmarked a page and is now clicking on the bookmarked link,
         # trigger the corresponding tile onclick event
-        if window.location.hash isnt ""
+        if window.location.hash isnt "#!/"
             debug "Hash detected"
             for i in [0..7]
-                if "#" + Constants.tileResolver[i][1] is window.location.hash
+                if "#!/" + Constants.tileResolver[i][1] is window.location.hash
                     i++
                     new Tile(i, Constants).onClick()
                     break
@@ -109,6 +115,7 @@ window.constants = Constants
 $ ->
     # Important initialization code
     c = window.core
+    c.initializeHashNavigation()
     c.handleHash()
     c.injectBackground()
     c.injectTileBackgrounds()
@@ -126,7 +133,7 @@ $ ->
         if $(window).scrollTop() is 0 and $(".ctitle").html() isnt "St.-Martins-Chorknaben Biberach"
             setTimeout ->
                 if $(window).scrollTop() is 0
-                    window.location.hash = "#"
+                    window.location.hash = "#!/"
                     $(".ctitle").fadeTo(500, 0)
                     setTimeout ->
                         $(".ctitle").html("St.-Martins-Chorknaben Biberach")
@@ -163,7 +170,7 @@ $ ->
             # $(".header-nav").fadeTo(200,1)
             # todo change to go down item
             if c.state["currentURL"] isnt "null"
-                window.location.hash = c.state["currentURL"]
+                window.location.hash = "!/" + c.state["currentURL"]
             if c.state["currentPage"] isnt "null" and @core.requestTaker("pageChanged")
                 $(".ctitle").fadeTo(200,0)
                 setTimeout ->

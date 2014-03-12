@@ -28,7 +28,7 @@ Tile = (function() {
     $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         window["load_" + urlWhat]();
-        window.location.hash = urlWhat;
+        window.location.hash = "!/" + urlWhat;
         $(".scrolled").attr("id", urlWhat);
         _this.core.state["currentPage"] = prettyWhat;
         _this.core.state["currentURL"] = urlWhat;

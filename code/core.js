@@ -38,13 +38,19 @@ Core = (function() {
 
   Core.prototype.construct = function() {};
 
+  Core.prototype.initializeHashNavigation = function() {
+    if (window.location.hash === "") {
+      return window.location.hash = "#!/";
+    }
+  };
+
   Core.prototype.handleHash = function() {
     var i, _i, _results;
-    if (window.location.hash !== "") {
+    if (window.location.hash !== "#!/") {
       debug("Hash detected");
       _results = [];
       for (i = _i = 0; _i <= 7; i = ++_i) {
-        if ("#" + Constants.tileResolver[i][1] === window.location.hash) {
+        if ("#!/" + Constants.tileResolver[i][1] === window.location.hash) {
           i++;
           new Tile(i, Constants).onClick();
           break;
@@ -166,6 +172,7 @@ window.constants = Constants;
 $(function() {
   var c;
   c = window.core;
+  c.initializeHashNavigation();
   c.handleHash();
   c.injectBackground();
   c.injectTileBackgrounds();
@@ -177,7 +184,7 @@ $(function() {
       return setTimeout(function() {
         var currentN, index, navItems;
         if ($(window).scrollTop() === 0) {
-          window.location.hash = "#";
+          window.location.hash = "#!/";
           $(".ctitle").fadeTo(500, 0);
           setTimeout(function() {
             $(".ctitle").html("St.-Martins-Chorknaben Biberach");
@@ -207,7 +214,7 @@ $(function() {
     if ($(window).scrollTop() > $(window).height() - 40 && !c.state["scrolledDown"]) {
       c.state["scrolledDown"] = true;
       if (c.state["currentURL"] !== "null") {
-        window.location.hash = c.state["currentURL"];
+        window.location.hash = "!/" + c.state["currentURL"];
       }
       if (c.state["currentPage"] !== "null" && this.core.requestTaker("pageChanged")) {
         $(".ctitle").fadeTo(200, 0);
