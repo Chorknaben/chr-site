@@ -283,7 +283,7 @@ $(function() {
             });
           });
         }
-      });
+      }, 1000);
     }
   });
   c.registerScrollHandler("scrollUpwards", function(event) {
@@ -294,11 +294,9 @@ $(function() {
   return c.registerScrollHandler("onLoadChild", function(event) {
     if ($(window).scrollTop() > $(window).height() - 40 && !c.state["scrolledDown"]) {
       c.state["scrolledDown"] = true;
-      if (c.state["currentURL"] !== "null") {
+      if ((c.state["currentURL"] !== "null") || ($(".ctitle").html() === "St.-Martins-Chorknaben Biberach")) {
         c.registerTaker("softReload", true);
         window.location.hash = "!/" + c.state["currentURL"];
-      }
-      if (c.state["currentPage"] !== "null" && this.core.requestTaker("pageChanged")) {
         $(".ctitle").fadeTo(200, 0);
         return setTimeout(function() {
           return $(".ctitle").html("Chorknaben // " + c.state["currentPage"]).fadeTo(200, 1);

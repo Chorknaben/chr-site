@@ -235,6 +235,7 @@ $ ->
                     currentN.animate({top: '30px'}, 500, ->
                         currentN.css top:'50px', width:0
                     )
+            , 1000
 
     # Handle scrolling upwards again after the user has visited a child page
     # note that this handler will sonn be unnecessary
@@ -252,10 +253,9 @@ $ ->
             c.state["scrolledDown"] = true
             # $(".header-nav").fadeTo(200,1)
             # todo change to go down item
-            if c.state["currentURL"] isnt "null"
+            if (c.state["currentURL"] isnt "null") or ($(".ctitle").html() is "St.-Martins-Chorknaben Biberach")
                 c.registerTaker("softReload", true)
                 window.location.hash = "!/" + c.state["currentURL"]
-            if c.state["currentPage"] isnt "null" and @core.requestTaker("pageChanged")
                 $(".ctitle").fadeTo(200,0)
                 setTimeout ->
                     $(".ctitle").html("Chorknaben // #{ c.state["currentPage"] }")
