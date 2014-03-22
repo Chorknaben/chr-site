@@ -5,6 +5,8 @@ class Tile
         @scaleCount = 0
         @headerImg = $("#header-img")
 
+        #@core.exportFunction("Tile.navDown", @navigationDown)
+
     onClick: =>
         console.log "Tile Click: id=#{@tileid}"
         if @tileid > 7 then @tileid -= 7
@@ -63,14 +65,16 @@ class Tile
         navItems = $('.header-nav').children('a')
         navLines = $('.header-nav').children('img')
         
-        # The Calendar tile has no ScrollDown, so delegate to 
-        # big image tile
+
+        ## The Calendar tile has no ScrollDown, so delegate to 
+        ## big image tile
         index = if @tileid isnt 7 then @tileid - 1 else 4
-        underLineEl = $(navLines[index])
-        toWidth     = $(navItems[index]).width()
-        
-        # slide in a underline from the left
-        underLineEl.animate({width:toWidth+20}, 800)
+        underLineEl = $(navItems[index])
+        underLineEl.css "font-weight" : "bold"
+        #toWidth     = $(navItems[index]).width()
+        #
+        ## slide in a underline from the left
+        #underLineEl.animate({width:toWidth+20}, 800)
 
 
 `

@@ -129,7 +129,7 @@ b {
     line-height:50px;
     float:left;
     white-space:nowrap;
-    font-weight:bold;
+    font-weight:normal;
 }
 
 /* --- HEADER -> CONDITIONAL NAVIGATION AREA */

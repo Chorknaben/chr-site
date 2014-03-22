@@ -11,7 +11,7 @@ Constants = (function() {
 
   Constants.SELECTOR_NAV = ".navitem nav";
 
-  Constants.tileResolver = [["Über uns", "uberuns"], ["Stiftung", "stiftung"], ["Presse", "presse"], ["Unterstützen", "unterstutzen"], ["Shop", "shop"], ["Kalender", "cal"], ["Bilder", "bilder"]];
+  Constants.tileResolver = [["Über uns", "uberuns"], ["Stiftung", "stiftung"], ["Presse", "presse"], ["Musik", "musik"], ["Shop", "shop"], ["Kalender", "kalender"], ["Bilder", "bilder"], ["Impressum", "impressum"]];
 
   return Constants;
 
@@ -138,6 +138,24 @@ Core = (function() {
     return pageObj.onInsertion();
   };
 
+  Core.prototype.exportFunction = function(name, func) {
+    return this.state[name] = func;
+  };
+
+  Core.prototype.requestFunction = function(name, success, failure) {
+    var func;
+    func = this.state[name];
+    if (func) {
+      return success(func);
+    } else {
+      return failure();
+    }
+  };
+
+  Core.prototype.revokeFunction = function(name) {
+    return delete this.state[name];
+  };
+
   return Core;
 
 })();
@@ -261,29 +279,22 @@ $(function() {
   $(window).scroll(c.getScrollHandler);
   window.onhashchange = c.handleHash;
   c.registerScrollHandler("onTop", function(event) {
+    var index, navItems, underLineEl;
     if ($(window).scrollTop() === 0 && $(".ctitle").html() !== "St.-Martins-Chorknaben Biberach") {
-      return setTimeout(function() {
-        var currentN, index, navItems;
-        if ($(window).scrollTop() === 0) {
-          window.location.hash = "#!/";
-          $(".ctitle").fadeTo(500, 0);
-          setTimeout(function() {
-            $(".ctitle").html("St.-Martins-Chorknaben Biberach");
-            return $(".ctitle").fadeTo(200, 1);
-          }, 500);
-          navItems = $('.header-nav').children('img');
-          index = c.state['tileid'] !== 7 ? c.state['tileid'] - 1 : 4;
-          currentN = $(navItems[index]);
-          return currentN.animate({
-            top: '30px'
-          }, 500, function() {
-            return currentN.css({
-              top: '50px',
-              width: 0
-            });
-          });
-        }
-      }, 1000);
+      if ($(window).scrollTop() === 0) {
+        window.location.hash = "#!/";
+        $(".ctitle").fadeTo(500, 0);
+        setTimeout(function() {
+          $(".ctitle").html("St.-Martins-Chorknaben Biberach");
+          return $(".ctitle").fadeTo(200, 1);
+        }, 500);
+        navItems = $('.header-nav').children('a');
+        index = c.state['tileid'] !== 7 ? c.state['tileid'] - 1 : 4;
+        underLineEl = $(navItems[index]);
+        return underLineEl.css({
+          "font-weight": "normal"
+        });
+      }
     }
   });
   c.registerScrollHandler("scrollUpwards", function(event) {
@@ -291,7 +302,7 @@ $(function() {
       return c.state["scrolledDown"] = false;
     }
   });
-  return c.registerScrollHandler("onLoadChild", function(event) {
+  c.registerScrollHandler("onLoadChild", function(event) {
     if ($(window).scrollTop() > $(window).height() - 40 && !c.state["scrolledDown"]) {
       c.state["scrolledDown"] = true;
       if ((c.state["currentURL"] !== "null") || ($(".ctitle").html() === "St.-Martins-Chorknaben Biberach")) {
@@ -303,5 +314,8 @@ $(function() {
         }, 200);
       }
     }
+  });
+  return $("#startst").click(function() {
+    return $.scrollTo('0px', 800);
   });
 });

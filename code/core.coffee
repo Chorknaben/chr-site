@@ -2,7 +2,7 @@ class Constants
     @SELECTOR_TILE = ".tile-content"
     @SELECTOR_NAV  = ".navitem nav"
     @tileResolver  = [
-       ["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Unterstützen","unterstutzen"],["Shop", "shop"],["Kalender", "cal"],["Bilder","bilder"] 
+       ["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Musik","musik"],["Shop", "shop"],["Kalender", "kalender"],["Bilder","bilder"], ["Impressum", "impressum"]
     ]
 
 
@@ -86,6 +86,19 @@ class Core
             @state["childPage"].onUnloadChild()
         @state["childPage"] = pageObj
         pageObj.onInsertion()
+
+    exportFunction: (name, func) ->
+        @state[name] = func
+
+    requestFunction: (name, success, failure) ->
+        func = @state[name]
+        if func
+            success(func)
+        else
+            failure()
+
+    revokeFunction: (name) ->
+        delete @state[name]
 
     #needed?
     #setIndexPage: (indexPage) ->
@@ -214,28 +227,24 @@ $ ->
     # from a child page
     c.registerScrollHandler "onTop", (event) ->
         if $(window).scrollTop() is 0 and $(".ctitle").html() isnt "St.-Martins-Chorknaben Biberach"
-            setTimeout ->
-                if $(window).scrollTop() is 0
-                    window.location.hash = "#!/"
-                    $(".ctitle").fadeTo(500, 0)
-                    setTimeout ->
-                        $(".ctitle").html("St.-Martins-Chorknaben Biberach")
-                        $(".ctitle").fadeTo(200,1)
-                    , 500
+            if $(window).scrollTop() is 0
+                window.location.hash = "#!/"
+                $(".ctitle").fadeTo(500, 0)
+                setTimeout ->
+                    $(".ctitle").html("St.-Martins-Chorknaben Biberach")
+                    $(".ctitle").fadeTo(200,1)
+                , 500
 
-                    # Also revert the Navigation Item that has slided to left
-                    navItems = $('.header-nav').children('img')
-                    
-                    # See tilec.coffee, because the calendar tile has no onclick (yet!)
-                    index = if c.state['tileid'] isnt 7 then c.state['tileid'] - 1 else 4
+                # Also revert the Navigation Item that has slided to left
+                navItems = $('.header-nav').children('a')
+                
+                # See tilec.coffee, because the calendar tile has no onclick (yet!)
+                index = if c.state['tileid'] isnt 7 then c.state['tileid'] - 1 else 4
 
-                    # Slide Underline upwards, then, revert the underlines css to its
-                    # original form
-                    currentN = $(navItems[index])
-                    currentN.animate({top: '30px'}, 500, ->
-                        currentN.css top:'50px', width:0
-                    )
-            , 1000
+                ## The Calendar tile has no ScrollDown, so delegate to 
+                ## big image tile
+                underLineEl = $(navItems[index])
+                underLineEl.css "font-weight" : "normal"
 
     # Handle scrolling upwards again after the user has visited a child page
     # note that this handler will sonn be unnecessary
@@ -262,4 +271,4 @@ $ ->
                       .fadeTo(200,1)
                 , 200
 
-
+    $("#startst").click -> $.scrollTo('0px', 800)

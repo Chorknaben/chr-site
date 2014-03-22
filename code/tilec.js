@@ -70,15 +70,14 @@ Tile = (function() {
   };
 
   Tile.prototype.navigationDown = function() {
-    var index, navItems, navLines, toWidth, underLineEl;
+    var index, navItems, navLines, underLineEl;
     navItems = $('.header-nav').children('a');
     navLines = $('.header-nav').children('img');
     index = this.tileid !== 7 ? this.tileid - 1 : 4;
-    underLineEl = $(navLines[index]);
-    toWidth = $(navItems[index]).width();
-    return underLineEl.animate({
-      width: toWidth + 20
-    }, 800);
+    underLineEl = $(navItems[index]);
+    return underLineEl.css({
+      "font-weight": "bold"
+    });
   };
 
   return Tile;
