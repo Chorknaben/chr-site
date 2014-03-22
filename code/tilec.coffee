@@ -27,6 +27,9 @@ class Tile
             # Set new Hash
             window.location.hash = "!/" + urlWhat
 
+            # Insert background Image
+            $(@core.state["blurredbg"]).appendTo("#blurbg")
+
             $(".scrolled").attr("id", urlWhat)
             @core.state["currentPage"] = prettyWhat
             @core.state["currentURL" ] = urlWhat

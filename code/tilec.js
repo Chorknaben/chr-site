@@ -28,6 +28,7 @@ Tile = (function() {
     $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         window.location.hash = "!/" + urlWhat;
+        $(_this.core.state["blurredbg"]).appendTo("#blurbg");
         $(".scrolled").attr("id", urlWhat);
         _this.core.state["currentPage"] = prettyWhat;
         _this.core.state["currentURL"] = urlWhat;
