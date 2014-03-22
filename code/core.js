@@ -213,7 +213,8 @@ IndexPage = (function(_super) {
   IndexPage.prototype.onInsertion = function() {
     this.injectBackground();
     this.injectTileBackgrounds();
-    return this.loadEffects();
+    this.loadEffects();
+    return this.preloadImage();
   };
 
   IndexPage.prototype.bgSrc = "/" + ($(window).width()) + "/" + ($(window).height() - 90) + "/";
@@ -224,6 +225,15 @@ IndexPage = (function(_super) {
     }).appendTo($("#bg")).load(function() {
       return $(this).fadeIn(300);
     });
+  };
+
+  IndexPage.prototype.preloadImage = function() {
+    var h, img, w;
+    img = new Image();
+    w = $(window).width();
+    h = $(window).height();
+    img.src = "" + w + "/" + h + "/bg/blurred";
+    return this.c.state["blurredbg"] = img;
   };
 
   IndexPage.prototype.injectTileBackgrounds = function() {

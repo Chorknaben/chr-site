@@ -29,6 +29,7 @@ class Core
           .done (data) ->
             callback(JSON.parse(data))
 
+
     initializeHashNavigation: ->
         # Initialize the hash
         if window.location.hash is ""
@@ -159,6 +160,7 @@ class IndexPage extends ChildPage
         @injectBackground()
         @injectTileBackgrounds()
         @loadEffects()
+        @preloadImage()
 
     bgSrc : "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
 
@@ -171,6 +173,13 @@ class IndexPage extends ChildPage
                 $(@).fadeIn 300
                 #$("#bg").css("background-image": "url(#{@bgSrc}bg)")
                 #       .fadeIn 300
+
+    preloadImage: ->
+        img = new Image()
+        w   = $(window).width()
+        h   = $(window).height()
+        img.src = "#{w}/#{h}/bg/blurred"
+        @c.state["blurredbg"] = img
 
     injectTileBackgrounds: ->
         # inject Tile Backgrounds as background attributes to the corresponding DOM
