@@ -7,34 +7,22 @@ class Presse extends ChildPage
     onGenerateMarkup: ->
 
     onLoad: ->
-        $.getScript "code/freewall.js", (data, textStatus, jqxhr) ->
-            @ready = true
-            wall   = new freewall(".presseart")
-            wall.reset
-                selector: '.brick'
-                cellW: (container) -> 450
-                    
-                    #cellWidth = container / 3
-                    #return cellWidth - 20 - ((0.12 * $(window).width()) / 3)
-                    #console.log container
-                    #cellWidth = 450
-                    #if container.hasClass('s450')
-                    #    cellWidth = container.width()/2
-                    #return cellWidth
-                cellH: (container) ->
-                    cellHeight = container / 3
-                    return cellHeight - 20
-                    #cellHeight = 450
-                    #if container.hasClass('s450')
-                    #    cellHeight = container.height()/2
-                    #return cellHeight
-                fixSize: true
-                gutterY: 20
-                gutterX: 20
-                animate: false
-                onResize: ->
-                    wall.fitWidth()
-            wall.fitWidth()
+        $(".scrolled").css "background-image" : "url(img/testbg1920gauss.png)"
+        $.getScript "code/sly.min.js", ->
+            sly = new Sly(".presse-frame", {
+                horizontal: 1
+                itemNav:    'basic'
+                activateOn: 'click'
+                mouseDragging: 1
+                touchDragging: 1
+                releaseSwing: 1
+                smart: 1
+                dynamicHandle: 1
+                speed: 300
+                easing: 'swing'
+                scrollBy:   1
+            }).init()
+            $(".presse-frame").css top: $(window).height()/2 - $(".presse-frame").height()/2
 
 
     onScrollFinished: ->

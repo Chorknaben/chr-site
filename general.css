@@ -210,7 +210,6 @@ b {
 .contentoffset{
     position:absolute;
     margin-top:5%;
-    height:100%;
     width:100%;
     top:50px;
 }
@@ -360,7 +359,6 @@ box-shadow: -1px -1px 30px 0px rgba(0, 0, 0, 1);*/
 /* --- START SCROLLING HANDLERS --- */
 .scrolled{
     position:absolute;
-    overflow:hidden;
     width:100%;
     top:100%;
     min-height:100%;
