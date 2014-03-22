@@ -17,9 +17,6 @@ Presse = (function(_super) {
   Presse.prototype.onGenerateMarkup = function() {};
 
   Presse.prototype.onLoad = function() {
-    $(".scrolled").css({
-      "background-image": "url(img/testbg1920gauss.png)"
-    });
     return $.getScript("code/sly.min.js", function() {
       var sly;
       sly = new Sly(".presse-frame", {
@@ -39,6 +36,10 @@ Presse = (function(_super) {
         top: $(window).height() / 2 - $(".presse-frame").height() / 2
       });
     });
+  };
+
+  Presse.prototype.dependencyHook = function() {
+    return ["code/sly.min.js"];
   };
 
   Presse.prototype.onScrollFinished = function() {};

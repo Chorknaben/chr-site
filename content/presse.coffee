@@ -7,7 +7,6 @@ class Presse extends ChildPage
     onGenerateMarkup: ->
 
     onLoad: ->
-        $(".scrolled").css "background-image" : "url(img/testbg1920gauss.png)"
         $.getScript "code/sly.min.js", ->
             sly = new Sly(".presse-frame", {
                 horizontal: 1
@@ -24,6 +23,10 @@ class Presse extends ChildPage
             }).init()
             $(".presse-frame").css top: $(window).height()/2 - $(".presse-frame").height()/2
 
+    dependencyHook: ->
+        return [
+            "code/sly.min.js"
+        ]
 
     onScrollFinished: ->
 
