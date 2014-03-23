@@ -207,7 +207,14 @@ IndexPage = (function(_super) {
   __extends(IndexPage, _super);
 
   function IndexPage() {
+    var w;
     IndexPage.__super__.constructor.call(this);
+    w = $(window).width();
+    if (w > 1177) {
+      this.bgSrc = "/" + ($(window).width()) + "/" + ($(window).height() - 90) + "/";
+    } else {
+      this.bgSrc = "/1610/" + ($(window).height() - 90) + "/";
+    }
   }
 
   IndexPage.prototype.onInsertion = function() {
@@ -217,8 +224,6 @@ IndexPage = (function(_super) {
     this.preloadImage();
     return this.footerLeftClick();
   };
-
-  IndexPage.prototype.bgSrc = "/" + ($(window).width()) + "/" + ($(window).height() - 90) + "/";
 
   IndexPage.prototype.injectBackground = function() {
     return $("<img>", {

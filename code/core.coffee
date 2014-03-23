@@ -155,6 +155,11 @@ class ChildPage
 class IndexPage extends ChildPage
     constructor: ->
         super()
+        w = $(window).width()
+        if w > 1177
+            @bgSrc = "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
+        else 
+            @bgSrc = "/1610/#{$(window).height()-90}/"
 
     onInsertion: ->
         @injectBackground()
@@ -162,8 +167,6 @@ class IndexPage extends ChildPage
         @loadEffects()
         @preloadImage()
         @footerLeftClick()
-
-    bgSrc : "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
 
     injectBackground: ->
         # Determine the resolution of the client and send it to the server.
