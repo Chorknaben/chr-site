@@ -161,6 +161,7 @@ class IndexPage extends ChildPage
         @injectTileBackgrounds()
         @loadEffects()
         @preloadImage()
+        @footerLeftClick()
 
     bgSrc : "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
 
@@ -178,8 +179,38 @@ class IndexPage extends ChildPage
         img = new Image()
         w   = $(window).width()
         h   = $(window).height()
-        img.src = "#{w}/#{h}/bg/blurred"
+        src = "#{w}/#{h}/bg/blurred"
+        img.src = src
         @c.state["blurredbg"] = img
+
+        $("<img>").attr("src", src)
+            .css(position:"absolute", left:0, "z-index":-1)
+            .prependTo("#infoarea")
+
+    footerLeftClick: ->
+        $(".footer-left").click (event) =>
+            event.preventDefault()
+            event.stopPropagation()
+            @toggleInfo()
+
+    toggleInfo: ->
+        if $("#footer").css("bottom") is "0px"
+            $("#footer").animate({bottom: "300px"}, 100)
+            @rotateImg(".footer-left img", 180)
+        else
+            $("#footer").animate({bottom: "0px"}, 100)
+            @rotateImg(".footer-left img", 0)
+
+
+     rotateImg: (image, degree) ->
+         $elem = $(image)
+         $elem.css
+             '-webkit-transform': 'rotate(' + degree + 'deg)',
+             '-moz-transform': 'rotate(' + degree + 'deg)',
+             '-ms-transform': 'rotate(' + degree + 'deg)',
+             '-o-transform': 'rotate(' + degree + 'deg)',
+             'transform': 'rotate(' + degree + 'deg)',
+             'zoom': 1
 
     injectTileBackgrounds: ->
         # inject Tile Backgrounds as background attributes to the corresponding DOM

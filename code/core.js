@@ -214,7 +214,8 @@ IndexPage = (function(_super) {
     this.injectBackground();
     this.injectTileBackgrounds();
     this.loadEffects();
-    return this.preloadImage();
+    this.preloadImage();
+    return this.footerLeftClick();
   };
 
   IndexPage.prototype.bgSrc = "/" + ($(window).width()) + "/" + ($(window).height() - 90) + "/";
@@ -228,12 +229,55 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.preloadImage = function() {
-    var h, img, w;
+    var h, img, src, w;
     img = new Image();
     w = $(window).width();
     h = $(window).height();
-    img.src = "" + w + "/" + h + "/bg/blurred";
-    return this.c.state["blurredbg"] = img;
+    src = "" + w + "/" + h + "/bg/blurred";
+    img.src = src;
+    this.c.state["blurredbg"] = img;
+    return $("<img>").attr("src", src).css({
+      position: "absolute",
+      left: 0,
+      "z-index": -1
+    }).prependTo("#infoarea");
+  };
+
+  IndexPage.prototype.footerLeftClick = function() {
+    return $(".footer-left").click((function(_this) {
+      return function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        return _this.toggleInfo();
+      };
+    })(this));
+  };
+
+  IndexPage.prototype.toggleInfo = function() {
+    if ($("#footer").css("bottom") === "0px") {
+      $("#footer").animate({
+        bottom: "300px"
+      }, 100);
+      return this.rotateImg(".footer-left img", 180);
+    } else {
+      $("#footer").animate({
+        bottom: "0px"
+      }, 100);
+      return this.rotateImg(".footer-left img", 0);
+    }
+  };
+
+  IndexPage.prototype.rotateImg = function(image, degree) {
+    var $elem;
+    $elem = $(image);
+    return $elem.css({
+      '-webkit-transform': 'rotate(' + degree + 'deg)',
+      '-moz-transform': 'rotate(' + degree + 'deg)',
+      '-ms-transform': 'rotate(' + degree + 'deg)',
+      '-o-transform': 'rotate(' + degree + 'deg)',
+      'transform': 'rotate(' + degree + 'deg)',
+      'zoom': 1
+    });
   };
 
   IndexPage.prototype.injectTileBackgrounds = function() {
