@@ -319,6 +319,9 @@ b {
   .header-nav {
     display: none;
   }
+  #tile-presse {
+    margin-top: 10px;
+  }
 }
 .image-thumb {
   display: block;
