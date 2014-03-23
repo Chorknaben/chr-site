@@ -52,6 +52,17 @@ b {
     font-weight:bold;
 }
 
+#startst {
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 65px;
+}
+
+#feedback{
+    padding-right:30px;
+}
+
 .footer-right{
     color: white;
     float: right;
