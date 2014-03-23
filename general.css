@@ -114,11 +114,11 @@ b {
 .header #loading-img {
   visibility: hidden;
 }
-.header #hMain {
+#hMain {
   position: fixed;
   top: 0;
 }
-.header #hScroll {
+#hScroll {
   position: absolute;
   top: 0;
 }
