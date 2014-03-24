@@ -343,6 +343,9 @@ $(function() {
       if ($(window).scrollTop() === 0) {
         window.location.hash = "#!/";
         $(".ctitle").fadeTo(500, 0);
+        $("#header-up img").css({
+          display: "none"
+        });
         setTimeout(function() {
           $(".ctitle").html("St.-Martins-Chorknaben Biberach");
           return $(".ctitle").fadeTo(200, 1);
@@ -369,7 +372,10 @@ $(function() {
         window.location.hash = "!/" + c.state["currentURL"];
         $(".ctitle").fadeTo(200, 0);
         return setTimeout(function() {
-          return $(".ctitle").html("Chorknaben // " + c.state["currentPage"]).fadeTo(200, 1);
+          $(".ctitle").html("Chorknaben").fadeTo(200, 1);
+          return $("#header-up img").css({
+            display: "block"
+          });
         }, 200);
       }
     }

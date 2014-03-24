@@ -273,6 +273,7 @@ $ ->
             if $(window).scrollTop() is 0
                 window.location.hash = "#!/"
                 $(".ctitle").fadeTo(500, 0)
+                $("#header-up img").css display:"none"
                 setTimeout ->
                     $(".ctitle").html("St.-Martins-Chorknaben Biberach")
                     $(".ctitle").fadeTo(200,1)
@@ -310,8 +311,9 @@ $ ->
                 window.location.hash = "!/" + c.state["currentURL"]
                 $(".ctitle").fadeTo(200,0)
                 setTimeout ->
-                    $(".ctitle").html("Chorknaben // #{ c.state["currentPage"] }")
+                    $(".ctitle").html("Chorknaben")
                       .fadeTo(200,1)
+                    $("#header-up img").css display:"block"
                 , 200
 
     $("#startst").click -> $.scrollTo('0px', 800)

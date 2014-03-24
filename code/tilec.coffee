@@ -46,7 +46,7 @@ class Tile
                         @core.state["scrolloff"  ] = $(window).scrollTop()
 
                         # Change Title and fade in
-                        $(".ctitle").html("Chorknaben // #{ prettyWhat }")
+                        $(".ctitle").html("Chorknaben")
                         $(".ctitle").fadeTo(200, 1)
 
                         # Revert state that animations modified

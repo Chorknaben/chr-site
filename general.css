@@ -61,11 +61,15 @@ b {
   z-index: 200;
 }
 .header a {
-  position: relative;
-  background-color: #1a171a;
-  border: 10px solid #1a171a;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  text-decoration: none;
+  color: white;
+}
+.header #header-up img {
+  height: 56px;
+  display: none;
+  float: left;
+  position: static;
+  margin-left: 2%;
 }
 .header .imgcontainer {
   position: absolute;
@@ -108,8 +112,11 @@ b {
   z-index: -1;
 }
 .header .header-nav a {
-  text-decoration: none;
-  color: white;
+  position: relative;
+  background-color: #1a171a;
+  border: 10px solid #1a171a;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 .header #loading-img {
   visibility: hidden;

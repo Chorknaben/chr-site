@@ -41,7 +41,7 @@ Tile = (function() {
             onAfter: function() {
               _this.core.state["childPage"].onScrollFinished();
               _this.core.state["scrolloff"] = $(window).scrollTop();
-              $(".ctitle").html("Chorknaben // " + prettyWhat);
+              $(".ctitle").html("Chorknaben");
               $(".ctitle").fadeTo(200, 1);
               $("#loading-img").css({
                 visibility: "hidden"
