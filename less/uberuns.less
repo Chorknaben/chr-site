@@ -1,0 +1,52 @@
+#uberuns-header{
+    text-align: center;
+    font-family: "Exo 2";
+    font-size: 3em;
+    color: white;
+    display:table-row;
+}
+
+#uberuns-cnt{
+    display:table-row;
+    height:100%;
+    .main-area{
+        width:75%;
+        float:left;
+        position:relative;
+        height:100%;
+    }
+
+    .side-area{
+        width:25%;
+        float:right;
+        position:relative;
+        height:100%;
+        background-color:green;
+        .side-margin{
+            margin-left: 10px;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            // todo table row
+            overflow:hidden;
+            div{
+                width:100%;
+                background-color: coral;
+                height:33%;
+                // todo table-row
+                margin-bottom:10px;
+            }
+        }
+    }
+}
+
+.wrapper{
+    display:table;
+    height:100%;
+    width:100%;
+}
+
+.testblock{
+    height:100%;
+    background-color:red;
+}

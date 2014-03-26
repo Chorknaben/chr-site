@@ -27,6 +27,18 @@ b {
 .m10 {
   margin-top: 10px;
 }
+.deadcenter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.defaultdimension {
+  width: 88%;
+  height: 80%;
+}
 #bg {
   position: absolute;
   top: 50px;
@@ -363,4 +375,50 @@ b {
   margin-bottom: 1.88%;
   float: left;
   background-color: black;
+}
+#uberuns-header {
+  text-align: center;
+  font-family: "Exo 2";
+  font-size: 3em;
+  color: white;
+  display: table-row;
+}
+#uberuns-cnt {
+  display: table-row;
+  height: 100%;
+}
+#uberuns-cnt .main-area {
+  width: 75%;
+  float: left;
+  position: relative;
+  height: 100%;
+}
+#uberuns-cnt .side-area {
+  width: 25%;
+  float: right;
+  position: relative;
+  height: 100%;
+  background-color: green;
+}
+#uberuns-cnt .side-area .side-margin {
+  margin-left: 10px;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+#uberuns-cnt .side-area .side-margin div {
+  width: 100%;
+  background-color: coral;
+  height: 33%;
+  margin-bottom: 10px;
+}
+.wrapper {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+.testblock {
+  height: 100%;
+  background-color: red;
 }
