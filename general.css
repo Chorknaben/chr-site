@@ -181,6 +181,9 @@ b {
   text-align: initial;
   line-height: initial;
 }
+#infoarea img {
+  height: initial;
+}
 .infouberuns {
   position: absolute;
   left: 6%;
