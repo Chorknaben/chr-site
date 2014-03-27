@@ -382,12 +382,14 @@ b {
   font-size: 3em;
   color: white;
   display: table-row;
+  font-weight: bold;
 }
 #uberuns-cnt {
   display: table-row;
   height: 100%;
 }
 #uberuns-cnt .main-area {
+  margin-top: 10px;
   width: 75%;
   float: left;
   position: relative;
@@ -400,11 +402,11 @@ b {
   margin: 2%;
 }
 #uberuns-cnt .side-area {
+  margin-top: 10px;
   width: 25%;
   float: right;
   position: relative;
   height: 100%;
-  background-color: green;
 }
 #uberuns-cnt .side-area .side-margin {
   margin-left: 10px;
@@ -413,11 +415,20 @@ b {
   width: 100%;
   overflow: hidden;
 }
-#uberuns-cnt .side-area .side-margin div {
+#uberuns-cnt .side-area .side-margin .icon-container {
   width: 100%;
-  background-color: coral;
   height: 33%;
+  position: relative;
   margin-bottom: 10px;
+  background-color: coral;
+}
+#uberuns-cnt .side-area .side-margin .icon-container img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
 .wrapper {
   display: table;
@@ -427,4 +438,38 @@ b {
 .testblock {
   height: 100%;
   background: url(img/marc-0.jpg) no-repeat center center;
+}
+.hiddentext {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+  background-color: #1a171a;
+  color: white;
+}
+#prettymargin {
+  margin: 100px 0 0 50px;
+  text-align: initial;
+}
+#bitches {
+  font-size: 3em;
+}
+#sogeil {
+  font-size: 2.5em;
+}
+#kapla {
+  font-size: 4em;
+  margin-left: 50px;
+}
+#kaplanist {
+  font-size: 2em;
+  margin-left: 50px;
+}
+#machmit {
+  position: absolute;
+  bottom: 90px;
+  width: 100%;
+  font-size: 5em;
+  font-weight: bold;
 }

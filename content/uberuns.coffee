@@ -2,18 +2,21 @@ class Uberuns extends ChildPage
     constructor: ->
 
     onLoad: ->
-        console.log "onLoad in here"
-        #$(window).resize @verticallyCenterImage
-        #$(window).resize()
+        $(".icon-container .hoveroverlay").each (i, obj) ->
+            $obj = $(obj)
+            $obj.hover(->
+                $obj.animate({opacity: 0.7}, 100)
+            , ->
+                $obj.animate({opacity: 0}, 100)
+            )
 
-    verticallyCenterImage: ->
-        $img = $(".main-area img")
-        wHeight = $(".main-area").outerHeight()
+        $(".testblock").hover(->
+            $(this).animate({opacity:0}, 350)
+        ,->
+            $(this).animate({opacity:1}, 350)
+        )
 
-        if $img.height() < wHeight 
-            delta = wHeight - $img.height()
-            $img.css 'margin-top' : (delta / 2) + "px"
-        else
-            $img.attr 'style', ''
+    mouseEnter: ->
+
 
 window.core.insertChildPage(new Uberuns())

@@ -9,22 +9,31 @@ Uberuns = (function(_super) {
   function Uberuns() {}
 
   Uberuns.prototype.onLoad = function() {
-    return console.log("onLoad in here");
+    $(".icon-container .hoveroverlay").each(function(i, obj) {
+      var $obj;
+      $obj = $(obj);
+      return $obj.hover(function() {
+        return $obj.animate({
+          opacity: 0.7
+        }, 100);
+      }, function() {
+        return $obj.animate({
+          opacity: 0
+        }, 100);
+      });
+    });
+    return $(".testblock").hover(function() {
+      return $(this).animate({
+        opacity: 0
+      }, 350);
+    }, function() {
+      return $(this).animate({
+        opacity: 1
+      }, 350);
+    });
   };
 
-  Uberuns.prototype.verticallyCenterImage = function() {
-    var $img, delta, wHeight;
-    $img = $(".main-area img");
-    wHeight = $(".main-area").outerHeight();
-    if ($img.height() < wHeight) {
-      delta = wHeight - $img.height();
-      return $img.css({
-        'margin-top': (delta / 2) + "px"
-      });
-    } else {
-      return $img.attr('style', '');
-    }
-  };
+  Uberuns.prototype.mouseEnter = function() {};
 
   return Uberuns;
 
