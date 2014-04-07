@@ -186,9 +186,9 @@ class IndexPage extends ChildPage
         img.src = src
         @c.state["blurredbg"] = img
 
-        $("<img>").attr("src", src)
-            .css(position:"absolute", left:0, "z-index":-1)
-            .prependTo("#infoarea")
+        #$("<img>").attr("src", src)
+        #    .css(position:"absolute", left:0, "z-index":-1)
+        #    .prependTo("#infoarea")
 
     footerLeftClick: ->
         $(".footer-left").click (event) =>
@@ -272,12 +272,12 @@ $ ->
         if $(window).scrollTop() is 0 and $(".ctitle").html() isnt "St.-Martins-Chorknaben Biberach"
             if $(window).scrollTop() is 0
                 window.location.hash = "#!/"
-                $(".ctitle").fadeTo(500, 0)
-                $("#header-up img").css display:"none"
-                setTimeout ->
-                    $(".ctitle").html("St.-Martins-Chorknaben Biberach")
-                    $(".ctitle").fadeTo(200,1)
-                , 500
+                #$(".ctitle").fadeTo(500, 0)
+                #$("#header-up img").css display:"none"
+                #setTimeout ->
+                #    $(".ctitle").html("St.-Martins-Chorknaben Biberach")
+                #    $(".ctitle").fadeTo(200,1)
+                #, 500
 
                 # Also revert the Navigation Item that has slided to left
                 navItems = $('.header-nav').children('a')
@@ -309,11 +309,11 @@ $ ->
             if (c.state["currentURL"] isnt "null") or ($(".ctitle").html() is "St.-Martins-Chorknaben Biberach")
                 c.registerTaker("softReload", true)
                 window.location.hash = "!/" + c.state["currentURL"]
-                $(".ctitle").fadeTo(200,0)
-                setTimeout ->
-                    $(".ctitle").html("Chorknaben")
-                      .fadeTo(200,1)
-                    $("#header-up img").css display:"block"
-                , 200
+                #$(".ctitle").fadeTo(200,0)
+                #setTimeout ->
+                #    $(".ctitle").html("Chorknaben")
+                #      .fadeTo(200,1)
+                #    $("#header-up img").css display:"block"
+                #, 200
 
     $("#startst").click -> $.scrollTo('0px', 800)

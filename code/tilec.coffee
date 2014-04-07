@@ -46,13 +46,13 @@ class Tile
                         @core.state["scrolloff"  ] = $(window).scrollTop()
 
                         # Change Title and fade in
-                        $(".ctitle").html("Chorknaben")
-                        $(".ctitle").fadeTo(200, 1)
+                        #$(".ctitle").html("Chorknaben")
+                        #$(".ctitle").fadeTo(200, 1)
 
                         # Revert state that animations modified
                         $("#loading-img").css visibility:"hidden"
                         @scaleCount = 0
-        $(".ctitle").fadeTo(200, 0)
+        #$(".ctitle").fadeTo(200, 0)
 
     sclSmaller: =>
         if @scaleCount >= 20
@@ -80,19 +80,3 @@ class Tile
         #underLineEl.animate({width:toWidth+20}, 800)
 
 
-`
-function withResponseObject(url, callback){
-    $.ajax({
-        url:url,
-    })
-      .done(function(data){
-        callback(JSON.parse(data));   
-    });
-}
-window["load_bilder"] = function(){
-    
-}
-window["load_uberuns"] = function(){
-    
-}
-`

@@ -25,7 +25,7 @@ Tile = (function() {
 
   Tile.prototype.load = function(prettyWhat, urlWhat) {
     this.navigationDown();
-    $("#result").load("content/" + urlWhat + ".html", (function(_this) {
+    return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         window.location.hash = "!/" + urlWhat;
         $(_this.core.state["blurredbg"]).appendTo("#blurbg");
@@ -41,8 +41,6 @@ Tile = (function() {
             onAfter: function() {
               _this.core.state["childPage"].onScrollFinished();
               _this.core.state["scrolloff"] = $(window).scrollTop();
-              $(".ctitle").html("Chorknaben");
-              $(".ctitle").fadeTo(200, 1);
               $("#loading-img").css({
                 visibility: "hidden"
               });
@@ -52,7 +50,6 @@ Tile = (function() {
         });
       };
     })(this));
-    return $(".ctitle").fadeTo(200, 0);
   };
 
   Tile.prototype.sclSmaller = function() {
@@ -84,20 +81,3 @@ Tile = (function() {
   return Tile;
 
 })();
-
-
-function withResponseObject(url, callback){
-    $.ajax({
-        url:url,
-    })
-      .done(function(data){
-        callback(JSON.parse(data));   
-    });
-}
-window["load_bilder"] = function(){
-    
-}
-window["load_uberuns"] = function(){
-    
-}
-;
