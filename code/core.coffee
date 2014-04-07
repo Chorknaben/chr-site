@@ -50,6 +50,12 @@ class Core
                     i++
                     new Tile(i, Constants).onClick()
                     break
+        if window.location.hash is "#!/" and @requestTaker("pageChanged")
+            debug "Back to Index page"
+            $(".tilecontainer").css display: "initial"
+            $(".scrolled").css display: "none"
+            @state["childPage"].onUnloadChild()
+            @sanitize()
 
 
     getScrollHandler: (event) =>
@@ -101,6 +107,16 @@ class Core
     revokeFunction: (name) ->
         delete @state[name]
 
+    sanitize: ->
+        # sanitize is meant to be a general sanitization function.
+        # Clean up UI-Fragments
+        if window.location.hash is "#!/"
+            $(".header-nav").children().each (i, obj) ->
+                $obj = $(obj)
+                console.log $obj.css("font-weight")
+                if $obj.css("font-weight") is "bold"
+                    $obj.css "font-weight" : "initial"
+
     #needed?
     #setIndexPage: (indexPage) ->
 
@@ -151,6 +167,21 @@ class ChildPage
     # own constructor execution.
     onInsertion: ->
         notImplemented "onInsertion"
+
+class Context
+    #necessity unsure
+    @internalState: {}
+    constructor: (@pageName) ->
+        @runDetection(@pageName)
+
+    getCorrelations: ->
+        return @internalState
+
+    runDetection: (pageName) ->
+        # Complete internalState using a limited
+        # amount of clues
+
+
 
 class IndexPage extends ChildPage
     constructor: ->
@@ -245,6 +276,12 @@ class IndexPage extends ChildPage
                     .children ".hoveroverlay"
                     .animate opacity:"0", 100
 
+class Navigation
+    @preState = null
+    constructor: ->
+
+
+
 # Global Objects, associated to all other
 # objects created due to the modular infrastructure
 window.core = new Core
@@ -262,58 +299,3 @@ $ ->
     $(window).scroll c.getScrollHandler
 
     window.onhashchange = c.handleHash
-
-    # Basic functionality
-    # -------------------
-
-    # Handle changing the title back when the user is scrolling back up
-    # from a child page
-    c.registerScrollHandler "onTop", (event) ->
-        if $(window).scrollTop() is 0 and $(".ctitle").html() isnt "St.-Martins-Chorknaben Biberach"
-            if $(window).scrollTop() is 0
-                window.location.hash = "#!/"
-                #$(".ctitle").fadeTo(500, 0)
-                #$("#header-up img").css display:"none"
-                #setTimeout ->
-                #    $(".ctitle").html("St.-Martins-Chorknaben Biberach")
-                #    $(".ctitle").fadeTo(200,1)
-                #, 500
-
-                # Also revert the Navigation Item that has slided to left
-                navItems = $('.header-nav').children('a')
-                
-                # See tilec.coffee, because the calendar tile has no onclick (yet!)
-                index = if c.state['tileid'] isnt 7 then c.state['tileid'] - 1 else 4
-
-                ## The Calendar tile has no ScrollDown, so delegate to 
-                ## big image tile
-                underLineEl = $(navItems[index])
-                underLineEl.css "font-weight" : "normal"
-
-    # Handle scrolling upwards again after the user has visited a child page
-    # note that this handler will sonn be unnecessary
-    c.registerScrollHandler "scrollUpwards", (event) ->
-        if $(window).scrollTop() < $(window).height() - 40 and c.state["scrolledDown"]
-            #$(".header-nav").fadeTo(200, 0)
-            # todo change to go down item
-            c.state["scrolledDown"] = false
-
-    # This executes after the page has been fully loaded and is scrolled to
-    # todo: maybe only load this handler when beginning to load a page / beginning
-    # to scroll down etc as it is quite expensive
-    c.registerScrollHandler "onLoadChild", (event) ->
-        if $(window).scrollTop() > $(window).height() - 40 and not c.state["scrolledDown"]
-            c.state["scrolledDown"] = true
-            # $(".header-nav").fadeTo(200,1)
-            # todo change to go down item
-            if (c.state["currentURL"] isnt "null") or ($(".ctitle").html() is "St.-Martins-Chorknaben Biberach")
-                c.registerTaker("softReload", true)
-                window.location.hash = "!/" + c.state["currentURL"]
-                #$(".ctitle").fadeTo(200,0)
-                #setTimeout ->
-                #    $(".ctitle").html("Chorknaben")
-                #      .fadeTo(200,1)
-                #    $("#header-up img").css display:"block"
-                #, 200
-
-    $("#startst").click -> $.scrollTo('0px', 800)

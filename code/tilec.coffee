@@ -43,7 +43,7 @@ class Tile
                     @core.state["childPage"].onGenerateMarkup()
                     # Execute onLoad of inserted Child Page
                     @core.state["childPage"].onLoad()
-                    setTimeout (-> @setLoadingScreen(false), 350)
+                    @setLoadingScreen(false)
                     $("#result").css display: "initial"
                     $(".tilecontainer").css display: "none"
                     #$.scrollTo ".scrolled", 800, onAfter: =>
