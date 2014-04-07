@@ -14,6 +14,18 @@ b {
     margin-top:15%;
 }
 
+#loading-screen{
+    top: 50px;
+    bottom: 25px;
+    left: 0;
+    right: 0;
+    position: absolute;
+    z-index: 4;
+    opacity: 0.8;
+    background: black;
+    display:none;
+}
+
 .contentoffset{
     position:absolute;
     margin-top:5%;
@@ -239,8 +251,12 @@ b {
 .scrolled{
     position:absolute;
     width:100%;
-    top:100%;
+    top:0;
     min-height:100%;
+}
+
+#result{
+    display:none;
 }
 
 #scrollcnt{

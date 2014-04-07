@@ -28,6 +28,7 @@ Tile = (function() {
     return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         window.location.hash = "!/" + urlWhat;
+        _this.setLoadingScreen(true);
         $(_this.core.state["blurredbg"]).appendTo("#blurbg");
         $(".scrolled").attr("id", urlWhat);
         _this.core.state["currentPage"] = prettyWhat;
@@ -37,19 +38,28 @@ Tile = (function() {
         return $.getScript("content/" + urlWhat + ".js").done(function() {
           _this.core.state["childPage"].onGenerateMarkup();
           _this.core.state["childPage"].onLoad();
-          return $.scrollTo(".scrolled", 800, {
-            onAfter: function() {
-              _this.core.state["childPage"].onScrollFinished();
-              _this.core.state["scrolloff"] = $(window).scrollTop();
-              $("#loading-img").css({
-                visibility: "hidden"
-              });
-              return _this.scaleCount = 0;
-            }
+          _this.setLoadingScreen(false);
+          $("#result").css({
+            display: "initial"
+          });
+          return $(".tilecontainer").css({
+            display: "none"
           });
         });
       };
     })(this));
+  };
+
+  Tile.prototype.setLoadingScreen = function(toggle) {
+    if (toggle) {
+      return $("#loading-screen").css({
+        display: "block"
+      });
+    } else {
+      return $("#loading-screen").css({
+        display: "none"
+      });
+    }
   };
 
   Tile.prototype.sclSmaller = function() {
