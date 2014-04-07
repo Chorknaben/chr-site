@@ -1,5 +1,5 @@
 body {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: "Exo 2", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 b {
   font-weight: bold;
@@ -215,10 +215,14 @@ b {
   top: 0;
 }
 .tilecontainer {
-  left: 6%;
+  margin: auto;
   position: absolute;
-  margin-top: 13%;
-  right: 6%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 88%;
+  height: 40%;
 }
 .hoveroverlay {
   margin-right: 0 !important;
