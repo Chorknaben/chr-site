@@ -19,7 +19,8 @@ class Tile
     load: (prettyWhat, urlWhat) ->
         # Animations happening on Click
         # --------
-        @navigationDown()
+        console.log urlWhat
+        window.nav.by(@const.METHODS.NAME, urlWhat)
 
         # Load content
         # --------
@@ -66,30 +67,3 @@ class Tile
         else
 
             $("#loading-screen").css display: "none"
-
-    sclSmaller: =>
-        if @scaleCount >= 20
-            window.clearInterval(@interval)
-            return
-        @scaleCount++
-        @headerImg.width(90 - @scaleCount)
-
-    activateLoadingAnimation: ->
-        $("#loading-img").css visibility: "visible"
-
-    navigationDown: ->
-        navItems = $('.header-nav').children('a')
-        navLines = $('.header-nav').children('img')
-        
-
-        ## The Calendar tile has no ScrollDown, so delegate to 
-        ## big image tile
-        index = if @tileid isnt 7 then @tileid - 1 else 4
-        underLineEl = $(navItems[index])
-        underLineEl.css "font-weight" : "bold"
-        #toWidth     = $(navItems[index]).width()
-        #
-        ## slide in a underline from the left
-        #underLineEl.animate({width:toWidth+20}, 800)
-
-

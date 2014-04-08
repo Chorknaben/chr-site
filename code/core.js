@@ -11,6 +11,12 @@ Constants = (function() {
 
   Constants.SELECTOR_NAV = ".navitem nav";
 
+  Constants.METHODS = {
+    "NAME": 0x00001,
+    "NAME_USER": 0x00010,
+    "ID": 0x00100
+  };
+
   Constants.tileResolver = [["Über uns", "uberuns"], ["Stiftung", "stiftung"], ["Presse", "presse"], ["Musik", "musik"], ["Shop", "shop"], ["Kalender", "kalender"], ["Bilder", "bilder"], ["Impressum", "impressum"]];
 
   return Constants;
@@ -21,7 +27,6 @@ Core = (function() {
   var debug;
 
   function Core() {
-    this.getScrollHandler = __bind(this.getScrollHandler, this);
     this.handleHash = __bind(this.handleHash, this);
   }
 
@@ -79,38 +84,8 @@ Core = (function() {
         display: "none"
       });
       this.state["childPage"].onUnloadChild();
-      return this.sanitize();
+      return window.nav.reset();
     }
-  };
-
-  Core.prototype.getScrollHandler = function(event) {
-    var key, val, _ref, _results;
-    _ref = this.scrollHandlers;
-    _results = [];
-    for (key in _ref) {
-      val = _ref[key];
-      _results.push(val(event));
-    }
-    return _results;
-  };
-
-  Core.prototype.registerScrollHandler = function(name, callback) {
-    return this.scrollHandlers[name] = callback;
-  };
-
-  Core.prototype.deleteScrollHandler = function(name) {
-    var key, _i, _len, _ref, _results;
-    _ref = this.scrollHandlers;
-    _results = [];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      key = _ref[_i];
-      if (key === name) {
-        _results.push(delete this.scrollHandlers[key]);
-      } else {
-        _results.push(void 0);
-      }
-    }
-    return _results;
   };
 
   Core.prototype.executeOnce = function(name, func) {
@@ -127,13 +102,13 @@ Core = (function() {
   };
 
   Core.prototype.registerTaker = function(name, obj) {
-    return this.state["taker" + name] = obj;
+    return this.state["__taker" + name] = obj;
   };
 
   Core.prototype.requestTaker = function(name) {
     var s;
-    s = this.state["taker" + name];
-    delete this.state["taker" + name];
+    s = this.state["__taker" + name];
+    delete this.state["__taker" + name];
     return s;
   };
 
@@ -161,21 +136,6 @@ Core = (function() {
 
   Core.prototype.revokeFunction = function(name) {
     return delete this.state[name];
-  };
-
-  Core.prototype.sanitize = function() {
-    if (window.location.hash === "#!/") {
-      return $(".header-nav").children().each(function(i, obj) {
-        var $obj;
-        $obj = $(obj);
-        console.log($obj.css("font-weight"));
-        if ($obj.css("font-weight") === "bold") {
-          return $obj.css({
-            "font-weight": "initial"
-          });
-        }
-      });
-    }
   };
 
   return Core;
@@ -363,7 +323,57 @@ IndexPage = (function(_super) {
 Navigation = (function() {
   Navigation.preState = null;
 
-  function Navigation() {}
+  function Navigation(element) {
+    this.navigator = $(element);
+    console.log(this.navigator);
+    this.navigationChilds = this.navigator.children();
+  }
+
+  Navigation.prototype.by = function(method, name) {
+    var result;
+    if (method === Constants.METHODS.NAME) {
+      result = null;
+      this.navigationChilds.each(function(i, obj) {
+        var href;
+        href = obj.attributes["href"].firstChild;
+        if (href.data.substring(3, href.length) === name) {
+          result = $(obj);
+          return false;
+        }
+      });
+      if (result === null) {
+        throw new Error("No such name under method");
+      }
+      return this.internalToggle(result);
+    } else if (method === Constants.METHODS.ID) {
+      if ((0 > name && name > this.navigationChilds.length)) {
+        throw new Error("No object with this ID");
+      }
+      result = $(this.navigationChilds[name]);
+      return this.internalToggle(result);
+    }
+  };
+
+  Navigation.prototype.reset = function() {
+    if (this.preState !== void 0) {
+      return this.preState.css({
+        "font-weight": "initial"
+      });
+    }
+  };
+
+  Navigation.prototype.internalToggle = function(toggleThis) {
+    console.log(this.preState);
+    if (this.preState !== void 0) {
+      this.preState.css({
+        "font-weight": "initial"
+      });
+    }
+    toggleThis.css({
+      "font-weight": "bold"
+    });
+    return this.preState = toggleThis;
+  };
 
   return Navigation;
 
@@ -375,6 +385,7 @@ window.constants = Constants;
 
 $(function() {
   var c;
+  window.nav = new Navigation(".header-nav");
   c = window.core;
   c.initializeHashNavigation();
   c.handleHash();

@@ -32,15 +32,4 @@ class Bilder extends ChildPage
                     $(obj).css({"background-image":"url(/images/thumbs/#{i+1})"})
         , 100)
 
-    onScrollFinished: ->
-        @c.registerScrollHandler "pullup", ->
-            $(".pullup-element").each (i, el) ->
-                el = $(el)
-                if (el.visible(true))
-                    el.addClass("come-in")
-
-    onUnloadChild: ->
-        @c.deleteScrollHandler "pullup"
-
-
 window.core.insertChildPage(new Bilder())

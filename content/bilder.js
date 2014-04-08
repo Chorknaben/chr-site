@@ -39,21 +39,6 @@ Bilder = (function(_super) {
     }, 100);
   };
 
-  Bilder.prototype.onScrollFinished = function() {
-    return this.c.registerScrollHandler("pullup", function() {
-      return $(".pullup-element").each(function(i, el) {
-        el = $(el);
-        if (el.visible(true)) {
-          return el.addClass("come-in");
-        }
-      });
-    });
-  };
-
-  Bilder.prototype.onUnloadChild = function() {
-    return this.c.deleteScrollHandler("pullup");
-  };
-
   return Bilder;
 
 })(ChildPage);

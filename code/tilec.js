@@ -6,7 +6,6 @@ Tile = (function() {
   function Tile(tileid, _const) {
     this.tileid = tileid;
     this["const"] = _const != null ? _const : Constants;
-    this.sclSmaller = __bind(this.sclSmaller, this);
     this.onClick = __bind(this.onClick, this);
     this.core = window.core;
     this.interval = null;
@@ -24,7 +23,8 @@ Tile = (function() {
   };
 
   Tile.prototype.load = function(prettyWhat, urlWhat) {
-    this.navigationDown();
+    console.log(urlWhat);
+    window.nav.by(this["const"].METHODS.NAME, urlWhat);
     return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         window.location.hash = "!/" + urlWhat;
@@ -60,32 +60,6 @@ Tile = (function() {
         display: "none"
       });
     }
-  };
-
-  Tile.prototype.sclSmaller = function() {
-    if (this.scaleCount >= 20) {
-      window.clearInterval(this.interval);
-      return;
-    }
-    this.scaleCount++;
-    return this.headerImg.width(90 - this.scaleCount);
-  };
-
-  Tile.prototype.activateLoadingAnimation = function() {
-    return $("#loading-img").css({
-      visibility: "visible"
-    });
-  };
-
-  Tile.prototype.navigationDown = function() {
-    var index, navItems, navLines, underLineEl;
-    navItems = $('.header-nav').children('a');
-    navLines = $('.header-nav').children('img');
-    index = this.tileid !== 7 ? this.tileid - 1 : 4;
-    underLineEl = $(navItems[index]);
-    return underLineEl.css({
-      "font-weight": "bold"
-    });
   };
 
   return Tile;

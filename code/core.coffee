@@ -1,6 +1,11 @@
 class Constants
     @SELECTOR_TILE = ".tile-content"
     @SELECTOR_NAV  = ".navitem nav"
+    @METHODS = {
+        "NAME" : 0x00001
+        "NAME_USER" : 0x00010
+        "ID" : 0x00100
+    }
     @tileResolver  = [
        ["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Musik","musik"],["Shop", "shop"],["Kalender", "kalender"],["Bilder","bilder"], ["Impressum", "impressum"]
     ]
@@ -55,20 +60,7 @@ class Core
             $(".tilecontainer").css display: "initial"
             $(".scrolled").css display: "none"
             @state["childPage"].onUnloadChild()
-            @sanitize()
-
-
-    getScrollHandler: (event) =>
-        for key, val of @scrollHandlers
-            val(event)
-
-    registerScrollHandler: (name, callback) ->
-        @scrollHandlers[name] = callback
-
-    deleteScrollHandler: (name) ->
-        for key in @scrollHandlers
-            if key is name
-                delete @scrollHandlers[key]
+            window.nav.reset()
 
     executeOnce: (name, func) ->
         if @state["tmp" + name] is true
@@ -81,11 +73,11 @@ class Core
         delete @state["tmp#{name}"]
 
     registerTaker: (name, obj) ->
-        @state["taker#{name}"] = obj
+        @state["__taker#{name}"] = obj
 
     requestTaker: (name) ->
-        s = @state["taker#{name}"]
-        delete @state["taker#{name}"]
+        s = @state["__taker#{name}"]
+        delete @state["__taker#{name}"]
         return s
 
     insertChildPage: (pageObj) ->
@@ -106,19 +98,6 @@ class Core
 
     revokeFunction: (name) ->
         delete @state[name]
-
-    sanitize: ->
-        # sanitize is meant to be a general sanitization function.
-        # Clean up UI-Fragments
-        if window.location.hash is "#!/"
-            $(".header-nav").children().each (i, obj) ->
-                $obj = $(obj)
-                console.log $obj.css("font-weight")
-                if $obj.css("font-weight") is "bold"
-                    $obj.css "font-weight" : "initial"
-
-    #needed?
-    #setIndexPage: (indexPage) ->
 
 # Abstract Skeleton Class that any Child Page ought to execute.
 class ChildPage
@@ -278,7 +257,39 @@ class IndexPage extends ChildPage
 
 class Navigation
     @preState = null
-    constructor: ->
+    constructor: (element) ->
+        @navigator = $(element)
+        console.log @navigator
+        @navigationChilds = @navigator.children()
+
+    by: (method, name) ->
+        if method is Constants.METHODS.NAME
+            result = null
+            @navigationChilds.each (i, obj) ->
+                href = obj.attributes["href"].firstChild
+                if href.data.substring(3, href.length) is name
+                    result = $(obj)
+                    return false
+            if result is null
+                throw new Error("No such name under method")
+            @internalToggle(result)
+        else if method is Constants.METHODS.ID
+            if 0 > name > @navigationChilds.length
+                throw new Error("No object with this ID")
+            result = $(@navigationChilds[name])
+            @internalToggle(result)
+
+    reset: ->
+        if @preState isnt undefined
+            @preState.css "font-weight" : "initial"
+
+    internalToggle: (toggleThis) ->
+        console.log @preState
+        if @preState isnt undefined
+            @preState.css "font-weight" : "initial"
+        toggleThis.css    "font-weight" : "bold"
+        @preState = toggleThis
+
 
 
 
@@ -288,6 +299,8 @@ window.core = new Core
 window.constants = Constants
 
 $ ->
+    window.nav = new Navigation(".header-nav")
+
     # Important initialization code
     c = window.core
     c.initializeHashNavigation()
