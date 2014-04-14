@@ -11,32 +11,16 @@ Bilder = (function(_super) {
   }
 
   Bilder.prototype.onGenerateMarkup = function() {
-    return this.c.withAPICall("/images/num", function(retobj) {
-      var i, tcolcount, x, _i, _j, _ref, _results;
-      tcolcount = 0;
-      _results = [];
-      for (i = _i = 0, _ref = Math.ceil(retobj.numtiles / 5); 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
-        $("#scrolledcontentoff").append("<div class=\"tile-column\" id=\"imgcol-" + i + "\"></div>");
-        for (x = _j = 0; _j <= 4; x = ++_j) {
-          $("#imgcol-" + i).append($("<div>").addClass("stdtile m10 x-" + x).append($("<div>").addClass("tile-scaling"), $("<div>").addClass("tile-content test-b").append($("<a>").attr("href", "#").append($("<div>").addClass("image-thumb")))));
-        }
-        _results.push($("#scrolledcontentoff").pullupScroll("#scrolledcontentoff .tile-column"));
-      }
-      return _results;
-    });
+    return this.c.withAPICall("/images/num", function(retobj) {});
   };
 
   Bilder.prototype.onLoad = function() {
-    return window.dirtyhack = setInterval(function() {
-      if ($('.image-thumb').length !== 0) {
-        window.clearInterval(window.dirtyhack);
-        return $('.image-thumb').each(function(i, obj) {
-          return $(obj).css({
-            "background-image": "url(/images/thumbs/" + (i + 1) + ")"
-          });
-        });
-      }
-    }, 100);
+    console.log($("a.chapter"));
+    return $("a.chapter").each(function(index, obj) {
+      var $obj;
+      $obj = $(obj);
+      return console.log(obj);
+    });
   };
 
   return Bilder;
