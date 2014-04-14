@@ -36,15 +36,15 @@ Tile = (function() {
         _this.core.state["tileid"] = _this.tileid;
         _this.core.registerTaker("pageChanged", true);
         return $.getScript("content/" + urlWhat + ".js").done(function() {
-          _this.core.state["childPage"].onGenerateMarkup();
           _this.core.state["childPage"].onLoad();
           _this.setLoadingScreen(false);
           $("#result").css({
             display: "initial"
           });
-          return $(".tilecontainer").css({
+          $(".tilecontainer").css({
             display: "none"
           });
+          return _this.core.state["childPage"].onDOMVisible();
         });
       };
     })(this));

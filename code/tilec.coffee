@@ -41,12 +41,12 @@ class Tile
 
             $.getScript "content/#{ urlWhat }.js"
                 .done =>
-                    @core.state["childPage"].onGenerateMarkup()
                     # Execute onLoad of inserted Child Page
                     @core.state["childPage"].onLoad()
                     @setLoadingScreen(false)
                     $("#result").css display: "initial"
                     $(".tilecontainer").css display: "none"
+                    @core.state["childPage"].onDOMVisible()
                     #$.scrollTo ".scrolled", 800, onAfter: =>
                     #    # Execute onScrolledDown of inserted Child Page
                     #    @core.state["childPage"].onScrollFinished()
