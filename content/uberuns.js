@@ -23,9 +23,13 @@ Uberuns = (function(_super) {
       });
     });
     return $(".testblock").hover(function() {
-      return $(this).animate({
-        opacity: 0
-      }, 350);
+      return setTimeout(function() {
+        if ($(".testblock").is(":hover")) {
+          return $(".testblock").animate({
+            opacity: 0
+          }, 350);
+        }
+      }, 700);
     }, function() {
       return $(this).animate({
         opacity: 1

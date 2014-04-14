@@ -11,7 +11,10 @@ class Uberuns extends ChildPage
             )
 
         $(".testblock").hover(->
-            $(this).animate({opacity:0}, 350)
+            setTimeout( ->
+                if $(".testblock").is(":hover")
+                    $(".testblock").animate({opacity:0}, 350)
+            , 700)
         ,->
             $(this).animate({opacity:1}, 350)
         )
