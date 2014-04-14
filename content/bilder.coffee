@@ -4,42 +4,37 @@ class Bilder extends ChildPage
 
     onGenerateMarkup: ->
         @c.withAPICall "/images/num", (retobj) ->
-            #tcolcount = 0
-            # for i in [0 .. Math.ceil(retobj.numtiles / 5)]
-            #    $("#scrolledcontentoff").append(
-            #        "<div class=\"tile-column\" id=\"imgcol-#{i}\"></div>"
-            #    )
-            #    for x in [0..4]
-            #        $("#imgcol-"+i).append(
-            #            $("<div>").addClass("stdtile m10 x-#{x}").append(
-            #                $("<div>").addClass("tile-scaling"),
-            #                $("<div>").addClass("tile-content test-b").append(
-            #                    $("<a>").attr("href", "#").append(
-            #                        $("<div>").addClass("image-thumb")
-            #                    )
-            #                )
-            #            )
-            #        )
-            #    $("#scrolledcontentoff").pullupScroll "#scrolledcontentoff .tile-column"
 
-    onLoad: ->
-        console.log $("a.chapter")
-        $("a.chapter").each (index, obj) ->
+    onDOMVisible: ->
+        @adjustPos()
+        $(window).bind
+            resize: @adjustPos
+
+    adjustPos: =>
+        #Adjust the positioning of the image grid to be centered exactly.
+        width = $(window).width()
+        rightElem = @findRightMost()
+        rightPoint = rightElem.offset().left + rightElem.width()
+        delta = (width * 0.94 - rightPoint) / 2
+
+        $(".image-container").css "margin-left" : (width * 0.06) + delta
+
+    findRightMost: ->
+        firstOffset = $(".img-image").first().offset().top
+        leftIndex   = -1
+        console.log "First offset:" + firstOffset
+        console.log $(".img-image")
+        $(".img-image").each (index, obj) =>
             $obj = $(obj)
-            console.log obj
-            #$obj.hover(-> 
-            #    console.log "asdasd"
-            #    $(this).animate({"background-color":"#000000"}, 250)
-            #, -> 
-            #    $(this).animate({"background-color":"#1a171a"}, 250) 
-            #)
-        # Once the generated Class exists, add background images to it
-        # Complete redesign pending
-        #window.dirtyhack = setInterval( ->
-        #    if $('.image-thumb').length isnt 0
-        #        window.clearInterval(window.dirtyhack)
-        #        $('.image-thumb').each (i, obj) ->
-        #            $(obj).css({"background-image":"url(/images/thumbs/#{i+1})"})
-        #, 100)
+            if $obj.offset().top isnt firstOffset
+                leftIndex = index - 1
+                return false
+        if leftIndex isnt -1
+            return $(".img-image").eq(leftIndex)
+        return false
+
+    onUnloadChild: ->
+        $(window).unbind("resize", @adjustPos)
+                
 
 window.core.insertChildPage(new Bilder())
