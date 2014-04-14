@@ -108,12 +108,10 @@ class ChildPage
     notImplemented = (name) ->
         console.log "#{name}: not implemented"
 
-    # Any Markup that shall be generated with the aid
-    # of ECMAScript has to be generated here. Other methods
-    # do not guarantee that the markup has finished building
-    # upon execution; this one does.
-    onGenerateMarkup: ->
-        notImplemented "onGenerateMarkup"
+    # Executes when the DOM is visible, and thus the elements are positioned
+    # correctly on the users screen.
+    onDOMVisible: ->
+        notImplemented "onDOMVisible"
 
     # Executed once the Ajax Page has been successfully requested
     # from the server, but before the scrolling has initiated.

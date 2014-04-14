@@ -153,8 +153,8 @@ ChildPage = (function() {
     return console.log("" + name + ": not implemented");
   };
 
-  ChildPage.prototype.onGenerateMarkup = function() {
-    return notImplemented("onGenerateMarkup");
+  ChildPage.prototype.onDOMVisible = function() {
+    return notImplemented("onDOMVisible");
   };
 
   ChildPage.prototype.onLoad = function() {
