@@ -9,11 +9,35 @@ Bilder = (function(_super) {
 
   function Bilder() {
     this.adjustPos = __bind(this.adjustPos, this);
+    this.onLoad = __bind(this.onLoad, this);
+    this.catCount = 0;
     Bilder.__super__.constructor.call(this);
   }
 
-  Bilder.prototype.onGenerateMarkup = function() {
-    return this.c.withAPICall("/images/num", function(retobj) {});
+  Bilder.prototype.onLoad = function() {
+    return $.ajax({
+      url: "test.json"
+    }).done((function(_this) {
+      return function(tree) {
+        var c, imgptr, _i, _j, _len, _len1, _ref;
+        console.log("onLoad: Generating Content!");
+        for (_i = 0, _len = tree.length; _i < _len; _i++) {
+          c = tree[_i];
+          _this.genCat(c.category.title, c.category.caption, c.category.content);
+          _ref = c.category.childs;
+          for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+            imgptr = _ref[_j];
+            _this.genImg(imgptr[0], imgptr[1]);
+          }
+        }
+        _this.c.release();
+        return _this.initOnClick();
+      };
+    })(this));
+  };
+
+  Bilder.prototype.acquireLoadingLock = function() {
+    return true;
   };
 
   Bilder.prototype.onDOMVisible = function() {
@@ -21,6 +45,31 @@ Bilder = (function(_super) {
     return $(window).bind({
       resize: this.adjustPos
     });
+  };
+
+  Bilder.prototype.onUnloadChild = function() {
+    return $(window).unbind("resize", this.adjustPos);
+  };
+
+  Bilder.prototype.initOnClick = function() {
+    return $(".img-image").each((function(_this) {
+      return function(index, obj) {
+        var $obj;
+        $obj = $(obj);
+        return $obj.click(function() {
+          var image, imgFullPath;
+          $obj.addClass("loading");
+          imgFullPath = $obj.children("img").attr("src").replace("thumbs", "real");
+          return image = $("<img>").attr("src", imgFullPath).load(function() {
+            return _this.imageViewer(image);
+          });
+        });
+      };
+    })(this));
+  };
+
+  Bilder.prototype.imageViewer = function(image) {
+    return console.log("here may be an image some day");
   };
 
   Bilder.prototype.adjustPos = function() {
@@ -56,8 +105,13 @@ Bilder = (function(_super) {
     return false;
   };
 
-  Bilder.prototype.onUnloadChild = function() {
-    return $(window).unbind("resize", this.adjustPos);
+  Bilder.prototype.genCat = function(title, caption, content) {
+    $(".image-container").append($("<a>").addClass("img-chapter").attr("href", "/#!/bilder/kategorie/" + this.catCount).append($("<h2>" + title + "</h2>").append($("<span>" + caption + "</span>"))));
+    return this.catCount++;
+  };
+
+  Bilder.prototype.genImg = function(filePtr, caption) {
+    return $(".image-container").append($("<a>").addClass("img-image").attr("href", "/#!/bilder/element/" + filePtr).append($("<img>").attr("src", "/images/thumbs/" + filePtr)).append($("<span>" + caption + "</span>")));
   };
 
   return Bilder;
