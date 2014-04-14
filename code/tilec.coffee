@@ -5,6 +5,7 @@ class Tile
         @scaleCount = 0
         @headerImg = $("#header-img")
 
+        @core.exportFunction("Tile.finalizeLoading", @finalizeLoading)
         #@core.exportFunction("Tile.navDown", @navigationDown)
 
     onClick: =>
@@ -43,10 +44,11 @@ class Tile
                 .done =>
                     # Execute onLoad of inserted Child Page
                     @core.state["childPage"].onLoad()
-                    @setLoadingScreen(false)
-                    $("#result").css display: "initial"
-                    $(".tilecontainer").css display: "none"
-                    @core.state["childPage"].onDOMVisible()
+                    if @core.state["childPage"].acquireLoadingLock()
+                        # Continue showing loading screen until Child Page
+                        # releases the lock
+                        return
+                    @finalizeLoading()
                     #$.scrollTo ".scrolled", 800, onAfter: =>
                     #    # Execute onScrolledDown of inserted Child Page
                     #    @core.state["childPage"].onScrollFinished()
@@ -60,10 +62,16 @@ class Tile
                     #    $("#loading-img").css visibility:"hidden"
                     #    @scaleCount = 0
         #$(".ctitle").fadeTo(200, 0)
+        #
+    finalizeLoading: =>
+        @setLoadingScreen(false)
+        $("#result").css display: "initial"
+        $(".tilecontainer").css display: "none"
+        @core.state["childPage"].onDOMVisible()
+
 
     setLoadingScreen: (toggle) ->
         if toggle
             $("#loading-screen").css display: "block"
         else
-
             $("#loading-screen").css display: "none"

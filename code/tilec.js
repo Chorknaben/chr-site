@@ -6,11 +6,13 @@ Tile = (function() {
   function Tile(tileid, _const) {
     this.tileid = tileid;
     this["const"] = _const != null ? _const : Constants;
+    this.finalizeLoading = __bind(this.finalizeLoading, this);
     this.onClick = __bind(this.onClick, this);
     this.core = window.core;
     this.interval = null;
     this.scaleCount = 0;
     this.headerImg = $("#header-img");
+    this.core.exportFunction("Tile.finalizeLoading", this.finalizeLoading);
   }
 
   Tile.prototype.onClick = function() {
@@ -37,17 +39,24 @@ Tile = (function() {
         _this.core.registerTaker("pageChanged", true);
         return $.getScript("content/" + urlWhat + ".js").done(function() {
           _this.core.state["childPage"].onLoad();
-          _this.setLoadingScreen(false);
-          $("#result").css({
-            display: "initial"
-          });
-          $(".tilecontainer").css({
-            display: "none"
-          });
-          return _this.core.state["childPage"].onDOMVisible();
+          if (_this.core.state["childPage"].acquireLoadingLock()) {
+            return;
+          }
+          return _this.finalizeLoading();
         });
       };
     })(this));
+  };
+
+  Tile.prototype.finalizeLoading = function() {
+    this.setLoadingScreen(false);
+    $("#result").css({
+      display: "initial"
+    });
+    $(".tilecontainer").css({
+      display: "none"
+    });
+    return this.core.state["childPage"].onDOMVisible();
   };
 
   Tile.prototype.setLoadingScreen = function(toggle) {

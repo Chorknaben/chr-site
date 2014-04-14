@@ -126,6 +126,9 @@ Core = (function() {
 
   Core.prototype.requestFunction = function(name, success, failure) {
     var func;
+    if (failure == null) {
+      failure = $.noop;
+    }
     func = this.state[name];
     if (func) {
       return success(func);
@@ -136,6 +139,12 @@ Core = (function() {
 
   Core.prototype.revokeFunction = function(name) {
     return delete this.state[name];
+  };
+
+  Core.prototype.release = function() {
+    return this.requestFunction("Tile.finalizeLoading", function(func) {
+      return func();
+    });
   };
 
   return Core;
@@ -179,6 +188,10 @@ ChildPage = (function() {
 
   ChildPage.prototype.onInsertion = function() {
     return notImplemented("onInsertion");
+  };
+
+  ChildPage.prototype.acquireLoadingLock = function() {
+    return false;
   };
 
   return ChildPage;

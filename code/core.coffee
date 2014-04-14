@@ -89,7 +89,7 @@ class Core
     exportFunction: (name, func) ->
         @state[name] = func
 
-    requestFunction: (name, success, failure) ->
+    requestFunction: (name, success, failure=$.noop) ->
         func = @state[name]
         if func
             success(func)
@@ -98,6 +98,10 @@ class Core
 
     revokeFunction: (name) ->
         delete @state[name]
+
+    release: ->
+        @requestFunction("Tile.finalizeLoading",
+            (func) -> func())
 
 # Abstract Skeleton Class that any Child Page ought to execute.
 class ChildPage
@@ -144,6 +148,11 @@ class ChildPage
     # own constructor execution.
     onInsertion: ->
         notImplemented "onInsertion"
+
+    # When Childpage returns true, the core will continue to show the loading
+    # screen until the Childpage interrupt the core with .release()
+    acquireLoadingLock: ->
+        return false
 
 class Context
     #necessity unsure
