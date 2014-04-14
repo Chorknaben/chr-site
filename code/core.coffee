@@ -237,8 +237,8 @@ class IndexPage extends ChildPage
         # Elements.
         for i in [12..0]
             $("#" + i).css "background-image" : "url(#{@bgSrc + i})"
-            tile = new Tile(i)
-            $("#" + i).click (tile.onClick)
+            #tile = new Tile(i)
+            #$("#" + i).click (tile.onClick)
 
     loadEffects: ->
         # attach hover effects to all tiles and navigation items

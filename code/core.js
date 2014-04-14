@@ -294,14 +294,12 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.injectTileBackgrounds = function() {
-    var i, tile, _i, _results;
+    var i, _i, _results;
     _results = [];
     for (i = _i = 12; _i >= 0; i = --_i) {
-      $("#" + i).css({
+      _results.push($("#" + i).css({
         "background-image": "url(" + (this.bgSrc + i) + ")"
-      });
-      tile = new Tile(i);
-      _results.push($("#" + i).click(tile.onClick));
+      }));
     }
     return _results;
   };
