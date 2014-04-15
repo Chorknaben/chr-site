@@ -59,11 +59,10 @@ Core = (function() {
   };
 
   Core.prototype.handleHash = function() {
-    var i, onlySoft, _i;
+    var dontHandle, i, _i;
     if (window.location.hash !== "#!/") {
-      onlySoft = this.requestTaker("softReload");
-      if (onlySoft) {
-        this.state["childPage"].onSoftReload();
+      dontHandle = this.requestTaker("dontHandle");
+      if (dontHandle) {
         return;
       }
       debug("Hash detected");

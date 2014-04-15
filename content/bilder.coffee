@@ -1,7 +1,12 @@
 class Bilder extends ChildPage
     constructor: ->
         @catCount = 0
+        @currentScrollPos = -1
         super()
+
+    argumentHandler: ->
+        #When delegated something like /bilder/elements/15
+        #important! todo!
 
     onLoad: =>
         # Generate content
@@ -40,11 +45,36 @@ class Bilder extends ChildPage
                 imgFullPath = $obj.children("img").attr("src").replace("thumbs","real")
                 image = $("<img>").attr("src", imgFullPath)
                     .load =>
-                        @imageViewer(image)
+                        $obj.removeClass("loading")
+                        @imageViewerOpen(image)
 
-    imageViewer: (image) ->
-        console.log "here may be an image some day"
+        $(".cross").click @imageViewerClose
 
+    imageViewerOpen: (image) =>
+        #lock scrolling
+        @currentScrollPos = $(window).scrollTop()
+        console.log "recording current scrolltop:"
+        $(".scrolled").css overflow:"hidden"
+
+        viewer = $(".image-viewer")
+        $(image).prependTo($(".image-viewer"))
+        viewer.removeClass("nodisplay")
+        $(".cross").removeClass("nodisplay")
+
+    imageViewerClose: =>
+        #revert Scrolling
+        console.log @currentScrollPos
+        $(".scrolled").css overflow:"initial"
+        $(window).scrollTop(@currentScrollPos)
+
+        #revert hash
+        @c.registerTaker("dontHandle", true)
+        window.location.hash = "#!/bilder"
+
+        #close viewer
+        $(".image-viewer").addClass("nodisplay")
+        $(".image-viewer").children("img").remove()
+        $(".cross").addClass("nodisplay")
                 
     adjustPos: =>
         #Adjust the positioning of the image grid to be centered exactly.

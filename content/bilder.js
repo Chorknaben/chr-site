@@ -9,10 +9,15 @@ Bilder = (function(_super) {
 
   function Bilder() {
     this.adjustPos = __bind(this.adjustPos, this);
+    this.imageViewerClose = __bind(this.imageViewerClose, this);
+    this.imageViewerOpen = __bind(this.imageViewerOpen, this);
     this.onLoad = __bind(this.onLoad, this);
     this.catCount = 0;
+    this.currentScrollPos = -1;
     Bilder.__super__.constructor.call(this);
   }
+
+  Bilder.prototype.argumentHandler = function() {};
 
   Bilder.prototype.onLoad = function() {
     return $.ajax({
@@ -52,7 +57,7 @@ Bilder = (function(_super) {
   };
 
   Bilder.prototype.initOnClick = function() {
-    return $(".img-image").each((function(_this) {
+    $(".img-image").each((function(_this) {
       return function(index, obj) {
         var $obj;
         $obj = $(obj);
@@ -61,15 +66,39 @@ Bilder = (function(_super) {
           $obj.addClass("loading");
           imgFullPath = $obj.children("img").attr("src").replace("thumbs", "real");
           return image = $("<img>").attr("src", imgFullPath).load(function() {
-            return _this.imageViewer(image);
+            $obj.removeClass("loading");
+            return _this.imageViewerOpen(image);
           });
         });
       };
     })(this));
+    return $(".cross").click(this.imageViewerClose);
   };
 
-  Bilder.prototype.imageViewer = function(image) {
-    return console.log("here may be an image some day");
+  Bilder.prototype.imageViewerOpen = function(image) {
+    var viewer;
+    this.currentScrollPos = $(window).scrollTop();
+    console.log("recording current scrolltop:");
+    $(".scrolled").css({
+      overflow: "hidden"
+    });
+    viewer = $(".image-viewer");
+    $(image).prependTo($(".image-viewer"));
+    viewer.removeClass("nodisplay");
+    return $(".cross").removeClass("nodisplay");
+  };
+
+  Bilder.prototype.imageViewerClose = function() {
+    console.log(this.currentScrollPos);
+    $(".scrolled").css({
+      overflow: "initial"
+    });
+    $(window).scrollTop(this.currentScrollPos);
+    this.c.registerTaker("dontHandle", true);
+    window.location.hash = "#!/bilder";
+    $(".image-viewer").addClass("nodisplay");
+    $(".image-viewer").children("img").remove();
+    return $(".cross").addClass("nodisplay");
   };
 
   Bilder.prototype.adjustPos = function() {

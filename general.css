@@ -478,6 +478,43 @@ b {
   bottom: -100px;
   width: 100%;
 }
+.image-viewer {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #1a171a;
+  overflow: hidden;
+}
+.image-viewer img {
+  width: 100%;
+  display: block;
+  max-height: 100%;
+}
+.image-viewer span {
+  position: relative;
+  display: block;
+  top: -90px;
+  left: 6%;
+  color: white;
+  line-height: 50px;
+  font-size: 50px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+}
+.cross {
+  position: absolute;
+  display: block;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  z-index: 1000;
+  cursor: pointer;
+}
+.nodisplay {
+  display: none;
+}
 #uberuns-header {
   text-align: center;
   font-size: 3em;

@@ -49,20 +49,7 @@ class Tile
                         # releases the lock
                         return
                     @finalizeLoading()
-                    #$.scrollTo ".scrolled", 800, onAfter: =>
-                    #    # Execute onScrolledDown of inserted Child Page
-                    #    @core.state["childPage"].onScrollFinished()
-                    #    @core.state["scrolloff"  ] = $(window).scrollTop()
 
-                    #    # Change Title and fade in
-                    #    #$(".ctitle").html("Chorknaben")
-                    #    #$(".ctitle").fadeTo(200, 1)
-
-                    #    # Revert state that animations modified
-                    #    $("#loading-img").css visibility:"hidden"
-                    #    @scaleCount = 0
-        #$(".ctitle").fadeTo(200, 0)
-        #
     finalizeLoading: =>
         @setLoadingScreen(false)
         $("#result").css display: "initial"

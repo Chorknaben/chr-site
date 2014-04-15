@@ -45,9 +45,8 @@ class Core
         # user has bookmarked a page and is now clicking on the bookmarked link,
         # trigger the corresponding tile onclick event
         if window.location.hash isnt "#!/"
-            onlySoft = @requestTaker("softReload")
-            if onlySoft
-                @state["childPage"].onSoftReload()
+            dontHandle = @requestTaker("dontHandle")
+            if dontHandle
                 return
             debug "Hash detected"
             for i in [0..7]
