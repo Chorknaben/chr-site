@@ -246,14 +246,25 @@ b {
   height: 40%;
 }
 .hoveroverlay {
-  margin-right: 0 !important;
   background-color: black;
   opacity: 0;
+  -webkit-transition: opacity 100ms ease-in-out;
+  -moz-transition: opacity 100ms ease-in-out;
+  -ms-transition: opacity 100ms ease-in-out;
+  -o-transition: opacity 100ms ease-in-out;
+  transition: opacity 100ms ease-in-out;
+}
+.tile-content:hover .hoveroverlay {
+  opacity: 0.7;
 }
 .tileov {
   width: 100%;
   height: 100%;
   position: absolute;
+  top: 0;
+}
+#link-bilder .hoveroverlay {
+  z-index: 5;
 }
 .tile-column {
   /*margin-top:10px;*/
@@ -303,12 +314,36 @@ b {
   top: 0;
 }
 .bigtile-content {
+  overflow: hidden;
   margin-right: 0;
 }
 .bigtile-content a {
   display: block;
   width: 100%;
   height: 100%;
+}
+#link-bilder img {
+  margin-left: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  -webkit-transition: all 2s ease-in-out;
+  -moz-transition: all 2s ease-in-out;
+  -ms-transition: all 2s ease-in-out;
+  -o-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
+  -webkit-filter: saturate(1) opacity(1);
+  -moz-filter: saturate(1) opacity(1);
+  -ms-filter: saturate(1) opacity(1);
+  -o-filter: saturate(1) opacity(1);
+  filter: saturate(1) opacity(1);
+}
+#link-bilder img.luminanz {
+  -webkit-filter: saturate(0) opacity(0);
+  -moz-filter: saturate(0) opacity(0);
+  -ms-filter: saturate(0) opacity(0);
+  -o-filter: saturate(0) opacity(0);
+  filter: saturate(0) opacity(0);
 }
 @media screen and (max-width: 1177px) and (min-width: 940px) {
   .stdtile {
@@ -610,4 +645,43 @@ b {
   width: 100%;
   font-size: 5em;
   font-weight: bold;
+}
+.presse-frame {
+  width: 94%;
+  position: absolute;
+  padding: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 6%;
+  height: 600px;
+  margin: auto;
+}
+.artikel-container {
+  height: 100%;
+  position: relative;
+  background: #fff;
+  display: block;
+}
+.presse-frame .slidee {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  list-style: none;
+}
+.presse-frame .slidee li {
+  float: left;
+  margin: 0 50px 0 0;
+  padding: 0;
+  width: 750px;
+  height: 100%;
+}
+.presse-frame .slidee li img {
+  width: 750px;
+  height: auto;
+  display: block;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
 }

@@ -4,14 +4,18 @@ class Presse extends ChildPage
     constructor: ->
         super()
 
-    onGenerateMarkup: ->
+    acquireLoadingLock: ->
+        return true
+
+    notifyHashChange: (hash) ->
+        console.log hash
 
     onLoad: ->
         $.getScript "code/sly.min.js", ->
             sly = new Sly(".presse-frame", {
                 horizontal: 1
                 itemNav:    'basic'
-                activateOn: 'click'
+                #activateOn: 'click'
                 mouseDragging: 1
                 touchDragging: 1
                 releaseSwing: 1
@@ -21,12 +25,8 @@ class Presse extends ChildPage
                 easing: 'swing'
                 scrollBy:   1
             }).init()
-            $(".presse-frame").css top: $(window).height()/2 - $(".presse-frame").height()/2
-
-    dependencyHook: ->
-        return [
-            "code/sly.min.js"
-        ]
+            #$(".presse-frame").css top: $(window).height()/2 - $(".presse-frame").height()/2
+        window.core.release()
 
     onScrollFinished: ->
 

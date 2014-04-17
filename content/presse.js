@@ -14,15 +14,20 @@ Presse = (function(_super) {
     Presse.__super__.constructor.call(this);
   }
 
-  Presse.prototype.onGenerateMarkup = function() {};
+  Presse.prototype.acquireLoadingLock = function() {
+    return true;
+  };
+
+  Presse.prototype.notifyHashChange = function(hash) {
+    return console.log(hash);
+  };
 
   Presse.prototype.onLoad = function() {
-    return $.getScript("code/sly.min.js", function() {
+    $.getScript("code/sly.min.js", function() {
       var sly;
-      sly = new Sly(".presse-frame", {
+      return sly = new Sly(".presse-frame", {
         horizontal: 1,
         itemNav: 'basic',
-        activateOn: 'click',
         mouseDragging: 1,
         touchDragging: 1,
         releaseSwing: 1,
@@ -32,14 +37,8 @@ Presse = (function(_super) {
         easing: 'swing',
         scrollBy: 1
       }).init();
-      return $(".presse-frame").css({
-        top: $(window).height() / 2 - $(".presse-frame").height() / 2
-      });
     });
-  };
-
-  Presse.prototype.dependencyHook = function() {
-    return ["code/sly.min.js"];
+    return window.core.release();
   };
 
   Presse.prototype.onScrollFinished = function() {};

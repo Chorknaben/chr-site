@@ -49,11 +49,21 @@ class Core
             if dontHandle
                 return
             debug "Hash detected"
+
+            # Delegate the Hash if it belongs to a currently loaded childPage
+            currentPage = $(".scrolled").attr("id")
+            if currentPage
+                if window.location.hash.substr(3,currentPage.length) is currentPage
+                    subHash = window.location.hash.substr(3+currentPage.length, window.location.hash.length)
+                    @state["childPage"].notifyHashChange(subHash)
+                    return
+
             for i in [0..7]
                 if "#!/" + Constants.tileResolver[i][1] is window.location.hash
                     i++
                     new Tile(i, Constants).onClick()
                     break
+
         if window.location.hash is "#!/" and @requestTaker("pageChanged")
             debug "Back to Index page"
             $(".tilecontainer").css display: "initial"
@@ -153,6 +163,10 @@ class ChildPage
     acquireLoadingLock: ->
         return false
 
+    # An Hash is being delegated to the subpage
+    notifyHashChange: (newHash) ->
+
+
 class Context
     #necessity unsure
     @internalState: {}
@@ -177,12 +191,17 @@ class IndexPage extends ChildPage
         else 
             @bgSrc = "/1610/#{$(window).height()-90}/"
 
+        @currentRotatorImgID = 0
+        @maxRotatorImgID = 100
+        @imgObj = null
+
     onInsertion: ->
         @injectBackground()
         @injectTileBackgrounds()
         @loadEffects()
         @preloadImage()
         @footerLeftClick()
+        @imgRotator(10000)
 
     injectBackground: ->
         # Determine the resolution of the client and send it to the server.
@@ -220,16 +239,52 @@ class IndexPage extends ChildPage
             $("#footer").animate({bottom: "0px"}, 100)
             @rotateImg(".footer-left img", 0)
 
+    imgRotator: (waitFor) ->
+        #@currentRotatorImgID = 0
+        #@maxRotatorImgID = 100
+        #
+        if @currentRotatorImgID is 0
+            console.log "imgRotator: init"
+            @makeImage(->
+                $("#link-bilder").append(@imgObj))
+            @imgRotator(15000)
+        else
+            console.log "imgRotator: now:wait"
+            setTimeout(=>
+                $("#link-bilder img").addClass("luminanz")
+                setTimeout(=>
+                    console.log "after fade"
+                    $("#link-bilder img").remove()
+                    if @currentRotatorImgID > @maxRotatorImgID
+                        @currentRotatorImgID = 1
+                    @makeImage((image) =>
+                        setTimeout(=>
+                            console.log image
+                            $("#link-bilder").append(image)
+                            $(image).removeClass("luminanz")
+                            setTimeout(=>
+                                @imgRotator(15000)
+                            ,2000)
+                        , 3000)
+                    , true)
+                , 2000)
+            , waitFor)
 
-     rotateImg: (image, degree) ->
+    makeImage: (onload,lum) ->
+        @imgObj = new Image()
+        @imgObj.onload = onload(@imgObj)
+        @imgObj.src = "/images/real/#{@currentRotatorImgID}"
+        if lum then @imgObj.classList.add("luminanz")
+        @currentRotatorImgID++
+
+     luminanz: (image, saturate, opacity) ->
          $elem = $(image)
          $elem.css
-             '-webkit-transform': 'rotate(' + degree + 'deg)',
-             '-moz-transform': 'rotate(' + degree + 'deg)',
-             '-ms-transform': 'rotate(' + degree + 'deg)',
-             '-o-transform': 'rotate(' + degree + 'deg)',
-             'transform': 'rotate(' + degree + 'deg)',
-             'zoom': 1
+             '-webkit-filter': "saturate(#{saturate}) opacity(#{opacity})",
+             '-moz-filter': "saturate(#{saturate}) opacity(#{opacity})",
+             '-ms-filter': "saturate(#{saturate}) opacity(#{opacity})",
+             '-o-filter': "saturate(#{saturate}) opacity(#{opacity})",
+             'filter': "saturate(#{saturate}) opacity(#{opacity})",
 
     injectTileBackgrounds: ->
         # inject Tile Backgrounds as background attributes to the corresponding DOM
@@ -241,23 +296,23 @@ class IndexPage extends ChildPage
         # attach hover effects to all tiles and navigation items
         stl = $( Constants.SELECTOR_TILE )
 
-        stl.each (index, obj) ->
-            obj = $ ( obj )
-            obj.hover ->
-                obj.children "a"
-                   .children ".hoveroverlay"
-                   .animate opacity:"0.7", 100
-                $ stl.not(".hoveroverlay")[ index - 1 ]
-                    .children ".hoveroverlay"
-                    .animate opacity:"0", 100
-            , ->
-                obj.children "a"
-                   .children ".hoveroverlay"
-                   .animate opacity:"0", 100
-                $ stl[ index - 1 ]
-                    .children "a"
-                    .children ".hoveroverlay"
-                    .animate opacity:"0", 100
+        #stl.each (index, obj) ->
+        #    obj = $ ( obj )
+        #    obj.hover ->
+        #        obj.children "a"
+        #           .children ".hoveroverlay"
+        #           .animate opacity:"0.7", 100
+        #        $ stl.not(".hoveroverlay")[ index - 1 ]
+        #            .children ".hoveroverlay"
+        #            .animate opacity:"0", 100
+        #    , ->
+        #        obj.children "a"
+        #           .children ".hoveroverlay"
+        #           .animate opacity:"0", 100
+        #        $ stl[ index - 1 ]
+        #            .children "a"
+        #            .children ".hoveroverlay"
+        #            .animate opacity:"0", 100
 
 class Navigation
     @preState = null

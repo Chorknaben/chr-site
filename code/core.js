@@ -59,13 +59,21 @@ Core = (function() {
   };
 
   Core.prototype.handleHash = function() {
-    var dontHandle, i, _i;
+    var currentPage, dontHandle, i, subHash, _i;
     if (window.location.hash !== "#!/") {
       dontHandle = this.requestTaker("dontHandle");
       if (dontHandle) {
         return;
       }
       debug("Hash detected");
+      currentPage = $(".scrolled").attr("id");
+      if (currentPage) {
+        if (window.location.hash.substr(3, currentPage.length) === currentPage) {
+          subHash = window.location.hash.substr(3 + currentPage.length, window.location.hash.length);
+          this.state["childPage"].notifyHashChange(subHash);
+          return;
+        }
+      }
       for (i = _i = 0; _i <= 7; i = ++_i) {
         if ("#!/" + Constants.tileResolver[i][1] === window.location.hash) {
           i++;
@@ -193,6 +201,8 @@ ChildPage = (function() {
     return false;
   };
 
+  ChildPage.prototype.notifyHashChange = function(newHash) {};
+
   return ChildPage;
 
 })();
@@ -227,6 +237,9 @@ IndexPage = (function(_super) {
     } else {
       this.bgSrc = "/1610/" + ($(window).height() - 90) + "/";
     }
+    this.currentRotatorImgID = 0;
+    this.maxRotatorImgID = 100;
+    this.imgObj = null;
   }
 
   IndexPage.prototype.onInsertion = function() {
@@ -234,7 +247,8 @@ IndexPage = (function(_super) {
     this.injectTileBackgrounds();
     this.loadEffects();
     this.preloadImage();
-    return this.footerLeftClick();
+    this.footerLeftClick();
+    return this.imgRotator(10000);
   };
 
   IndexPage.prototype.injectBackground = function() {
@@ -279,16 +293,59 @@ IndexPage = (function(_super) {
     }
   };
 
-  IndexPage.prototype.rotateImg = function(image, degree) {
+  IndexPage.prototype.imgRotator = function(waitFor) {
+    if (this.currentRotatorImgID === 0) {
+      console.log("imgRotator: init");
+      this.makeImage(function() {
+        return $("#link-bilder").append(this.imgObj);
+      });
+      return this.imgRotator(15000);
+    } else {
+      console.log("imgRotator: now:wait");
+      return setTimeout((function(_this) {
+        return function() {
+          $("#link-bilder img").addClass("luminanz");
+          return setTimeout(function() {
+            console.log("after fade");
+            $("#link-bilder img").remove();
+            if (_this.currentRotatorImgID > _this.maxRotatorImgID) {
+              _this.currentRotatorImgID = 1;
+            }
+            return _this.makeImage(function(image) {
+              return setTimeout(function() {
+                console.log(image);
+                $("#link-bilder").append(image);
+                $(image).removeClass("luminanz");
+                return setTimeout(function() {
+                  return _this.imgRotator(15000);
+                }, 2000);
+              }, 3000);
+            }, true);
+          }, 2000);
+        };
+      })(this), waitFor);
+    }
+  };
+
+  IndexPage.prototype.makeImage = function(onload, lum) {
+    this.imgObj = new Image();
+    this.imgObj.onload = onload(this.imgObj);
+    this.imgObj.src = "/images/real/" + this.currentRotatorImgID;
+    if (lum) {
+      this.imgObj.classList.add("luminanz");
+    }
+    return this.currentRotatorImgID++;
+  };
+
+  IndexPage.prototype.luminanz = function(image, saturate, opacity) {
     var $elem;
     $elem = $(image);
     return $elem.css({
-      '-webkit-transform': 'rotate(' + degree + 'deg)',
-      '-moz-transform': 'rotate(' + degree + 'deg)',
-      '-ms-transform': 'rotate(' + degree + 'deg)',
-      '-o-transform': 'rotate(' + degree + 'deg)',
-      'transform': 'rotate(' + degree + 'deg)',
-      'zoom': 1
+      '-webkit-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
+      '-moz-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
+      '-ms-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
+      '-o-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
+      'filter': "saturate(" + saturate + ") opacity(" + opacity + ")"
     });
   };
 
@@ -305,25 +362,7 @@ IndexPage = (function(_super) {
 
   IndexPage.prototype.loadEffects = function() {
     var stl;
-    stl = $(Constants.SELECTOR_TILE);
-    return stl.each(function(index, obj) {
-      obj = $(obj);
-      return obj.hover(function() {
-        obj.children("a").children(".hoveroverlay").animate({
-          opacity: "0.7"
-        }, 100);
-        return $(stl.not(".hoveroverlay")[index - 1]).children(".hoveroverlay").animate({
-          opacity: "0"
-        }, 100);
-      }, function() {
-        obj.children("a").children(".hoveroverlay").animate({
-          opacity: "0"
-        }, 100);
-        return $(stl[index - 1]).children("a").children(".hoveroverlay").animate({
-          opacity: "0"
-        }, 100);
-      });
-    });
+    return stl = $(Constants.SELECTOR_TILE);
   };
 
   return IndexPage;
