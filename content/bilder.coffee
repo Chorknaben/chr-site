@@ -4,9 +4,30 @@ class Bilder extends ChildPage
         @currentScrollPos = -1
         super()
 
-    argumentHandler: ->
-        #When delegated something like /bilder/elements/15
-        #important! todo!
+    notifyHashChange: (newHash) ->
+        console.log newHash
+        if newHash.indexOf("/element/") == 0
+            id = newHash.substr(9,newHash.length)
+            el = $(".img-image").eq(id + 1)
+            el.addClass("loading")
+            image = $("<img>").attr("src", "/images/real/#{id}")
+                .load =>
+                    el.removeClass("loading")
+                    @imageViewerOpen(image)
+        if newHash.indexOf("/kategorie/") == 0
+            rightElem = @findRightMost()
+            rightPt = rightElem.offset().left + rightElem.width()
+            firstChapt = $(".image-container").children().eq(0).offset()
+            chapterID = newHash.substr(11,newHash.length)
+            chapter = $(".img-chapter").eq(chapterID)
+            @contentViewerOpen
+                left: firstChapt.left
+                top: firstChapt.top
+                right: $(window).width() - rightPt
+                chapter: chapter
+                title: "WILLKOMMEN"
+                caption: "auf unserer Bilder Seite!"
+                content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
 
     onLoad: =>
         # Generate content
@@ -20,9 +41,6 @@ class Bilder extends ChildPage
                     @genImg(imgptr[0], imgptr[1])
             @c.release()
             
-            # Initialize onclick listeners
-            @initOnClick()
-
     acquireLoadingLock: ->
         return true
 
@@ -34,21 +52,50 @@ class Bilder extends ChildPage
     onUnloadChild: ->
         $(window).unbind("resize", @adjustPos)
 
-    initOnClick: ->
-        $(".img-image").each (index,obj) =>
-            $obj = $(obj)
-            $obj.click =>
-                # Display loading spinner
-                $obj.addClass("loading")
+    contentViewerOpen: (contentObj) =>
+        $cnt = $(".content-viewer")
+        #todo click another while open? think about that bitch..
+        console.log "contentViewer: open"
 
-                # Load Image
-                imgFullPath = $obj.children("img").attr("src").replace("thumbs","real")
-                image = $("<img>").attr("src", imgFullPath)
-                    .load =>
-                        $obj.removeClass("loading")
-                        @imageViewerOpen(image)
+        #$.scrollTo("+=#{contentObj.chapter.offset().top-contentObj.top}px", 200)
+        $.scrollTo(contentObj.chapter.offset().top-contentObj.top, 500)
 
-        $(".cross").click @imageViewerClose
+        $("html").css cursor:"pointer"
+        $cnt.css
+            left: contentObj.left
+            right: contentObj.right+30
+            top: contentObj.top
+            cursor:"default"
+
+        $cnt.children("h1").html(contentObj.title)
+        $cnt.children("h2").html(contentObj.caption)
+        $cnt.children("#ccnt").html(contentObj.content)
+
+        $(document).click @closeClickHandler
+        $(".content-viewer").click @clickOnViewerHandler
+
+        $cnt.removeClass("nodisplay")
+
+    closeClickHandler: =>
+        @contentViewerClose()
+
+    clickOnViewerHandler: (event) =>
+        event.stopPropagation()
+
+    contentViewerClose: =>
+        $cnt = $(".content-viewer")
+        console.log "contentViewer: close"
+
+        $(document).unbind("click", @closeClickHandler)
+        $(".content-viewer").unbind("click", @clickOnViewerHandler)
+
+        $("html").css cursor: "default"
+        $cnt.css cursor: "default"
+
+        @c.registerTaker("dontHandle", true)
+        window.location.hash = "#!/bilder"
+
+        $cnt.addClass("nodisplay")
 
     imageViewerOpen: (image) =>
         #lock scrolling
@@ -57,6 +104,9 @@ class Bilder extends ChildPage
         $(".scrolled").css overflow:"hidden"
 
         viewer = $(".image-viewer")
+        $(image).addClass("link-cursor")
+        $(image).click =>
+            @imageViewerClose()
         $(image).prependTo($(".image-viewer"))
         viewer.removeClass("nodisplay")
         $(".cross").removeClass("nodisplay")

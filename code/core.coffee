@@ -53,9 +53,20 @@ class Core
             # Delegate the Hash if it belongs to a currently loaded childPage
             currentPage = $(".scrolled").attr("id")
             if currentPage
-                if window.location.hash.substr(3,currentPage.length) is currentPage
-                    subHash = window.location.hash.substr(3+currentPage.length, window.location.hash.length)
-                    @state["childPage"].notifyHashChange(subHash)
+                unless window.location.hash.length is 3+currentPage.length
+                    if window.location.hash.substr(3,currentPage.length) is currentPage
+                        subHash = window.location.hash.substr(3+currentPage.length, window.location.hash.length)
+                        @state["childPage"].notifyHashChange(subHash)
+                        return
+            else
+                if window.location.hash.indexOf("/",2) isnt -1
+                    console.log "this condition is true"
+                    @registerTaker("backupHash", window.location.hash)
+                    for i in [0..7]
+                        if window.location.hash.indexOf(Constants.tileResolver[i][1]) isnt -1
+                            i++
+                            new Tile(i, Constants).onClick()
+                            break
                     return
 
             for i in [0..7]

@@ -59,7 +59,7 @@ Core = (function() {
   };
 
   Core.prototype.handleHash = function() {
-    var currentPage, dontHandle, i, subHash, _i;
+    var currentPage, dontHandle, i, subHash, _i, _j;
     if (window.location.hash !== "#!/") {
       dontHandle = this.requestTaker("dontHandle");
       if (dontHandle) {
@@ -68,13 +68,28 @@ Core = (function() {
       debug("Hash detected");
       currentPage = $(".scrolled").attr("id");
       if (currentPage) {
-        if (window.location.hash.substr(3, currentPage.length) === currentPage) {
-          subHash = window.location.hash.substr(3 + currentPage.length, window.location.hash.length);
-          this.state["childPage"].notifyHashChange(subHash);
+        if (window.location.hash.length !== 3 + currentPage.length) {
+          if (window.location.hash.substr(3, currentPage.length) === currentPage) {
+            subHash = window.location.hash.substr(3 + currentPage.length, window.location.hash.length);
+            this.state["childPage"].notifyHashChange(subHash);
+            return;
+          }
+        }
+      } else {
+        if (window.location.hash.indexOf("/", 2) !== -1) {
+          console.log("this condition is true");
+          this.registerTaker("backupHash", window.location.hash);
+          for (i = _i = 0; _i <= 7; i = ++_i) {
+            if (window.location.hash.indexOf(Constants.tileResolver[i][1]) !== -1) {
+              i++;
+              new Tile(i, Constants).onClick();
+              break;
+            }
+          }
           return;
         }
       }
-      for (i = _i = 0; _i <= 7; i = ++_i) {
+      for (i = _j = 0; _j <= 7; i = ++_j) {
         if ("#!/" + Constants.tileResolver[i][1] === window.location.hash) {
           i++;
           new Tile(i, Constants).onClick();

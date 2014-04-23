@@ -2,14 +2,6 @@ class Uberuns extends ChildPage
     constructor: ->
 
     onLoad: ->
-        $(".icon-container .hoveroverlay").each (i, obj) ->
-            $obj = $(obj)
-            $obj.hover(->
-                $obj.animate({opacity: 0.7}, 100)
-            , ->
-                $obj.animate({opacity: 0}, 100)
-            )
-
         $(".testblock").hover(->
             setTimeout( ->
                 if $(".testblock").is(":hover")

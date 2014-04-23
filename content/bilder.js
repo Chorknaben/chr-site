@@ -11,13 +11,47 @@ Bilder = (function(_super) {
     this.adjustPos = __bind(this.adjustPos, this);
     this.imageViewerClose = __bind(this.imageViewerClose, this);
     this.imageViewerOpen = __bind(this.imageViewerOpen, this);
+    this.contentViewerClose = __bind(this.contentViewerClose, this);
+    this.clickOnViewerHandler = __bind(this.clickOnViewerHandler, this);
+    this.closeClickHandler = __bind(this.closeClickHandler, this);
+    this.contentViewerOpen = __bind(this.contentViewerOpen, this);
     this.onLoad = __bind(this.onLoad, this);
     this.catCount = 0;
     this.currentScrollPos = -1;
     Bilder.__super__.constructor.call(this);
   }
 
-  Bilder.prototype.argumentHandler = function() {};
+  Bilder.prototype.notifyHashChange = function(newHash) {
+    var chapter, chapterID, el, firstChapt, id, image, rightElem, rightPt;
+    console.log(newHash);
+    if (newHash.indexOf("/element/") === 0) {
+      id = newHash.substr(9, newHash.length);
+      el = $(".img-image").eq(id + 1);
+      el.addClass("loading");
+      image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
+        return function() {
+          el.removeClass("loading");
+          return _this.imageViewerOpen(image);
+        };
+      })(this));
+    }
+    if (newHash.indexOf("/kategorie/") === 0) {
+      rightElem = this.findRightMost();
+      rightPt = rightElem.offset().left + rightElem.width();
+      firstChapt = $(".image-container").children().eq(0).offset();
+      chapterID = newHash.substr(11, newHash.length);
+      chapter = $(".img-chapter").eq(chapterID);
+      return this.contentViewerOpen({
+        left: firstChapt.left,
+        top: firstChapt.top,
+        right: $(window).width() - rightPt,
+        chapter: chapter,
+        title: "WILLKOMMEN",
+        caption: "auf unserer Bilder Seite!",
+        content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
+      });
+    }
+  };
 
   Bilder.prototype.onLoad = function() {
     return $.ajax({
@@ -35,8 +69,7 @@ Bilder = (function(_super) {
             _this.genImg(imgptr[0], imgptr[1]);
           }
         }
-        _this.c.release();
-        return _this.initOnClick();
+        return _this.c.release();
       };
     })(this));
   };
@@ -56,23 +89,51 @@ Bilder = (function(_super) {
     return $(window).unbind("resize", this.adjustPos);
   };
 
-  Bilder.prototype.initOnClick = function() {
-    $(".img-image").each((function(_this) {
-      return function(index, obj) {
-        var $obj;
-        $obj = $(obj);
-        return $obj.click(function() {
-          var image, imgFullPath;
-          $obj.addClass("loading");
-          imgFullPath = $obj.children("img").attr("src").replace("thumbs", "real");
-          return image = $("<img>").attr("src", imgFullPath).load(function() {
-            $obj.removeClass("loading");
-            return _this.imageViewerOpen(image);
-          });
-        });
-      };
-    })(this));
-    return $(".cross").click(this.imageViewerClose);
+  Bilder.prototype.contentViewerOpen = function(contentObj) {
+    var $cnt;
+    $cnt = $(".content-viewer");
+    console.log("contentViewer: open");
+    $.scrollTo(contentObj.chapter.offset().top - contentObj.top, 500);
+    $("html").css({
+      cursor: "pointer"
+    });
+    $cnt.css({
+      left: contentObj.left,
+      right: contentObj.right + 30,
+      top: contentObj.top,
+      cursor: "default"
+    });
+    $cnt.children("h1").html(contentObj.title);
+    $cnt.children("h2").html(contentObj.caption);
+    $cnt.children("#ccnt").html(contentObj.content);
+    $(document).click(this.closeClickHandler);
+    $(".content-viewer").click(this.clickOnViewerHandler);
+    return $cnt.removeClass("nodisplay");
+  };
+
+  Bilder.prototype.closeClickHandler = function() {
+    return this.contentViewerClose();
+  };
+
+  Bilder.prototype.clickOnViewerHandler = function(event) {
+    return event.stopPropagation();
+  };
+
+  Bilder.prototype.contentViewerClose = function() {
+    var $cnt;
+    $cnt = $(".content-viewer");
+    console.log("contentViewer: close");
+    $(document).unbind("click", this.closeClickHandler);
+    $(".content-viewer").unbind("click", this.clickOnViewerHandler);
+    $("html").css({
+      cursor: "default"
+    });
+    $cnt.css({
+      cursor: "default"
+    });
+    this.c.registerTaker("dontHandle", true);
+    window.location.hash = "#!/bilder";
+    return $cnt.addClass("nodisplay");
   };
 
   Bilder.prototype.imageViewerOpen = function(image) {
@@ -83,6 +144,12 @@ Bilder = (function(_super) {
       overflow: "hidden"
     });
     viewer = $(".image-viewer");
+    $(image).addClass("link-cursor");
+    $(image).click((function(_this) {
+      return function() {
+        return _this.imageViewerClose();
+      };
+    })(this));
     $(image).prependTo($(".image-viewer"));
     viewer.removeClass("nodisplay");
     return $(".cross").removeClass("nodisplay");

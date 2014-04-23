@@ -9,19 +9,6 @@ Uberuns = (function(_super) {
   function Uberuns() {}
 
   Uberuns.prototype.onLoad = function() {
-    $(".icon-container .hoveroverlay").each(function(i, obj) {
-      var $obj;
-      $obj = $(obj);
-      return $obj.hover(function() {
-        return $obj.animate({
-          opacity: 0.7
-        }, 100);
-      }, function() {
-        return $obj.animate({
-          opacity: 0
-        }, 100);
-      });
-    });
     return $(".testblock").hover(function() {
       return setTimeout(function() {
         if ($(".testblock").is(":hover")) {

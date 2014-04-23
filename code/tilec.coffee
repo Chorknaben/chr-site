@@ -51,6 +51,10 @@ class Tile
                     @finalizeLoading()
 
     finalizeLoading: =>
+        moreHash = @core.requestTaker("backupHash")
+        if typeof moreHash isnt "undefined"
+            #maybe re-get-the-loading-lock!
+            window.location.hash = moreHash
         @setLoadingScreen(false)
         $("#result").css display: "initial"
         $(".tilecontainer").css display: "none"

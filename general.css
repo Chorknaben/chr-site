@@ -8,6 +8,9 @@ b {
   position: relative;
   margin-top: 15%;
 }
+.link-cursor {
+  cursor: pointer;
+}
 #loading-screen {
   top: 50px;
   bottom: 25px;
@@ -24,6 +27,42 @@ b {
   margin-top: 5%;
   width: 100%;
   top: 50px;
+}
+.content-viewer {
+  position: fixed;
+  display: block;
+  left: 80px;
+  top: 170px;
+  z-index: 5;
+  height: 100%;
+  background: #1a171a;
+  color: white;
+  padding: 30px 50px 0 50px;
+}
+.content-viewer h1 {
+  font-size: 50px;
+}
+.content-viewer h2 {
+  font-size: 30px;
+  font-style: italic;
+  position: relative;
+  top: -10px;
+}
+.content-viewer #ccnt {
+  border-top: 1px solid #333;
+  padding-top: 25px;
+}
+#subpage-header {
+  text-align: center;
+  font-size: 3em;
+  color: white;
+  font-weight: bold;
+}
+.withtable {
+  display: table-row;
+}
+.withspace {
+  margin-bottom: 10px;
 }
 .allcnt {
   position: relative;
@@ -81,7 +120,7 @@ b {
 }
 .default-y {
   position: absolute;
-  top: 150px;
+  top: 100px;
 }
 .header {
   color: white;
@@ -418,7 +457,7 @@ b {
   margin-top: 4px;
   float: left;
   height: 210px;
-  width: 210px;
+  width: 338px;
   overflow: hidden;
   text-decoration: none;
 }
@@ -436,7 +475,7 @@ b {
 .image-container a.img-chapter h2 {
   font-size: 26px;
   display: block;
-  padding-top: 40%;
+  padding-top: 26%;
   line-height: 26px;
   color: white;
   text-decoration: none;
@@ -460,7 +499,7 @@ b {
 }
 .image-container a.img-image img {
   height: 210px;
-  width: 210px;
+  width: 338px;
   opacity: 0.95;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
@@ -550,13 +589,6 @@ b {
 .nodisplay {
   display: none;
 }
-#uberuns-header {
-  text-align: center;
-  font-size: 3em;
-  color: white;
-  display: table-row;
-  font-weight: bold;
-}
 #uberuns-cnt {
   display: table-row;
   height: 100%;
@@ -602,6 +634,9 @@ b {
   top: 0;
   bottom: 0;
   margin: auto;
+}
+.hoveroverlay:hover {
+  opacity: 0.8;
 }
 .wrapper {
   display: table;

@@ -49,6 +49,11 @@ Tile = (function() {
   };
 
   Tile.prototype.finalizeLoading = function() {
+    var moreHash;
+    moreHash = this.core.requestTaker("backupHash");
+    if (typeof moreHash !== "undefined") {
+      window.location.hash = moreHash;
+    }
     this.setLoadingScreen(false);
     $("#result").css({
       display: "initial"
