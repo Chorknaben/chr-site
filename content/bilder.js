@@ -25,7 +25,7 @@ Bilder = (function(_super) {
     var chapter, chapterID, el, firstChapt, id, image, rightElem, rightPt;
     console.log(newHash);
     if (newHash.indexOf("/element/") === 0) {
-      id = newHash.substr(9, newHash.length);
+      id = parseInt(newHash.substr(9, newHash.length));
       el = $(".img-image").eq(id + 1);
       el.addClass("loading");
       image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
