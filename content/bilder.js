@@ -26,7 +26,9 @@ Bilder = (function(_super) {
     console.log(newHash);
     if (newHash.indexOf("/element/") === 0) {
       id = parseInt(newHash.substr(9, newHash.length));
-      el = $(".img-image").eq(id + 1);
+      console.log("id:" + id);
+      el = $(".img-image").eq(id - 1);
+      console.log(el);
       el.addClass("loading");
       image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
         return function() {
