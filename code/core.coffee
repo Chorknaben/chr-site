@@ -336,8 +336,8 @@ class Navigation
         if method is Constants.METHODS.NAME
             result = null
             @navigationChilds.each (i, obj) ->
-                href = obj.attributes["href"].firstChild
-                if href.data.substring(3, href.length) is name
+                href = obj.attributes["href"].value
+                if href.substring(3, href.length) is name
                     result = $(obj)
                     return false
             if result is null

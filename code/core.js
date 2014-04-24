@@ -399,8 +399,8 @@ Navigation = (function() {
       result = null;
       this.navigationChilds.each(function(i, obj) {
         var href;
-        href = obj.attributes["href"].firstChild;
-        if (href.data.substring(3, href.length) === name) {
+        href = obj.attributes["href"].value;
+        if (href.substring(3, href.length) === name) {
           result = $(obj);
           return false;
         }
