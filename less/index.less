@@ -45,6 +45,29 @@
     float:left;
 }
 
+//bottom part of tiles
+.bottomtile{
+    float:left;
+    margin-top:10px;
+    height:40px;
+    .bottomcontentoffset{
+        position:absolute;
+        left:0; right:10px;
+        top:0; bottom:0;
+        background:midnightblue;
+    }
+}
+
+.left{
+    width:60%;
+    position:relative;
+}
+.right{
+    width:40%;
+    background:#000;
+
+}
+
 #bigtile1{
     /*display:inline-block;*/
     position:relative;
@@ -147,6 +170,7 @@
         left: 0;
         right: 0;
         margin: auto;
+        margin-top:48px;
     }
     .header .ctitle{
         width:100%;
@@ -156,6 +180,17 @@
     .header-nav{
         display:none
     }
+    .left{
+        width:100%;
+    }
+    .right{
+        display:none;
+    }
+    .tilecontainer{
+        height:60%;
+    }
+    #bg img{display:none;}
+    #bg{background:#1a171a;}
 }
 
 @media screen and (max-width: 940px){
@@ -190,4 +225,15 @@
     #tile-presse{
         margin-top:10px;
     }
+    .left{
+        display:none;
+    }
+    .right{
+        display:none;
+    }
+    .tilecontainer{
+        height:70%;
+    }
+    #bg img{display:none;}
+    #bg{background:#1a171a;}
 }
