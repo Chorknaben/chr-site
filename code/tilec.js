@@ -13,6 +13,7 @@ Tile = (function() {
     this.scaleCount = 0;
     this.headerImg = $("#header-img");
     this.core.exportFunction("Tile.finalizeLoading", this.finalizeLoading);
+    this.core.exportFunction("Tile.load", this.load);
   }
 
   Tile.prototype.onClick = function() {
@@ -24,9 +25,14 @@ Tile = (function() {
     return this.load(this["const"].tileResolver[this.tileid - 1][0], this["const"].tileResolver[this.tileid - 1][1]);
   };
 
-  Tile.prototype.load = function(prettyWhat, urlWhat) {
+  Tile.prototype.load = function(prettyWhat, urlWhat, bare) {
+    if (bare == null) {
+      bare = false;
+    }
     console.log(urlWhat);
-    window.nav.by(this["const"].METHODS.NAME, urlWhat);
+    if (!bare) {
+      window.nav.by(this["const"].METHODS.NAME, urlWhat);
+    }
     return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         window.location.hash = "!/" + urlWhat;

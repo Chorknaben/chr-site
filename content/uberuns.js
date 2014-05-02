@@ -6,10 +6,26 @@ var Uberuns,
 Uberuns = (function(_super) {
   __extends(Uberuns, _super);
 
-  function Uberuns() {}
+  function Uberuns() {
+    this.core = window.core;
+    this.oneshot = true;
+  }
+
+  Uberuns.prototype.onDOMVisible = function() {};
+
+  Uberuns.prototype.notifyHashChange = function(newHash) {
+    var load;
+    if (this.oneshot) {
+      load = this.core.requestFunction("Tile.load", function(load) {
+        newHash = newHash.substr(1, newHash.length);
+        return load("Über uns", "uberuns-" + newHash, true);
+      }, $.noop);
+    }
+    return this.oneshot = false;
+  };
 
   Uberuns.prototype.onLoad = function() {
-    return $(".testblock").hover(function() {
+    $(".testblock").hover(function() {
       return setTimeout(function() {
         if ($(".testblock").is(":hover")) {
           return $(".testblock").animate({
@@ -22,6 +38,7 @@ Uberuns = (function(_super) {
         opacity: 1
       }, 350);
     });
+    return window.core.release();
   };
 
   Uberuns.prototype.mouseEnter = function() {};

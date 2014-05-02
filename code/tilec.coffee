@@ -6,6 +6,7 @@ class Tile
         @headerImg = $("#header-img")
 
         @core.exportFunction("Tile.finalizeLoading", @finalizeLoading)
+        @core.exportFunction("Tile.load", @load)
         #@core.exportFunction("Tile.navDown", @navigationDown)
 
     onClick: =>
@@ -17,11 +18,11 @@ class Tile
            @const.tileResolver[@tileid-1][1]
         )
 
-    load: (prettyWhat, urlWhat) ->
+    load: (prettyWhat, urlWhat, bare=false) ->
         # Animations happening on Click
         # --------
         console.log urlWhat
-        window.nav.by(@const.METHODS.NAME, urlWhat)
+        unless bare then window.nav.by(@const.METHODS.NAME, urlWhat)
 
         # Load content
         # --------
