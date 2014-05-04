@@ -740,6 +740,49 @@ b {
   height: 600px;
   width: 1500px;
 }
+#uberuns-cnt #reise-onleft {
+  position: fixed;
+  left: -60px;
+  height: 75.5%;
+}
+.reise-gridcontainer {
+  height: 100%;
+}
+#uberuns-cnt #width-reise {
+  width: 100px;
+}
+.reise-tile {
+  height: 50%;
+  width: 32%;
+  float: left;
+  background: #1a171a;
+  margin-left: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+.text {
+  color: white;
+}
+.text .padding {
+  padding: 10px 10px 0 10px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+}
+.text h1 {
+  font-size: 40px;
+  padding-bottom: 3px;
+}
+.text p {
+  position: absolute;
+  top: 65px;
+  bottom: 0;
+  overflow-y: auto;
+  border-top: 1px solid #333;
+  padding-top: 5px;
+}
 .presse-frame {
   width: 94%;
   position: absolute;

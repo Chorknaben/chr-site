@@ -8,20 +8,19 @@ Uberuns = (function(_super) {
 
   function Uberuns() {
     this.core = window.core;
-    this.oneshot = true;
   }
 
   Uberuns.prototype.onDOMVisible = function() {};
 
   Uberuns.prototype.notifyHashChange = function(newHash) {
-    var load;
-    if (this.oneshot) {
-      load = this.core.requestFunction("Tile.load", function(load) {
-        newHash = newHash.substr(1, newHash.length);
-        return load("Über uns", "uberuns-" + newHash, true);
-      }, $.noop);
-    }
-    return this.oneshot = false;
+    console.log("getting hash: " + newHash);
+    return this.core.requestFunction("Tile.load", function(load) {
+      var bare, originalSite, urlOverride;
+      newHash = newHash.substr(1, newHash.length);
+      this.core.registerTaker("dontHandle", true);
+      load("Über uns", "uberuns-" + newHash, originalSite = "uberuns", urlOverride = "uberuns/" + newHash, bare = true);
+      return this.core.requestTaker("dontHandle");
+    }, $.noop);
   };
 
   Uberuns.prototype.onLoad = function() {

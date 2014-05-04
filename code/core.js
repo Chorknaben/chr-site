@@ -77,7 +77,6 @@ Core = (function() {
         }
       } else {
         if (window.location.hash.indexOf("/", 2) !== -1) {
-          console.log("this condition is true");
           this.registerTaker("backupHash", window.location.hash);
           for (i = _i = 0; _i <= 7; i = ++_i) {
             if (window.location.hash.indexOf(Constants.tileResolver[i][1]) !== -1) {
@@ -106,7 +105,13 @@ Core = (function() {
         display: "none"
       });
       this.state["childPage"].onUnloadChild();
-      return window.nav.reset();
+      this.state["currentPage"] = void 0;
+      this.state["currentURL"] = void 0;
+      window.nav.reset();
+      return this.requestFunction("ImgRotator.pauseImgRotator", function(func) {
+        console.log("imgRotator: resume");
+        return func(true);
+      });
     }
   };
 
@@ -139,6 +144,9 @@ Core = (function() {
       this.state["childPage"].onUnloadChild();
     }
     this.state["childPage"] = pageObj;
+    this.requestFunction("ImgRotator.pauseImgRotator", function(func) {
+      return func(false);
+    });
     return pageObj.onInsertion();
   };
 
@@ -244,6 +252,7 @@ IndexPage = (function(_super) {
   __extends(IndexPage, _super);
 
   function IndexPage() {
+    this.pauseImgRotator = __bind(this.pauseImgRotator, this);
     var w;
     IndexPage.__super__.constructor.call(this);
     w = $(window).width();
@@ -255,6 +264,7 @@ IndexPage = (function(_super) {
     this.currentRotatorImgID = 0;
     this.maxRotatorImgID = 100;
     this.imgObj = null;
+    this.imgRotatorEnabled = true;
   }
 
   IndexPage.prototype.onInsertion = function() {
@@ -263,7 +273,8 @@ IndexPage = (function(_super) {
     this.loadEffects();
     this.preloadImage();
     this.footerLeftClick();
-    return this.imgRotator(10000);
+    this.imgRotator(10000);
+    return this.c.exportFunction("ImgRotator.pauseImgRotator", this.pauseImgRotator);
   };
 
   IndexPage.prototype.injectBackground = function() {
@@ -316,19 +327,16 @@ IndexPage = (function(_super) {
       });
       return this.imgRotator(15000);
     } else {
-      console.log("imgRotator: now:wait");
       return setTimeout((function(_this) {
         return function() {
           $("#link-bilder img").addClass("luminanz");
           return setTimeout(function() {
-            console.log("after fade");
             $("#link-bilder img").remove();
             if (_this.currentRotatorImgID > _this.maxRotatorImgID) {
               _this.currentRotatorImgID = 1;
             }
             return _this.makeImage(function(image) {
               return setTimeout(function() {
-                console.log(image);
                 $("#link-bilder").append(image);
                 $(image).removeClass("luminanz");
                 return setTimeout(function() {
@@ -342,6 +350,10 @@ IndexPage = (function(_super) {
     }
   };
 
+  IndexPage.prototype.pauseImgRotator = function(state) {
+    return this.imgRotatorEnabled = state;
+  };
+
   IndexPage.prototype.makeImage = function(onload, lum) {
     this.imgObj = new Image();
     this.imgObj.onload = onload(this.imgObj);
@@ -349,7 +361,9 @@ IndexPage = (function(_super) {
     if (lum) {
       this.imgObj.classList.add("luminanz");
     }
-    return this.currentRotatorImgID++;
+    if (this.imgRotatorEnabled) {
+      return this.currentRotatorImgID++;
+    }
   };
 
   IndexPage.prototype.luminanz = function(image, saturate, opacity) {
@@ -389,7 +403,6 @@ Navigation = (function() {
 
   function Navigation(element) {
     this.navigator = $(element);
-    console.log(this.navigator);
     this.navigationChilds = this.navigator.children();
   }
 

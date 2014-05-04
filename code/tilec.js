@@ -7,6 +7,7 @@ Tile = (function() {
     this.tileid = tileid;
     this["const"] = _const != null ? _const : Constants;
     this.finalizeLoading = __bind(this.finalizeLoading, this);
+    this.load = __bind(this.load, this);
     this.onClick = __bind(this.onClick, this);
     this.core = window.core;
     this.interval = null;
@@ -21,26 +22,39 @@ Tile = (function() {
     if (this.tileid > 7) {
       this.tileid -= 7;
     }
-    console.log(this["const"].tileResolver);
     return this.load(this["const"].tileResolver[this.tileid - 1][0], this["const"].tileResolver[this.tileid - 1][1]);
   };
 
-  Tile.prototype.load = function(prettyWhat, urlWhat, bare) {
+  Tile.prototype.load = function(prettyWhat, urlWhat, originalSite, urlOverride, bare) {
+    if (originalSite == null) {
+      originalSite = void 0;
+    }
+    if (urlOverride == null) {
+      urlOverride = void 0;
+    }
     if (bare == null) {
       bare = false;
     }
-    console.log(urlWhat);
     if (!bare) {
       window.nav.by(this["const"].METHODS.NAME, urlWhat);
     }
     return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
-        window.location.hash = "!/" + urlWhat;
         _this.setLoadingScreen(true);
         $(_this.core.state["blurredbg"]).appendTo("#blurbg");
-        $(".scrolled").attr("id", urlWhat);
+        if (!originalSite) {
+          $(".scrolled").attr("id", urlWhat);
+        } else {
+          $(".scrolled").attr("id", originalSite);
+        }
         _this.core.state["currentPage"] = prettyWhat;
-        _this.core.state["currentURL"] = urlWhat;
+        if (!urlOverride) {
+          window.location.hash = "!/" + urlWhat;
+          _this.core.state["currentURL"] = urlWhat;
+        } else {
+          window.location.hash = "!/" + urlOverride;
+          _this.core.state["currentURL"] = urlOverride;
+        }
         _this.core.state["tileid"] = _this.tileid;
         _this.core.registerTaker("pageChanged", true);
         return $.getScript("content/" + urlWhat + ".js").done(function() {

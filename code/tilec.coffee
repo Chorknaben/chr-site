@@ -12,32 +12,37 @@ class Tile
     onClick: =>
         console.log "Tile Click: id=#{@tileid}"
         if @tileid > 7 then @tileid -= 7
-        console.log @const.tileResolver
         @load(
            @const.tileResolver[@tileid-1][0],
            @const.tileResolver[@tileid-1][1]
         )
 
-    load: (prettyWhat, urlWhat, bare=false) ->
+    load: (prettyWhat, urlWhat, originalSite=undefined, urlOverride=undefined, bare=false) =>
         # Animations happening on Click
         # --------
-        console.log urlWhat
         unless bare then window.nav.by(@const.METHODS.NAME, urlWhat)
 
         # Load content
         # --------
         $("#result").load "content/#{ urlWhat }.html", =>
-            # Set new Hash
-            window.location.hash = "!/" + urlWhat
-
             @setLoadingScreen(true)
 
             # Insert background Image
             $(@core.state["blurredbg"]).appendTo("#blurbg")
 
-            $(".scrolled").attr("id", urlWhat)
+            if not originalSite
+                $(".scrolled").attr("id", urlWhat)
+            else
+                $(".scrolled").attr("id", originalSite)
+
             @core.state["currentPage"] = prettyWhat
-            @core.state["currentURL" ] = urlWhat
+            if not urlOverride
+                # Set new Hash
+                window.location.hash = "!/" + urlWhat
+                @core.state["currentURL" ] = urlWhat
+            else
+                window.location.hash = "!/" + urlOverride
+                @core.state["currentURL"] = urlOverride
             @core.state["tileid"] = @tileid
             @core.registerTaker("pageChanged", true)
 

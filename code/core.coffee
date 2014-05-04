@@ -44,11 +44,15 @@ class Core
         # If the site gets called and a hash is already set, for example when the
         # user has bookmarked a page and is now clicking on the bookmarked link,
         # trigger the corresponding tile onclick event
+        # 
+        # redesign this... mess
         if window.location.hash isnt "#!/"
             dontHandle = @requestTaker("dontHandle")
             if dontHandle
                 return
             debug "Hash detected"
+
+        #situation:user is on site presse and types site uberuns/team
 
             # Delegate the Hash if it belongs to a currently loaded childPage
             currentPage = $(".scrolled").attr("id")
@@ -60,7 +64,6 @@ class Core
                         return
             else
                 if window.location.hash.indexOf("/",2) isnt -1
-                    console.log "this condition is true"
                     @registerTaker("backupHash", window.location.hash)
                     for i in [0..7]
                         if window.location.hash.indexOf(Constants.tileResolver[i][1]) isnt -1
@@ -80,7 +83,12 @@ class Core
             $(".tilecontainer").css display: "initial"
             $(".scrolled").css display: "none"
             @state["childPage"].onUnloadChild()
+            @state["currentPage"] = undefined
+            @state["currentURL"] = undefined
             window.nav.reset()
+            @requestFunction("ImgRotator.pauseImgRotator", (func) -> 
+                console.log "imgRotator: resume"
+                func(true))
 
     executeOnce: (name, func) ->
         if @state["tmp" + name] is true
@@ -104,6 +112,8 @@ class Core
         if @state["childPage"]
             @state["childPage"].onUnloadChild()
         @state["childPage"] = pageObj
+        @requestFunction("ImgRotator.pauseImgRotator", (func) ->
+            func(false))
         pageObj.onInsertion()
 
     exportFunction: (name, func) ->
@@ -205,6 +215,7 @@ class IndexPage extends ChildPage
         @currentRotatorImgID = 0
         @maxRotatorImgID = 100
         @imgObj = null
+        @imgRotatorEnabled = true
 
     onInsertion: ->
         @injectBackground()
@@ -213,6 +224,8 @@ class IndexPage extends ChildPage
         @preloadImage()
         @footerLeftClick()
         @imgRotator(10000)
+
+        @c.exportFunction("ImgRotator.pauseImgRotator", @pauseImgRotator)
 
     injectBackground: ->
         # Determine the resolution of the client and send it to the server.
@@ -260,17 +273,15 @@ class IndexPage extends ChildPage
                 $("#link-bilder").append(@imgObj))
             @imgRotator(15000)
         else
-            console.log "imgRotator: now:wait"
+            # TODO no delay
             setTimeout(=>
                 $("#link-bilder img").addClass("luminanz")
                 setTimeout(=>
-                    console.log "after fade"
                     $("#link-bilder img").remove()
                     if @currentRotatorImgID > @maxRotatorImgID
                         @currentRotatorImgID = 1
                     @makeImage((image) =>
                         setTimeout(=>
-                            console.log image
                             $("#link-bilder").append(image)
                             $(image).removeClass("luminanz")
                             setTimeout(=>
@@ -281,12 +292,15 @@ class IndexPage extends ChildPage
                 , 2000)
             , waitFor)
 
+    pauseImgRotator: (state) =>
+        @imgRotatorEnabled = state
+
     makeImage: (onload,lum) ->
         @imgObj = new Image()
         @imgObj.onload = onload(@imgObj)
         @imgObj.src = "/images/real/#{@currentRotatorImgID}"
         if lum then @imgObj.classList.add("luminanz")
-        @currentRotatorImgID++
+        if @imgRotatorEnabled then @currentRotatorImgID++
 
      luminanz: (image, saturate, opacity) ->
          $elem = $(image)
@@ -329,7 +343,6 @@ class Navigation
     @preState = null
     constructor: (element) ->
         @navigator = $(element)
-        console.log @navigator
         @navigationChilds = @navigator.children()
 
     by: (method, name) ->

@@ -1,17 +1,17 @@
 class Uberuns extends ChildPage
     constructor: ->
         @core = window.core
-        @oneshot = true
 
     onDOMVisible: ->
 
     notifyHashChange: (newHash) ->
-        if @oneshot
-            load = @core.requestFunction("Tile.load", (load) ->
-                newHash = newHash.substr(1,newHash.length)
-                load("Über uns", "uberuns-#{newHash}", true)
-            , $.noop)
-        @oneshot = false
+        console.log "getting hash: #{newHash}"
+        @core.requestFunction("Tile.load", (load) ->
+            newHash = newHash.substr(1,newHash.length)
+            @core.registerTaker("dontHandle", true)
+            load("Über uns", "uberuns-#{newHash}", originalSite="uberuns", urlOverride="uberuns/#{newHash}", bare=true)
+            @core.requestTaker("dontHandle")
+        , $.noop)
 
     onLoad: ->
         $(".testblock").hover(->
