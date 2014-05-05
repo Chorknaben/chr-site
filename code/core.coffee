@@ -6,8 +6,19 @@ class Constants
         "NAME_USER" : 0x00010
         "ID" : 0x00100
     }
-    @tileResolver  = [
-       ["Über uns", "uberuns"], ["Stiftung", "stiftung"],["Presse", "presse"],["Musik","musik"],["Shop", "shop"],["Kalender", "kalender"],["Bilder","bilder"], ["Impressum", "impressum"]
+    #Subpages first; order important
+    @ApplicationRoutes = [
+          ["uberuns/reise", "uberuns-reise"]
+        , ["uberuns/team", "uberuns-team"]
+        , ["uberuns/timeline", "uberuns-timeline"]
+        , ["uberuns", "uberuns"]
+        , ["stiftung", "stiftung"]
+        , ["presse", "presse"]
+        , ["musik","musik"]
+        , ["shop", "shop"]
+        , ["kalender", "kalender"]
+        , ["bilder","bilder"]
+        , ["impressum", "impressum"]
     ]
 
 
@@ -41,54 +52,91 @@ class Core
             window.location.hash = "#!/"
 
     handleHash: =>
-        # If the site gets called and a hash is already set, for example when the
-        # user has bookmarked a page and is now clicking on the bookmarked link,
-        # trigger the corresponding tile onclick event
-        # 
-        # redesign this... mess
-        if window.location.hash isnt "#!/"
-            dontHandle = @requestTaker("dontHandle")
-            if dontHandle
+        # Respond to a hash change.
+        if @state["globalHashResponseDisabled"]
+            return
+
+        hash = window.location.hash
+
+        if hash is "#!/"
+            @raiseIndexPage()
+            return
+
+        # Top priority: test if Hash can be resolved to a route.
+        # Only the relevant part, that is, everything after #!/ will
+        # be tested for being a route.
+        #   Then, if the hash is a valid route, matching.msg will return "match"
+        #   If it isn't, it will return "nomatch"
+        matching = @resolveLocator(hash)
+        switch matching.msg
+            when "match"
+                # Then, in "match" it will be checked if the site is already loaded.
+                # If so, 
+                #   If there is a remaining part of the hash
+                #       Delegate this Hash to the child page
+                # Else,
+                #   Actually load the child page.
+                #   Then,
+                #       If there is a remaining part of the hash
+                #       Delegate this Hash to the child page
+                matching.handler()
                 return
-            debug "Hash detected"
+            when "nomatch"
+                # Display a 404; stub!
+                matching.handler()
+                return
 
-        #situation:user is on site presse and types site uberuns/team
+    resolveLocator: (hash) =>
+        # strip preceding junk
+        route = null
+        usefulHash = hash.substr(3, hash.length)
+        for element in Constants.ApplicationRoutes
+            # usefulhash.startsWith(element)
+            if usefulHash.lastIndexOf(element[0], 0) is 0
+                route = element[1]
+                break
+        if route
+            return {
+                msg: "match"
+                handler: =>
+                    if $(".scrolled").attr("id") is route
+                        # Child page is already loaded
+                        @delegateChildPage(route, usefulHash)
+                    else
+                        @requestFunction "Tile.load", (load) =>
+                            load route, =>
+                                @delegateChildPage(route, usefulHash)
+            }
 
-            # Delegate the Hash if it belongs to a currently loaded childPage
-            currentPage = $(".scrolled").attr("id")
-            if currentPage
-                unless window.location.hash.length is 3+currentPage.length
-                    if window.location.hash.substr(3,currentPage.length) is currentPage
-                        subHash = window.location.hash.substr(3+currentPage.length, window.location.hash.length)
-                        @state["childPage"].notifyHashChange(subHash)
-                        return
-            else
-                if window.location.hash.indexOf("/",2) isnt -1
-                    @registerTaker("backupHash", window.location.hash)
-                    for i in [0..7]
-                        if window.location.hash.indexOf(Constants.tileResolver[i][1]) isnt -1
-                            i++
-                            new Tile(i, Constants).onClick()
-                            break
-                    return
+        else
+            return {
+                msg: "nomatch"
+                handler: =>
+                    console.log "fixme: display 404"
+            }
 
-            for i in [0..7]
-                if "#!/" + Constants.tileResolver[i][1] is window.location.hash
-                    i++
-                    new Tile(i, Constants).onClick()
-                    break
+    delegateChildPage: (route, hash) ->
+        # delegate the route part
+        delegatePart = hash.substr(route.length, hash.length)
+        @state["childPage"].notifyHashChange(delegatePart)
 
+    raiseIndexPage: ->
         if window.location.hash is "#!/" and @requestTaker("pageChanged")
             debug "Back to Index page"
             $(".tilecontainer").css display: "initial"
             $(".scrolled").css display: "none"
+            $(".scrolled").attr("id", "")
             @state["childPage"].onUnloadChild()
+            @state["childPage"] = new IndexPage()
             @state["currentPage"] = undefined
             @state["currentURL"] = undefined
             window.nav.reset()
             @requestFunction("ImgRotator.pauseImgRotator", (func) -> 
                 console.log "imgRotator: resume"
                 func(true))
+        else
+            debug "Already at Index Page"
+
 
     executeOnce: (name, func) ->
         if @state["tmp" + name] is true
@@ -380,6 +428,7 @@ class Navigation
 # objects created due to the modular infrastructure
 window.core = new Core
 window.constants = Constants
+new Tile(Constants)
 
 $ ->
     window.nav = new Navigation(".header-nav")
@@ -395,3 +444,5 @@ $ ->
     $(window).scroll c.getScrollHandler
 
     window.onhashchange = c.handleHash
+    window.load=c.requestFunction "Tile.load", (func) -> func
+

@@ -12,21 +12,12 @@ Uberuns = (function(_super) {
 
   Uberuns.prototype.onDOMVisible = function() {};
 
-  Uberuns.prototype.notifyHashChange = function(newHash) {
-    console.log("getting hash: " + newHash);
-    return this.core.requestFunction("Tile.load", function(load) {
-      var bare, originalSite, urlOverride;
-      newHash = newHash.substr(1, newHash.length);
-      this.core.registerTaker("dontHandle", true);
-      load("Über uns", "uberuns-" + newHash, originalSite = "uberuns", urlOverride = "uberuns/" + newHash, bare = true);
-      return this.core.requestTaker("dontHandle");
-    }, $.noop);
-  };
+  Uberuns.prototype.notifyHashChange = function(newHash) {};
 
   Uberuns.prototype.onLoad = function() {
     $(".testblock").hover(function() {
       return setTimeout(function() {
-        if ($(".testblock").is(":hover")) {
+        if ($(".testblock:hover").length > 0) {
           return $(".testblock").animate({
             opacity: 0
           }, 350);

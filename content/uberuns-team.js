@@ -7,7 +7,7 @@ UberunsTeam = (function(_super) {
   __extends(UberunsTeam, _super);
 
   function UberunsTeam() {
-    return UberunsTeam.__super__.constructor.apply(this, arguments);
+    this.core = window.core;
   }
 
   UberunsTeam.prototype.onLoad = function() {};

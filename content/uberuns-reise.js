@@ -10,27 +10,61 @@ UberunsReise = (function(_super) {
   function UberunsReise() {
     this.reisehack = __bind(this.reisehack, this);
     this.core = window.core;
+    this.showMap = false;
   }
 
-  UberunsReise.prototype.onLoad = function() {};
+  UberunsReise.prototype.onLoad = function() {
+    return $.when($.getScript("/code/jquery.vmap.europe.js"), $.getScript("/code/jquery.vmap.min.js"), $.Deferred(function(deferred) {
+      return $(deferred.resolve);
+    })).then(function() {
+      console.log("sucess");
+      this.showMap = true;
+      return window.core.release();
+    }, function() {
+      console.log("fail");
+      return window.core.release();
+    });
+  };
 
   UberunsReise.prototype.onDOMVisible = function() {
+    console.log("in onASDvisible");
     this.reisehack();
-    return $(window).on("resize", this.reisehack);
+    $(window).on("resize", this.reisehack);
+    if (this.showMap) {
+      this.setupMap();
+      return $(window).on("resize", this.setupMap);
+    }
   };
 
   UberunsReise.prototype.onUnloadChild = function() {
-    return $(window).off("resize", this.reisehack);
+    $(window).off("resize", this.reisehack);
+    return $(window).off("resize", this.setupMap);
   };
 
-  UberunsReise.prototype.notifyHashChange = function(newHash) {
-    console.log("getting hash: " + newHash);
-    return this.core.requestFunction("Tile.load", function(load) {
-      newHash = newHash.substr(1, newHash.length);
-      this.core.registerTaker("dontHandle", true);
-      load("Über uns", "uberuns-" + newHash, "uberuns", "uberuns/" + newHash, true);
-      return this.core.requestTaker("dontHandle");
-    }, $.noop);
+  UberunsReise.prototype.notifyHashChange = function(newHash) {};
+
+  UberunsReise.prototype.acquireLoadingLock = function() {
+    return true;
+  };
+
+  UberunsReise.prototype.setupMap = function() {
+    var hReiseTile, wReiseTile;
+    wReiseTile = $(".reise-tile").eq(0).width();
+    hReiseTile = $(".reise-tile").eq(0).height();
+    $("#map").css({
+      height: hReiseTile,
+      width: wReiseTile
+    });
+    console.log(hReiseTile);
+    console.log($("#map").css("height"));
+    return $('#map').vectorMap({
+      map: 'europe_en',
+      backgroundColor: null,
+      color: '#ffffff',
+      hoverColor: '#999999',
+      enableZoom: false,
+      showTooltip: false
+    });
   };
 
   UberunsReise.prototype.reisehack = function() {

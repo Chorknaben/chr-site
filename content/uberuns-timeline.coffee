@@ -1,4 +1,7 @@
 class UberunsTimeline extends ChildPage
+    constructor: ->
+        @core = window.core
+
     onLoad: ->
 
     onUnloadChild: ->

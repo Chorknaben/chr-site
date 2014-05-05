@@ -7,7 +7,7 @@ UberunsTimeline = (function(_super) {
   __extends(UberunsTimeline, _super);
 
   function UberunsTimeline() {
-    return UberunsTimeline.__super__.constructor.apply(this, arguments);
+    this.core = window.core;
   }
 
   UberunsTimeline.prototype.onLoad = function() {};

@@ -17,7 +17,7 @@ Constants = (function() {
     "ID": 0x00100
   };
 
-  Constants.tileResolver = [["Über uns", "uberuns"], ["Stiftung", "stiftung"], ["Presse", "presse"], ["Musik", "musik"], ["Shop", "shop"], ["Kalender", "kalender"], ["Bilder", "bilder"], ["Impressum", "impressum"]];
+  Constants.ApplicationRoutes = [["uberuns/reise", "uberuns-reise"], ["uberuns/team", "uberuns-team"], ["uberuns/timeline", "uberuns-timeline"], ["uberuns", "uberuns"], ["stiftung", "stiftung"], ["presse", "presse"], ["musik", "musik"], ["shop", "shop"], ["kalender", "kalender"], ["bilder", "bilder"], ["impressum", "impressum"]];
 
   return Constants;
 
@@ -27,6 +27,7 @@ Core = (function() {
   var debug;
 
   function Core() {
+    this.resolveLocator = __bind(this.resolveLocator, this);
     this.handleHash = __bind(this.handleHash, this);
   }
 
@@ -59,43 +60,73 @@ Core = (function() {
   };
 
   Core.prototype.handleHash = function() {
-    var currentPage, dontHandle, i, subHash, _i, _j;
-    if (window.location.hash !== "#!/") {
-      dontHandle = this.requestTaker("dontHandle");
-      if (dontHandle) {
-        return;
-      }
-      debug("Hash detected");
-      currentPage = $(".scrolled").attr("id");
-      if (currentPage) {
-        if (window.location.hash.length !== 3 + currentPage.length) {
-          if (window.location.hash.substr(3, currentPage.length) === currentPage) {
-            subHash = window.location.hash.substr(3 + currentPage.length, window.location.hash.length);
-            this.state["childPage"].notifyHashChange(subHash);
-            return;
-          }
-        }
-      } else {
-        if (window.location.hash.indexOf("/", 2) !== -1) {
-          this.registerTaker("backupHash", window.location.hash);
-          for (i = _i = 0; _i <= 7; i = ++_i) {
-            if (window.location.hash.indexOf(Constants.tileResolver[i][1]) !== -1) {
-              i++;
-              new Tile(i, Constants).onClick();
-              break;
-            }
-          }
-          return;
-        }
-      }
-      for (i = _j = 0; _j <= 7; i = ++_j) {
-        if ("#!/" + Constants.tileResolver[i][1] === window.location.hash) {
-          i++;
-          new Tile(i, Constants).onClick();
-          break;
-        }
+    var hash, matching;
+    if (this.state["globalHashResponseDisabled"]) {
+      return;
+    }
+    hash = window.location.hash;
+    if (hash === "#!/") {
+      this.raiseIndexPage();
+      return;
+    }
+    matching = this.resolveLocator(hash);
+    switch (matching.msg) {
+      case "match":
+        matching.handler();
+        break;
+      case "nomatch":
+        matching.handler();
+    }
+  };
+
+  Core.prototype.resolveLocator = function(hash) {
+    var element, route, usefulHash, _i, _len, _ref;
+    route = null;
+    usefulHash = hash.substr(3, hash.length);
+    _ref = Constants.ApplicationRoutes;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      element = _ref[_i];
+      if (usefulHash.lastIndexOf(element[0], 0) === 0) {
+        route = element[1];
+        break;
       }
     }
+    if (route) {
+      return {
+        msg: "match",
+        handler: (function(_this) {
+          return function() {
+            if ($(".scrolled").attr("id") === route) {
+              return _this.delegateChildPage(route, usefulHash);
+            } else {
+              return _this.requestFunction("Tile.load", function(load) {
+                return load(route, function() {
+                  return _this.delegateChildPage(route, usefulHash);
+                });
+              });
+            }
+          };
+        })(this)
+      };
+    } else {
+      return {
+        msg: "nomatch",
+        handler: (function(_this) {
+          return function() {
+            return console.log("fixme: display 404");
+          };
+        })(this)
+      };
+    }
+  };
+
+  Core.prototype.delegateChildPage = function(route, hash) {
+    var delegatePart;
+    delegatePart = hash.substr(route.length, hash.length);
+    return this.state["childPage"].notifyHashChange(delegatePart);
+  };
+
+  Core.prototype.raiseIndexPage = function() {
     if (window.location.hash === "#!/" && this.requestTaker("pageChanged")) {
       debug("Back to Index page");
       $(".tilecontainer").css({
@@ -104,7 +135,9 @@ Core = (function() {
       $(".scrolled").css({
         display: "none"
       });
+      $(".scrolled").attr("id", "");
       this.state["childPage"].onUnloadChild();
+      this.state["childPage"] = new IndexPage();
       this.state["currentPage"] = void 0;
       this.state["currentURL"] = void 0;
       window.nav.reset();
@@ -112,6 +145,8 @@ Core = (function() {
         console.log("imgRotator: resume");
         return func(true);
       });
+    } else {
+      return debug("Already at Index Page");
     }
   };
 
@@ -460,6 +495,8 @@ window.core = new Core;
 
 window.constants = Constants;
 
+new Tile(Constants);
+
 $(function() {
   var c;
   window.nav = new Navigation(".header-nav");
@@ -468,5 +505,8 @@ $(function() {
   c.handleHash();
   c.insertChildPage(new IndexPage());
   $(window).scroll(c.getScrollHandler);
-  return window.onhashchange = c.handleHash;
+  window.onhashchange = c.handleHash;
+  return window.load = c.requestFunction("Tile.load", function(func) {
+    return func;
+  });
 });

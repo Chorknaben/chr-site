@@ -3,12 +3,10 @@ var Tile,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 Tile = (function() {
-  function Tile(tileid, _const) {
-    this.tileid = tileid;
-    this["const"] = _const != null ? _const : Constants;
+  function Tile(_const) {
+    this["const"] = _const;
     this.finalizeLoading = __bind(this.finalizeLoading, this);
     this.load = __bind(this.load, this);
-    this.onClick = __bind(this.onClick, this);
     this.core = window.core;
     this.interval = null;
     this.scaleCount = 0;
@@ -17,15 +15,7 @@ Tile = (function() {
     this.core.exportFunction("Tile.load", this.load);
   }
 
-  Tile.prototype.onClick = function() {
-    console.log("Tile Click: id=" + this.tileid);
-    if (this.tileid > 7) {
-      this.tileid -= 7;
-    }
-    return this.load(this["const"].tileResolver[this.tileid - 1][0], this["const"].tileResolver[this.tileid - 1][1]);
-  };
-
-  Tile.prototype.load = function(prettyWhat, urlWhat, originalSite, urlOverride, bare) {
+  Tile.prototype.load = function(urlWhat, callback, originalSite, urlOverride, bare) {
     if (originalSite == null) {
       originalSite = void 0;
     }
@@ -35,9 +25,7 @@ Tile = (function() {
     if (bare == null) {
       bare = false;
     }
-    if (!bare) {
-      window.nav.by(this["const"].METHODS.NAME, urlWhat);
-    }
+    this.core.state["globalHashResponseDisabled"] = true;
     return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
         _this.setLoadingScreen(true);
@@ -47,12 +35,9 @@ Tile = (function() {
         } else {
           $(".scrolled").attr("id", originalSite);
         }
-        _this.core.state["currentPage"] = prettyWhat;
         if (!urlOverride) {
-          window.location.hash = "!/" + urlWhat;
           _this.core.state["currentURL"] = urlWhat;
         } else {
-          window.location.hash = "!/" + urlOverride;
           _this.core.state["currentURL"] = urlOverride;
         }
         _this.core.state["tileid"] = _this.tileid;
@@ -60,16 +45,20 @@ Tile = (function() {
         return $.getScript("content/" + urlWhat + ".js").done(function() {
           _this.core.state["childPage"].onLoad();
           if (_this.core.state["childPage"].acquireLoadingLock()) {
+            callback();
             return;
           }
-          return _this.finalizeLoading();
+          return _this.finalizeLoading(callback);
         });
       };
     })(this));
   };
 
-  Tile.prototype.finalizeLoading = function() {
+  Tile.prototype.finalizeLoading = function(callback) {
     var moreHash;
+    if (callback == null) {
+      callback = void 0;
+    }
     moreHash = this.core.requestTaker("backupHash");
     if (typeof moreHash !== "undefined") {
       window.location.hash = moreHash;
@@ -81,6 +70,10 @@ Tile = (function() {
     $(".tilecontainer").css({
       display: "none"
     });
+    this.core.state["globalHashResponseDisabled"] = false;
+    if (callback) {
+      callback();
+    }
     return this.core.state["childPage"].onDOMVisible();
   };
 

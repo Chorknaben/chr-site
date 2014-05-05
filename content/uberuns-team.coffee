@@ -1,4 +1,7 @@
 class UberunsTeam extends ChildPage
+    constructor: ->
+        @core = window.core
+
     onLoad: ->
 
     onUnloadChild: ->
