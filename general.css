@@ -359,6 +359,20 @@ b {
   width: 40%;
   background: #000;
 }
+.right p {
+  line-height: 40px;
+  color: white;
+  text-align: center;
+  font-size: 17px;
+  transition: opacity 1s linear 0s;
+  opacity: 0;
+}
+.right p.out {
+  opacity: 0;
+}
+.right p.in {
+  opacity: 1;
+}
 #bigtile1 {
   /*display:inline-block;*/
   position: relative;
@@ -457,15 +471,6 @@ b {
   }
   .header-nav {
     display: none;
-  }
-  .header-nav-dropdown {
-    position: absolute;
-    top: 50px;
-    right: 40px;
-    width: 200px;
-    height: 150px;
-    background: #1a171a;
-    opacity: 0.8;
   }
   .left {
     width: 100%;

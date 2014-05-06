@@ -264,6 +264,7 @@ class IndexPage extends ChildPage
             @bgSrc = "/1610/#{$(window).height()-90}/"
 
         @currentRotatorImgID = 0
+        @currentNewsID = 0
         @maxRotatorImgID = 100
         @imgObj = null
         @imgRotatorEnabled = true
@@ -275,6 +276,7 @@ class IndexPage extends ChildPage
         @preloadImage()
         @footerLeftClick()
         @initNavDropDown()
+        @initNewsRotator()
         @imgRotator(10000)
 
         @c.exportFunction("ImgRotator.pauseImgRotator", @pauseImgRotator)
@@ -333,6 +335,33 @@ class IndexPage extends ChildPage
                     , true)
                 , 2000)
             , waitFor)
+
+    initNewsRotator: ->
+        $.getJSON "newsticker.json", (data) =>
+            @news = data.news
+            @newsRotator(7500)
+
+    newsRotator: (waitFor) ->
+        if @currentNewsID is 0
+            console.log "newsRotator: init"
+            $(".right").children("p").html("+++ #{@news[0]} +++")
+            $(".right").children("p").css opacity: 1
+            @currentNewsID++
+            @newsRotator(waitFor)
+            
+        else
+            setTimeout(=> 
+                $(".right").children("p").css opacity:0
+                setTimeout(=>
+                    $(".right").children("p").html("+++ #{@news[@currentNewsID]} +++")
+                    $(".right").children("p").css opacity: 1
+                    if @currentNewsID >= @news.length
+                        @currentNewsID = 0
+                    else @currentNewsID++
+                    @newsRotator(waitFor)
+                , 1000)
+            , waitFor)
+
 
     pauseImgRotator: (state) =>
         @imgRotatorEnabled = state
