@@ -12,7 +12,8 @@ class Tile
     load: (urlWhat, callback, originalSite=undefined, urlOverride=undefined, bare=false) =>
         # Animations happening on Click
         # --------
-        #unless bare then window.nav.by(@const.METHODS.NAME, urlWhat)
+        unless bare
+                window.nav.by(@const.METHODS.NAME_USER, urlWhat)
 
         # Load content
         # --------

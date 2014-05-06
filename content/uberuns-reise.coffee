@@ -3,7 +3,6 @@ class UberunsReise extends ChildPage
         @core = window.core
         @core.requestFunction "ContentViewer.requestInstance",
             (cView) => @contentViewer = cView()
-            # TODO do something awesome with this!
 
     onLoad: ->
         $.when(
@@ -11,17 +10,11 @@ class UberunsReise extends ChildPage
             $.getScript("/code/jquery.vmap.europe.js"),
             $.Deferred (deferred) ->
                 $(deferred.resolve)
-        ).then( ->
-            console.log "sucess"
+        ).done( ->
             window.core.release()
-        , ->
-            console.log "fail"
-            window.core.release()
-        )
-            
+        ) 
 
     onDOMVisible: =>
-        console.log "in onASDvisible"
         @reisehack()
         $(window).on("resize", @reisehack)
         @setupMap()
@@ -32,18 +25,32 @@ class UberunsReise extends ChildPage
         $(window).off("resize", @resizeMap)
 
     notifyHashChange: (newHash) ->
-        console.log newHash
         if newHash.lastIndexOf("/info/", 0) is 0
             # Load Info Block
             number = parseInt(newHash.substr(6, newHash.length))
+            w = $(window).width()
+            h = $(window).height()
+            @contentViewer.open
+                left: $("#uberuns-cnt").offset().left + 10
+                top: $(".reise-tile").offset().top 
+                right: w - $("#uberuns-cnt").width() - (w * 0.04) - 40
+                bottom: $("#uberuns-cnt").height() - 20
+                chapter: false
+                title: "MOSKAU &amp; STALINGRAD"
+                caption: "1945"
+                revertHash: "#!/uberuns/reise"
+                content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
 
 
     acquireLoadingLock: ->
         return true
 
     resizeMap: =>
-        $("#map").children().remove()
+        $("#map").remove()
         $(".jqvmap-label").remove()
+        $(".reise-tile").eq(3).append(
+            $("<div>").attr("id", "map")
+        )
         @setupMap()
 
 

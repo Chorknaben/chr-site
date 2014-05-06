@@ -25,6 +25,9 @@ Tile = (function() {
     if (bare == null) {
       bare = false;
     }
+    if (!bare) {
+      window.nav.by(this["const"].METHODS.NAME_USER, urlWhat);
+    }
     this.core.state["globalHashResponseDisabled"] = true;
     return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {

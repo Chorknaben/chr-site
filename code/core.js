@@ -305,14 +305,15 @@ IndexPage = (function(_super) {
     this.maxRotatorImgID = 100;
     this.imgObj = null;
     this.imgRotatorEnabled = true;
+    this.navDropState = false;
   }
 
   IndexPage.prototype.onInsertion = function() {
     this.injectBackground();
     this.injectTileBackgrounds();
-    this.loadEffects();
     this.preloadImage();
     this.footerLeftClick();
+    this.initNavDropDown();
     this.imgRotator(10000);
     return this.c.exportFunction("ImgRotator.pauseImgRotator", this.pauseImgRotator);
   };
@@ -406,18 +407,6 @@ IndexPage = (function(_super) {
     }
   };
 
-  IndexPage.prototype.luminanz = function(image, saturate, opacity) {
-    var $elem;
-    $elem = $(image);
-    return $elem.css({
-      '-webkit-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
-      '-moz-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
-      '-ms-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
-      '-o-filter': "saturate(" + saturate + ") opacity(" + opacity + ")",
-      'filter': "saturate(" + saturate + ") opacity(" + opacity + ")"
-    });
-  };
-
   IndexPage.prototype.injectTileBackgrounds = function() {
     var i, _i, _results;
     _results = [];
@@ -429,9 +418,24 @@ IndexPage = (function(_super) {
     return _results;
   };
 
-  IndexPage.prototype.loadEffects = function() {
-    var stl;
-    return stl = $(Constants.SELECTOR_TILE);
+  IndexPage.prototype.initNavDropDown = function() {
+    return $(".header-nav-dropdown-icon").click((function(_this) {
+      return function() {
+        var nav;
+        nav = $(".header-nav-dropdown");
+        if (_this.navDropDown) {
+          nav.css({
+            top: "50px"
+          });
+          return _this.navDropDown = false;
+        } else {
+          nav.css({
+            top: "-200px"
+          });
+          return _this.navDropDown = true;
+        }
+      };
+    })(this));
   };
 
   return IndexPage;
@@ -447,7 +451,7 @@ Navigation = (function() {
   }
 
   Navigation.prototype.by = function(method, name) {
-    var result;
+    var element, h, result, _i, _len, _ref;
     if (method === Constants.METHODS.NAME) {
       result = null;
       this.navigationChilds.each(function(i, obj) {
@@ -467,6 +471,21 @@ Navigation = (function() {
         throw new Error("No object with this ID");
       }
       result = $(this.navigationChilds[name]);
+      return this.internalToggle(result);
+    } else if (method === Constants.METHODS.NAME_USER) {
+      result = null;
+      _ref = this.navigationChilds;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        element = _ref[_i];
+        h = $(element).attr("href");
+        if (name.lastIndexOf(h.substr(3, h.length), 0) === 0) {
+          result = $(element);
+          break;
+        }
+      }
+      if (result === null) {
+        throw new Error("No object with such a internal name");
+      }
       return this.internalToggle(result);
     }
   };
@@ -511,7 +530,12 @@ ContentViewer = (function() {
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
     this.revertHash = contentObj.revertHash;
-    $.scrollTo(contentObj.chapter.offset().top - contentObj.top, 500);
+    if (contentObj.chapter) {
+      $.scrollTo(contentObj.chapter.offset().top - contentObj.top, 500);
+    }
+    if (!contentObj.bottom) {
+      contentObj.bottom = "initial";
+    }
     $("html").css({
       cursor: "pointer"
     });
@@ -519,6 +543,7 @@ ContentViewer = (function() {
       left: contentObj.left,
       right: contentObj.right + 30,
       top: contentObj.top,
+      height: contentObj.bottom,
       cursor: "default"
     });
     $cnt.children("h1").html(contentObj.title);

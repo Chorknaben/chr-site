@@ -267,13 +267,14 @@ class IndexPage extends ChildPage
         @maxRotatorImgID = 100
         @imgObj = null
         @imgRotatorEnabled = true
+        @navDropState = false
 
     onInsertion: ->
         @injectBackground()
         @injectTileBackgrounds()
-        @loadEffects()
         @preloadImage()
         @footerLeftClick()
+        @initNavDropDown()
         @imgRotator(10000)
 
         @c.exportFunction("ImgRotator.pauseImgRotator", @pauseImgRotator)
@@ -283,10 +284,7 @@ class IndexPage extends ChildPage
         # The server will return a matching background image.
         $ "<img>", src: @bgSrc + "bg"
             .appendTo($ "#bg").load ->
-                #$(@).show()
                 $(@).fadeIn 300
-                #$("#bg").css("background-image": "url(#{@bgSrc}bg)")
-                #       .fadeIn 300
 
     preloadImage: ->
         img = new Image()
@@ -295,10 +293,6 @@ class IndexPage extends ChildPage
         src = "#{w}/#{h}/bg/blurred"
         img.src = src
         @c.state["blurredbg"] = img
-
-        #$("<img>").attr("src", src)
-        #    .css(position:"absolute", left:0, "z-index":-1)
-        #    .prependTo("#infoarea")
 
     footerLeftClick: ->
         $(".footer-left").click (event) =>
@@ -315,9 +309,6 @@ class IndexPage extends ChildPage
             @rotateImg(".footer-left img", 0)
 
     imgRotator: (waitFor) ->
-        #@currentRotatorImgID = 0
-        #@maxRotatorImgID = 100
-        #
         if @currentRotatorImgID is 0
             console.log "imgRotator: init"
             @makeImage(->
@@ -353,42 +344,23 @@ class IndexPage extends ChildPage
         if lum then @imgObj.classList.add("luminanz")
         if @imgRotatorEnabled then @currentRotatorImgID++
 
-     luminanz: (image, saturate, opacity) ->
-         $elem = $(image)
-         $elem.css
-             '-webkit-filter': "saturate(#{saturate}) opacity(#{opacity})",
-             '-moz-filter': "saturate(#{saturate}) opacity(#{opacity})",
-             '-ms-filter': "saturate(#{saturate}) opacity(#{opacity})",
-             '-o-filter': "saturate(#{saturate}) opacity(#{opacity})",
-             'filter': "saturate(#{saturate}) opacity(#{opacity})",
-
     injectTileBackgrounds: ->
         # inject Tile Backgrounds as background attributes to the corresponding DOM
         # Elements.
         for i in [12..0]
             $("#" + i).css "background-image" : "url(#{@bgSrc + i})"
 
-    loadEffects: ->
-        # attach hover effects to all tiles and navigation items
-        stl = $( Constants.SELECTOR_TILE )
+    initNavDropDown: ->
+        $(".header-nav-dropdown-icon").click =>
+            nav = $(".header-nav-dropdown")
+            if @navDropDown
+                nav.css top: "50px"
+                @navDropDown = false
+            else
+                nav.css top: "-200px"
+                @navDropDown = true
 
-        #stl.each (index, obj) ->
-        #    obj = $ ( obj )
-        #    obj.hover ->
-        #        obj.children "a"
-        #           .children ".hoveroverlay"
-        #           .animate opacity:"0.7", 100
-        #        $ stl.not(".hoveroverlay")[ index - 1 ]
-        #            .children ".hoveroverlay"
-        #            .animate opacity:"0", 100
-        #    , ->
-        #        obj.children "a"
-        #           .children ".hoveroverlay"
-        #           .animate opacity:"0", 100
-        #        $ stl[ index - 1 ]
-        #            .children "a"
-        #            .children ".hoveroverlay"
-        #            .animate opacity:"0", 100
+        
 
 class Navigation
     @preState = null
@@ -411,6 +383,16 @@ class Navigation
             if 0 > name > @navigationChilds.length
                 throw new Error("No object with this ID")
             result = $(@navigationChilds[name])
+            @internalToggle(result)
+        else if method is Constants.METHODS.NAME_USER
+            result = null
+            for element in @navigationChilds
+                h = $(element).attr("href")
+                if name.lastIndexOf(h.substr(3,h.length), 0) is 0
+                    result = $(element)
+                    break
+            if result is null
+                throw new Error("No object with such a internal name")
             @internalToggle(result)
 
     reset: ->
@@ -437,14 +419,18 @@ class ContentViewer
 
         @revertHash = contentObj.revertHash
 
-        #$.scrollTo("+=#{contentObj.chapter.offset().top-contentObj.top}px", 200)
-        $.scrollTo(contentObj.chapter.offset().top-contentObj.top, 500)
+        if contentObj.chapter
+            $.scrollTo(contentObj.chapter.offset().top-contentObj.top, 500)
+
+        unless contentObj.bottom
+            contentObj.bottom = "initial"
 
         $("html").css cursor:"pointer"
         $cnt.css
             left: contentObj.left
             right: contentObj.right+30
             top: contentObj.top
+            height: contentObj.bottom
             cursor:"default"
 
         $cnt.children("h1").html(contentObj.title)

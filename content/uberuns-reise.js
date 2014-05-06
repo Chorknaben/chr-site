@@ -23,17 +23,12 @@ UberunsReise = (function(_super) {
   UberunsReise.prototype.onLoad = function() {
     return $.when($.getScript("/code/jquery.vmap.js"), $.getScript("/code/jquery.vmap.europe.js"), $.Deferred(function(deferred) {
       return $(deferred.resolve);
-    })).then(function() {
-      console.log("sucess");
-      return window.core.release();
-    }, function() {
-      console.log("fail");
+    })).done(function() {
       return window.core.release();
     });
   };
 
   UberunsReise.prototype.onDOMVisible = function() {
-    console.log("in onASDvisible");
     this.reisehack();
     $(window).on("resize", this.reisehack);
     this.setupMap();
@@ -46,10 +41,22 @@ UberunsReise = (function(_super) {
   };
 
   UberunsReise.prototype.notifyHashChange = function(newHash) {
-    var number;
-    console.log(newHash);
+    var h, number, w;
     if (newHash.lastIndexOf("/info/", 0) === 0) {
-      return number = parseInt(newHash.substr(6, newHash.length));
+      number = parseInt(newHash.substr(6, newHash.length));
+      w = $(window).width();
+      h = $(window).height();
+      return this.contentViewer.open({
+        left: $("#uberuns-cnt").offset().left + 10,
+        top: $(".reise-tile").offset().top,
+        right: w - $("#uberuns-cnt").width() - (w * 0.04) - 40,
+        bottom: $("#uberuns-cnt").height() - 20,
+        chapter: false,
+        title: "MOSKAU &amp; STALINGRAD",
+        caption: "1945",
+        revertHash: "#!/uberuns/reise",
+        content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
+      });
     }
   };
 
@@ -58,8 +65,9 @@ UberunsReise = (function(_super) {
   };
 
   UberunsReise.prototype.resizeMap = function() {
-    $("#map").children().remove();
+    $("#map").remove();
     $(".jqvmap-label").remove();
+    $(".reise-tile").eq(3).append($("<div>").attr("id", "map"));
     return this.setupMap();
   };
 
