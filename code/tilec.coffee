@@ -36,16 +36,19 @@ class Tile
             @core.state["tileid"] = @tileid
             @core.registerTaker("pageChanged", true)
 
-            $.getScript "content/#{ urlWhat }.js"
-                .done =>
-                    # Execute onLoad of inserted Child Page
-                    @core.state["childPage"].onLoad()
-                    if @core.state["childPage"].acquireLoadingLock()
-                        # Continue showing loading screen until Child Page
-                        # releases the lock
-                        callback()
-                        return
-                    @finalizeLoading(callback)
+            $.when(
+                $.getScript "content/#{ urlWhat }.js",
+                $.Deferred (deferred) ->
+                    $(deferred.resolve)
+            ).done =>
+                # Execute onLoad of inserted Child Page
+                @core.state["childPage"].onLoad()
+                if @core.state["childPage"].acquireLoadingLock()
+                    # Continue showing loading screen until Child Page
+                    # releases the lock
+                    @core.registerTaker("pendingCallback", callback)
+                    return
+                @finalizeLoading(callback)
 
     finalizeLoading: (callback=undefined) =>
         moreHash = @core.requestTaker("backupHash")
@@ -57,9 +60,10 @@ class Tile
         $(".tilecontainer").css display: "none"
 
         @core.state["globalHashResponseDisabled"] = false
-        if callback then callback()
 
         @core.state["childPage"].onDOMVisible()
+        if callback then callback()
+        #callback() here
 
 
 

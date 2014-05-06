@@ -1,16 +1,19 @@
 class Bilder extends ChildPage
     constructor: ->
-        @catCount = 0
-        @currentScrollPos = -1
         super()
 
+        @catCount = 0
+        @currentScrollPos = -1
+
+        @core = window.core
+        @contentViewer = null
+        @core.requestFunction "ContentViewer.requestInstance",
+            (cView) => @contentViewer = cView()
+
     notifyHashChange: (newHash) ->
-        console.log newHash
         if newHash.indexOf("/element/") == 0
             id = parseInt(newHash.substr(9,newHash.length))
-            console.log "id:#{id}"
             el = $(".img-image").eq(id-1)
-            console.log el
             el.addClass("loading")
             image = $("<img>").attr("src", "/images/real/#{id}")
                 .load =>
@@ -22,13 +25,14 @@ class Bilder extends ChildPage
             firstChapt = $(".image-container").children().eq(0).offset()
             chapterID = newHash.substr(11,newHash.length)
             chapter = $(".img-chapter").eq(chapterID)
-            @contentViewerOpen
+            @contentViewer.open
                 left: firstChapt.left
                 top: firstChapt.top
                 right: $(window).width() - rightPt
                 chapter: chapter
                 title: "WILLKOMMEN"
                 caption: "auf unserer Bilder Seite!"
+                revertHash: "#!/bilder"
                 content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
 
     onLoad: =>
@@ -36,7 +40,6 @@ class Bilder extends ChildPage
         $.ajax({
             url: "test.json"
         }).done (tree) =>
-            console.log "onLoad: Generating Content!"
             for c in tree
                 @genCat(c.category.title, c.category.caption, c.category.content)
                 for imgptr in c.category.childs
@@ -54,55 +57,10 @@ class Bilder extends ChildPage
     onUnloadChild: ->
         $(window).unbind("resize", @adjustPos)
 
-    contentViewerOpen: (contentObj) =>
-        $cnt = $(".content-viewer")
-        #todo click another while open? think about that bitch..
-        console.log "contentViewer: open"
-
-        #$.scrollTo("+=#{contentObj.chapter.offset().top-contentObj.top}px", 200)
-        $.scrollTo(contentObj.chapter.offset().top-contentObj.top, 500)
-
-        $("html").css cursor:"pointer"
-        $cnt.css
-            left: contentObj.left
-            right: contentObj.right+30
-            top: contentObj.top
-            cursor:"default"
-
-        $cnt.children("h1").html(contentObj.title)
-        $cnt.children("h2").html(contentObj.caption)
-        $cnt.children("#ccnt").html(contentObj.content)
-
-        $(document).click @closeClickHandler
-        $(".content-viewer").click @clickOnViewerHandler
-
-        $cnt.removeClass("nodisplay")
-
-    closeClickHandler: =>
-        @contentViewerClose()
-
-    clickOnViewerHandler: (event) =>
-        event.stopPropagation()
-
-    contentViewerClose: =>
-        $cnt = $(".content-viewer")
-        console.log "contentViewer: close"
-
-        $(document).unbind("click", @closeClickHandler)
-        $(".content-viewer").unbind("click", @clickOnViewerHandler)
-
-        $("html").css cursor: "default"
-        $cnt.css cursor: "default"
-
-        @c.registerTaker("dontHandle", true)
-        window.location.hash = "#!/bilder"
-
-        $cnt.addClass("nodisplay")
 
     imageViewerOpen: (image) =>
         #lock scrolling
         @currentScrollPos = $(window).scrollTop()
-        console.log "recording current scrolltop:"
         $(".scrolled").css overflow:"hidden"
 
         viewer = $(".image-viewer")
@@ -115,7 +73,6 @@ class Bilder extends ChildPage
 
     imageViewerClose: =>
         #revert Scrolling
-        console.log @currentScrollPos
         $(".scrolled").css overflow:"initial"
         $(window).scrollTop(@currentScrollPos)
 
@@ -138,18 +95,19 @@ class Bilder extends ChildPage
         $(".image-container").css "margin-left" : (width * 0.06) + delta
 
     findRightMost: ->
-        firstOffset = $(".img-image").first().offset().top
-        leftIndex   = -1
-        console.log "First offset:" + firstOffset
-        console.log $(".img-image")
-        $(".img-image").each (index, obj) =>
-            $obj = $(obj)
-            if $obj.offset().top isnt firstOffset
-                leftIndex = index - 1
-                return false
-        if leftIndex isnt -1
-            return $(".img-image").eq(leftIndex)
-        return false
+        try
+            firstOffset = $(".img-image").first().offset().top
+            leftIndex   = -1
+            $(".img-image").each (index, obj) =>
+                $obj = $(obj)
+                if $obj.offset().top isnt firstOffset
+                    leftIndex = index - 1
+                    return false
+            if leftIndex isnt -1
+                return $(".img-image").eq(leftIndex)
+            return false
+        catch error
+            return false
 
     genCat: (title, caption, content) ->
         $(".image-container").append(

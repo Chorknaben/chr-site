@@ -181,6 +181,9 @@ class Core
         @requestFunction("Tile.finalizeLoading",
             (func) -> func())
 
+        callback = @requestTaker("pendingCallback")
+        if callback then callback()
+
 # Abstract Skeleton Class that any Child Page ought to execute.
 class ChildPage
     constructor: ->
@@ -422,13 +425,66 @@ class Navigation
         @preState = toggleThis
 
 
+class ContentViewer
+    constructor: ->
+        @core = window.core
+        @revertHash = null
 
+    open: (contentObj) =>
+        $cnt = $(".content-viewer")
+        #todo click another while open? think about that bitch..
+        console.log "contentViewer: open"
+
+        @revertHash = contentObj.revertHash
+
+        #$.scrollTo("+=#{contentObj.chapter.offset().top-contentObj.top}px", 200)
+        $.scrollTo(contentObj.chapter.offset().top-contentObj.top, 500)
+
+        $("html").css cursor:"pointer"
+        $cnt.css
+            left: contentObj.left
+            right: contentObj.right+30
+            top: contentObj.top
+            cursor:"default"
+
+        $cnt.children("h1").html(contentObj.title)
+        $cnt.children("h2").html(contentObj.caption)
+        $cnt.children("#ccnt").html(contentObj.content)
+
+        $(document).click @closeClickHandler
+        $(".content-viewer").click @clickOnViewerHandler
+
+        $cnt.removeClass("nodisplay")
+
+    close: (revertHash) =>
+        $cnt = $(".content-viewer")
+        console.log "contentViewer: close"
+
+        $(document).unbind("click", @closeClickHandler)
+        $(".content-viewer").unbind("click", @clickOnViewerHandler)
+
+        $("html").css cursor: "default"
+        $cnt.css cursor: "default"
+
+        @core.registerTaker("dontHandle", true)
+        window.location.hash = revertHash
+
+        $cnt.addClass("nodisplay")
+
+    closeClickHandler: =>
+        @close(@revertHash)
+
+    clickOnViewerHandler: (event) =>
+        event.stopPropagation()
 
 # Global Objects, associated to all other
 # objects created due to the modular infrastructure
 window.core = new Core
 window.constants = Constants
 new Tile(Constants)
+
+window.core.exportFunction "ContentViewer.requestInstance", ->
+    new ContentViewer()
 
 $ ->
     window.nav = new Navigation(".header-nav")
@@ -444,5 +500,3 @@ $ ->
     $(window).scroll c.getScrollHandler
 
     window.onhashchange = c.handleHash
-    window.load=c.requestFunction "Tile.load", (func) -> func
-

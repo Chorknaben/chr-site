@@ -9,16 +9,22 @@ UberunsReise = (function(_super) {
 
   function UberunsReise() {
     this.reisehack = __bind(this.reisehack, this);
+    this.setupMap = __bind(this.setupMap, this);
+    this.resizeMap = __bind(this.resizeMap, this);
+    this.onDOMVisible = __bind(this.onDOMVisible, this);
     this.core = window.core;
-    this.showMap = false;
+    this.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
+      return function(cView) {
+        return _this.contentViewer = cView();
+      };
+    })(this));
   }
 
   UberunsReise.prototype.onLoad = function() {
-    return $.when($.getScript("/code/jquery.vmap.europe.js"), $.getScript("/code/jquery.vmap.min.js"), $.Deferred(function(deferred) {
+    return $.when($.getScript("/code/jquery.vmap.js"), $.getScript("/code/jquery.vmap.europe.js"), $.Deferred(function(deferred) {
       return $(deferred.resolve);
     })).then(function() {
       console.log("sucess");
-      this.showMap = true;
       return window.core.release();
     }, function() {
       console.log("fail");
@@ -30,21 +36,31 @@ UberunsReise = (function(_super) {
     console.log("in onASDvisible");
     this.reisehack();
     $(window).on("resize", this.reisehack);
-    if (this.showMap) {
-      this.setupMap();
-      return $(window).on("resize", this.setupMap);
-    }
+    this.setupMap();
+    return $(window).on("resize", this.resizeMap);
   };
 
   UberunsReise.prototype.onUnloadChild = function() {
     $(window).off("resize", this.reisehack);
-    return $(window).off("resize", this.setupMap);
+    return $(window).off("resize", this.resizeMap);
   };
 
-  UberunsReise.prototype.notifyHashChange = function(newHash) {};
+  UberunsReise.prototype.notifyHashChange = function(newHash) {
+    var number;
+    console.log(newHash);
+    if (newHash.lastIndexOf("/info/", 0) === 0) {
+      return number = parseInt(newHash.substr(6, newHash.length));
+    }
+  };
 
   UberunsReise.prototype.acquireLoadingLock = function() {
     return true;
+  };
+
+  UberunsReise.prototype.resizeMap = function() {
+    $("#map").children().remove();
+    $(".jqvmap-label").remove();
+    return this.setupMap();
   };
 
   UberunsReise.prototype.setupMap = function() {
@@ -55,11 +71,10 @@ UberunsReise = (function(_super) {
       height: hReiseTile,
       width: wReiseTile
     });
-    console.log(hReiseTile);
-    console.log($("#map").css("height"));
+    console.log($("#map").width());
     return $('#map').vectorMap({
       map: 'europe_en',
-      backgroundColor: null,
+      backgroundColor: "#1a171a",
       color: '#ffffff',
       hoverColor: '#999999',
       enableZoom: false,

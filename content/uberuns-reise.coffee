@@ -1,17 +1,18 @@
 class UberunsReise extends ChildPage
     constructor: ->
         @core = window.core
-        @showMap = false
+        @core.requestFunction "ContentViewer.requestInstance",
+            (cView) => @contentViewer = cView()
+            # TODO do something awesome with this!
 
     onLoad: ->
         $.when(
+            $.getScript("/code/jquery.vmap.js"),
             $.getScript("/code/jquery.vmap.europe.js"),
-            $.getScript("/code/jquery.vmap.min.js"),
             $.Deferred (deferred) ->
                 $(deferred.resolve)
         ).then( ->
             console.log "sucess"
-            @showMap = true
             window.core.release()
         , ->
             console.log "fail"
@@ -19,39 +20,41 @@ class UberunsReise extends ChildPage
         )
             
 
-    onDOMVisible: ->
+    onDOMVisible: =>
         console.log "in onASDvisible"
         @reisehack()
         $(window).on("resize", @reisehack)
-        if @showMap
-            @setupMap()
-            $(window).on("resize", @setupMap)
+        @setupMap()
+        $(window).on("resize", @resizeMap)
 
     onUnloadChild: ->
         $(window).off("resize", @reisehack)
-        $(window).off("resize", @setupMap)
+        $(window).off("resize", @resizeMap)
 
     notifyHashChange: (newHash) ->
-        #console.log "getting hash: #{newHash}"
-        #@core.requestFunction("Tile.load", (load) ->
-        #    newHash = newHash.substr(1,newHash.length)
-        #    @core.registerTaker("dontHandle", true)
-        #    load("Über uns", "uberuns-#{newHash}", "uberuns" ,"uberuns/#{newHash}", true)
-        #    @core.requestTaker("dontHandle")
-        #, $.noop)
+        console.log newHash
+        if newHash.lastIndexOf("/info/", 0) is 0
+            # Load Info Block
+            number = parseInt(newHash.substr(6, newHash.length))
+
 
     acquireLoadingLock: ->
         return true
 
-    setupMap: ->
+    resizeMap: =>
+        $("#map").children().remove()
+        $(".jqvmap-label").remove()
+        @setupMap()
+
+
+    setupMap: =>
         wReiseTile = $(".reise-tile").eq(0).width()
         hReiseTile = $(".reise-tile").eq(0).height()
         $("#map").css height: hReiseTile, width:wReiseTile
-        console.log hReiseTile
-        console.log $("#map").css("height")
+        console.log $("#map").width()
         $('#map').vectorMap
             map: 'europe_en',
-            backgroundColor: null,
+            backgroundColor: "#1a171a",
             color: '#ffffff',
             hoverColor: '#999999',
             enableZoom: false,

@@ -42,10 +42,12 @@ Tile = (function() {
         }
         _this.core.state["tileid"] = _this.tileid;
         _this.core.registerTaker("pageChanged", true);
-        return $.getScript("content/" + urlWhat + ".js").done(function() {
+        return $.when($.getScript("content/" + urlWhat + ".js", $.Deferred(function(deferred) {
+          return $(deferred.resolve);
+        }))).done(function() {
           _this.core.state["childPage"].onLoad();
           if (_this.core.state["childPage"].acquireLoadingLock()) {
-            callback();
+            _this.core.registerTaker("pendingCallback", callback);
             return;
           }
           return _this.finalizeLoading(callback);
@@ -71,10 +73,10 @@ Tile = (function() {
       display: "none"
     });
     this.core.state["globalHashResponseDisabled"] = false;
+    this.core.state["childPage"].onDOMVisible();
     if (callback) {
-      callback();
+      return callback();
     }
-    return this.core.state["childPage"].onDOMVisible();
   };
 
   Tile.prototype.setLoadingScreen = function(toggle) {

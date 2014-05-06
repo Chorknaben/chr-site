@@ -11,24 +11,24 @@ Bilder = (function(_super) {
     this.adjustPos = __bind(this.adjustPos, this);
     this.imageViewerClose = __bind(this.imageViewerClose, this);
     this.imageViewerOpen = __bind(this.imageViewerOpen, this);
-    this.contentViewerClose = __bind(this.contentViewerClose, this);
-    this.clickOnViewerHandler = __bind(this.clickOnViewerHandler, this);
-    this.closeClickHandler = __bind(this.closeClickHandler, this);
-    this.contentViewerOpen = __bind(this.contentViewerOpen, this);
     this.onLoad = __bind(this.onLoad, this);
+    Bilder.__super__.constructor.call(this);
     this.catCount = 0;
     this.currentScrollPos = -1;
-    Bilder.__super__.constructor.call(this);
+    this.core = window.core;
+    this.contentViewer = null;
+    this.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
+      return function(cView) {
+        return _this.contentViewer = cView();
+      };
+    })(this));
   }
 
   Bilder.prototype.notifyHashChange = function(newHash) {
     var chapter, chapterID, el, firstChapt, id, image, rightElem, rightPt;
-    console.log(newHash);
     if (newHash.indexOf("/element/") === 0) {
       id = parseInt(newHash.substr(9, newHash.length));
-      console.log("id:" + id);
       el = $(".img-image").eq(id - 1);
-      console.log(el);
       el.addClass("loading");
       image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
         return function() {
@@ -43,13 +43,14 @@ Bilder = (function(_super) {
       firstChapt = $(".image-container").children().eq(0).offset();
       chapterID = newHash.substr(11, newHash.length);
       chapter = $(".img-chapter").eq(chapterID);
-      return this.contentViewerOpen({
+      return this.contentViewer.open({
         left: firstChapt.left,
         top: firstChapt.top,
         right: $(window).width() - rightPt,
         chapter: chapter,
         title: "WILLKOMMEN",
         caption: "auf unserer Bilder Seite!",
+        revertHash: "#!/bilder",
         content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
       });
     }
@@ -61,7 +62,6 @@ Bilder = (function(_super) {
     }).done((function(_this) {
       return function(tree) {
         var c, imgptr, _i, _j, _len, _len1, _ref;
-        console.log("onLoad: Generating Content!");
         for (_i = 0, _len = tree.length; _i < _len; _i++) {
           c = tree[_i];
           _this.genCat(c.category.title, c.category.caption, c.category.content);
@@ -91,57 +91,9 @@ Bilder = (function(_super) {
     return $(window).unbind("resize", this.adjustPos);
   };
 
-  Bilder.prototype.contentViewerOpen = function(contentObj) {
-    var $cnt;
-    $cnt = $(".content-viewer");
-    console.log("contentViewer: open");
-    $.scrollTo(contentObj.chapter.offset().top - contentObj.top, 500);
-    $("html").css({
-      cursor: "pointer"
-    });
-    $cnt.css({
-      left: contentObj.left,
-      right: contentObj.right + 30,
-      top: contentObj.top,
-      cursor: "default"
-    });
-    $cnt.children("h1").html(contentObj.title);
-    $cnt.children("h2").html(contentObj.caption);
-    $cnt.children("#ccnt").html(contentObj.content);
-    $(document).click(this.closeClickHandler);
-    $(".content-viewer").click(this.clickOnViewerHandler);
-    return $cnt.removeClass("nodisplay");
-  };
-
-  Bilder.prototype.closeClickHandler = function() {
-    return this.contentViewerClose();
-  };
-
-  Bilder.prototype.clickOnViewerHandler = function(event) {
-    return event.stopPropagation();
-  };
-
-  Bilder.prototype.contentViewerClose = function() {
-    var $cnt;
-    $cnt = $(".content-viewer");
-    console.log("contentViewer: close");
-    $(document).unbind("click", this.closeClickHandler);
-    $(".content-viewer").unbind("click", this.clickOnViewerHandler);
-    $("html").css({
-      cursor: "default"
-    });
-    $cnt.css({
-      cursor: "default"
-    });
-    this.c.registerTaker("dontHandle", true);
-    window.location.hash = "#!/bilder";
-    return $cnt.addClass("nodisplay");
-  };
-
   Bilder.prototype.imageViewerOpen = function(image) {
     var viewer;
     this.currentScrollPos = $(window).scrollTop();
-    console.log("recording current scrolltop:");
     $(".scrolled").css({
       overflow: "hidden"
     });
@@ -158,7 +110,6 @@ Bilder = (function(_super) {
   };
 
   Bilder.prototype.imageViewerClose = function() {
-    console.log(this.currentScrollPos);
     $(".scrolled").css({
       overflow: "initial"
     });
@@ -182,25 +133,28 @@ Bilder = (function(_super) {
   };
 
   Bilder.prototype.findRightMost = function() {
-    var firstOffset, leftIndex;
-    firstOffset = $(".img-image").first().offset().top;
-    leftIndex = -1;
-    console.log("First offset:" + firstOffset);
-    console.log($(".img-image"));
-    $(".img-image").each((function(_this) {
-      return function(index, obj) {
-        var $obj;
-        $obj = $(obj);
-        if ($obj.offset().top !== firstOffset) {
-          leftIndex = index - 1;
-          return false;
-        }
-      };
-    })(this));
-    if (leftIndex !== -1) {
-      return $(".img-image").eq(leftIndex);
+    var error, firstOffset, leftIndex;
+    try {
+      firstOffset = $(".img-image").first().offset().top;
+      leftIndex = -1;
+      $(".img-image").each((function(_this) {
+        return function(index, obj) {
+          var $obj;
+          $obj = $(obj);
+          if ($obj.offset().top !== firstOffset) {
+            leftIndex = index - 1;
+            return false;
+          }
+        };
+      })(this));
+      if (leftIndex !== -1) {
+        return $(".img-image").eq(leftIndex);
+      }
+      return false;
+    } catch (_error) {
+      error = _error;
+      return false;
     }
-    return false;
   };
 
   Bilder.prototype.genCat = function(title, caption, content) {

@@ -5,13 +5,6 @@ class Uberuns extends ChildPage
     onDOMVisible: ->
 
     notifyHashChange: (newHash) ->
-        #console.log "getting hash: #{newHash}"
-        #@core.requestFunction("Tile.load", (load) ->
-        #    newHash = newHash.substr(1,newHash.length)
-        #    @core.registerTaker("dontHandle", true)
-        #    load("Über uns", "uberuns-#{newHash}", originalSite="uberuns", urlOverride="uberuns/#{newHash}", bare=true)
-        #    @core.requestTaker("dontHandle")
-        #, $.noop)
 
     onLoad: ->
         $(".testblock").hover(->
