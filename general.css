@@ -670,24 +670,50 @@ b {
   top: 50px;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: #1a171a;
+  bottom: 25px;
   overflow: hidden;
 }
 .image-viewer img {
-  width: 100%;
   display: block;
   max-height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  position: absolute;
+  z-index: 2;
 }
-.image-viewer span {
+.image-viewer .opacity {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: #1a171a;
+  opacity: 0.97;
+}
+.image-viewer .bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #1a171a;
+  height: 75px;
+  z-index: 3;
+  transition: all 0.3s linear 0s;
+  -webkit-transition: all 0.3s linear 0s;
+}
+.image-viewer .bar span {
   position: relative;
   display: block;
-  top: -90px;
   left: 6%;
   color: white;
-  line-height: 50px;
+  line-height: 75px;
   font-size: 50px;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+}
+.image-viewer .fade {
+  opacity: 0;
+  bottom: -75px;
 }
 .cross {
   position: absolute;
@@ -950,18 +976,32 @@ b {
   height: 550px;
   width: 88%;
 }
-.musik-dimension {
-  width: 88%;
-  height: 550px;
+#musik-cnt {
+  height: 100%;
+  display: table-row;
 }
-.musik-dimension .main-area {
+#musik-cnt .main-area {
   height: 100%;
   width: 39%;
   float: left;
   margin-right: 10px;
   position: relative;
 }
-.musik-dimension .side-area {
+#musik-cnt .main-area a {
+  position: relative;
+}
+#musik-cnt .main-area img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 80%;
+  height: auto;
+  max-height: 80%;
+}
+#musik-cnt .side-area {
   height: 100%;
   width: 59%;
   float: left;
@@ -971,6 +1011,14 @@ b {
 .playerdimension {
   height: 315px;
   width: 560px;
+}
+.offsetwrapper {
+  position: absolute;
+  top: 67px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 .outer {
   position: absolute;

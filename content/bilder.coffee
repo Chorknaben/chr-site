@@ -9,6 +9,7 @@ class Bilder extends ChildPage
         @contentViewer = null
         @core.requestFunction "ContentViewer.requestInstance",
             (cView) => @contentViewer = cView()
+        @timeout = null
 
     notifyHashChange: (newHash) ->
         if newHash.indexOf("/element/") == 0
@@ -71,6 +72,16 @@ class Bilder extends ChildPage
         $(image).prependTo($(".image-viewer"))
         viewer.removeClass("nodisplay")
         $(".cross").removeClass("nodisplay")
+        if $(".image-viewer img").height() > $(window).height() - 300
+            @fadeOutInfo()
+            $(".image-viewer img").on("mousemove", @fadeOutInfo)
+
+    fadeOutInfo: =>
+        clearTimeout(@timeout)
+        $(".bar").removeClass("fade")
+        @timeout = setTimeout(=>
+            $(".bar").addClass("fade")
+        , 2000)
 
     imageViewerClose: =>
         #revert Scrolling
@@ -82,6 +93,9 @@ class Bilder extends ChildPage
         window.location.hash = "#!/bilder"
 
         #close viewer
+        $(".image-viewer img").off("mousemove", @fadeOutInfo)
+        clearTimeout(@timeout)
+        $(".bar").removeClass("fade")
         $(".image-viewer").addClass("nodisplay")
         $(".image-viewer").children("img").remove()
         $(".cross").addClass("nodisplay")

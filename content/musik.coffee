@@ -12,8 +12,8 @@ class Musik extends ChildPage
             @contentViewer.open
                 left:   -> $(".main-area").offset().left
                 top:    -> $(".main-area").offset().top
-                right:  -> $(window).width() - ($(".musik-dimension").offset().left + $(".musik-dimension").width()) + 30
-                height: -> "520px"
+                right:  -> $(window).width() - ($("#musik-cnt").offset().left + $("#musik-cnt").width()) + 30
+                height: -> $(".offsetwrapper").height() - 30
                 chapter: false
                 title: "Was singen die Chorknaben?"
                 caption: "Eine grobe &Uuml;bersicht unseres Repertoires."

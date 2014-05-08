@@ -110,23 +110,47 @@
     top: 50px;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: #1a171a;
+    bottom: 25px;
     overflow: hidden;
     img{
-        width: 100%;
         display: block;
         max-height: 100%; 
+        top:0; bottom:0;
+        left:0; right:0;
+        margin:auto;
+        position:absolute;
+        z-index:2;
     }
-    span{
-        position: relative;
-        display: block;
-        top: -90px;
-        left: 6%;
-        color: white;
-        line-height: 50px;
-        font-size: 50px;
-        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+    .opacity{
+        position:absolute;
+        width:100%;
+        height:100%;
+        z-index:1;
+        background:#1a171a;
+        opacity:0.97;
+    }
+    .bar{
+        position:absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #1a171a;
+        height: 75px;
+        z-index: 3;
+        transition: all 0.3s linear 0s;
+        -webkit-transition: all 0.3s linear 0s;
+        span{
+            position: relative;
+            display: block;
+            left: 6%;
+            color: white;
+            line-height: 75px;
+            font-size: 50px;
+        }
+    }
+    .fade{
+        opacity: 0;
+        bottom: -75px;
     }
 }
 .cross{

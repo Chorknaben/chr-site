@@ -10,6 +10,7 @@ Bilder = (function(_super) {
   function Bilder() {
     this.adjustPos = __bind(this.adjustPos, this);
     this.imageViewerClose = __bind(this.imageViewerClose, this);
+    this.fadeOutInfo = __bind(this.fadeOutInfo, this);
     this.imageViewerOpen = __bind(this.imageViewerOpen, this);
     this.onLoad = __bind(this.onLoad, this);
     Bilder.__super__.constructor.call(this);
@@ -22,6 +23,7 @@ Bilder = (function(_super) {
         return _this.contentViewer = cView();
       };
     })(this));
+    this.timeout = null;
   }
 
   Bilder.prototype.notifyHashChange = function(newHash) {
@@ -115,7 +117,21 @@ Bilder = (function(_super) {
     })(this));
     $(image).prependTo($(".image-viewer"));
     viewer.removeClass("nodisplay");
-    return $(".cross").removeClass("nodisplay");
+    $(".cross").removeClass("nodisplay");
+    if ($(".image-viewer img").height() > $(window).height() - 300) {
+      this.fadeOutInfo();
+      return $(".image-viewer img").on("mousemove", this.fadeOutInfo);
+    }
+  };
+
+  Bilder.prototype.fadeOutInfo = function() {
+    clearTimeout(this.timeout);
+    $(".bar").removeClass("fade");
+    return this.timeout = setTimeout((function(_this) {
+      return function() {
+        return $(".bar").addClass("fade");
+      };
+    })(this), 2000);
   };
 
   Bilder.prototype.imageViewerClose = function() {
@@ -125,6 +141,9 @@ Bilder = (function(_super) {
     $(window).scrollTop(this.currentScrollPos);
     this.c.registerTaker("dontHandle", true);
     window.location.hash = "#!/bilder";
+    $(".image-viewer img").off("mousemove", this.fadeOutInfo);
+    clearTimeout(this.timeout);
+    $(".bar").removeClass("fade");
     $(".image-viewer").addClass("nodisplay");
     $(".image-viewer").children("img").remove();
     return $(".cross").addClass("nodisplay");

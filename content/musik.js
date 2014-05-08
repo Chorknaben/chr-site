@@ -28,10 +28,10 @@ Musik = (function(_super) {
           return $(".main-area").offset().top;
         },
         right: function() {
-          return $(window).width() - ($(".musik-dimension").offset().left + $(".musik-dimension").width()) + 30;
+          return $(window).width() - ($("#musik-cnt").offset().left + $("#musik-cnt").width()) + 30;
         },
         height: function() {
-          return "520px";
+          return $(".offsetwrapper").height() - 30;
         },
         chapter: false,
         title: "Was singen die Chorknaben?",
