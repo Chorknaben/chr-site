@@ -286,8 +286,8 @@ class IndexPage extends ChildPage
         # Determine the resolution of the client and send it to the server.
         # The server will return a matching background image.
         $ "<img>", src: @bgSrc + "bg"
-            .appendTo($ "#bg").load ->
-                $(@).fadeIn 300
+            .load ->
+                $(@).appendTo("#bg")
 
     preloadImage: ->
         img = new Image()
@@ -316,7 +316,7 @@ class IndexPage extends ChildPage
                 $("#link-bilder").append(@imgObj))
             @imgRotator(15000)
         else
-            # TODO no delay
+            #TODO gradual transfer
             setTimeout(=>
                 $("#link-bilder img").addClass("luminanz")
                 setTimeout(=>
@@ -324,14 +324,9 @@ class IndexPage extends ChildPage
                     if @currentRotatorImgID > @maxRotatorImgID
                         @currentRotatorImgID = 1
                     @makeImage((image) =>
-                        setTimeout(=>
-                            $("#link-bilder").append(image)
-                            $(image).removeClass("luminanz")
-                            setTimeout(=>
-                                @imgRotator(15000)
-                            ,2000)
-                        , 3000)
-                    , true)
+                        $("#link-bilder").append(image)
+                        @imgRotator(15000)
+                    , false)
                 , 2000)
             , waitFor)
 
@@ -387,8 +382,6 @@ class IndexPage extends ChildPage
             else
                 nav.css top: "-200px"
                 @navDropDown = false
-
-        
 
 class Navigation
     @preState = null

@@ -323,8 +323,8 @@ IndexPage = (function(_super) {
   IndexPage.prototype.injectBackground = function() {
     return $("<img>", {
       src: this.bgSrc + "bg"
-    }).appendTo($("#bg")).load(function() {
-      return $(this).fadeIn(300);
+    }).load(function() {
+      return $(this).appendTo("#bg");
     });
   };
 
@@ -377,14 +377,9 @@ IndexPage = (function(_super) {
               _this.currentRotatorImgID = 1;
             }
             return _this.makeImage(function(image) {
-              return setTimeout(function() {
-                $("#link-bilder").append(image);
-                $(image).removeClass("luminanz");
-                return setTimeout(function() {
-                  return _this.imgRotator(15000);
-                }, 2000);
-              }, 3000);
-            }, true);
+              $("#link-bilder").append(image);
+              return _this.imgRotator(15000);
+            }, false);
           }, 2000);
         };
       })(this), waitFor);

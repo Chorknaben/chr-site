@@ -715,6 +715,22 @@ b {
   opacity: 0;
   bottom: -75px;
 }
+.image-viewer a {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  color: white;
+  z-index: 2;
+  height: 20px;
+}
+.image-viewer .arrleft {
+  left: 6%;
+}
+.image-viewer .arrright {
+  right: 6%;
+}
 .cross {
   position: absolute;
   display: block;

@@ -11,6 +11,9 @@ class Bilder extends ChildPage
             (cView) => @contentViewer = cView()
         @timeout = null
 
+        @minImage = 1
+        @maxImage = 0
+
     notifyHashChange: (newHash) ->
         if newHash.indexOf("/element/") == 0
             id = parseInt(newHash.substr(9,newHash.length))
@@ -19,7 +22,7 @@ class Bilder extends ChildPage
             image = $("<img>").attr("src", "/images/real/#{id}")
                 .load =>
                     el.removeClass("loading")
-                    @imageViewerOpen(image)
+                    @imageViewerOpen(image, true)
         if newHash.indexOf("/kategorie/") == 0
             rightElem = @findRightMost()
             rightPt = rightElem.offset().left + rightElem.width()
@@ -46,6 +49,7 @@ class Bilder extends ChildPage
                 @genCat(c.category.title, c.category.caption, c.category.content)
                 for imgptr in c.category.childs
                     @genImg(imgptr[0], imgptr[1])
+                    @maxImage++
             @c.release()
             
     acquireLoadingLock: ->
@@ -60,7 +64,26 @@ class Bilder extends ChildPage
         $(window).unbind("resize", @adjustPos)
 
 
-    imageViewerOpen: (image) =>
+    imageViewerOpen: (image, links=false) =>
+        # is imageViewer already open?
+        if not $(".image-viewer").hasClass("nodisplay")
+            # if so, load the new image
+            $(".image-viewer img").remove()
+
+        # fade info bar in if it isnt already
+        $(".bar").removeClass("fade")
+
+        h = location.hash
+        @currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length))
+        if links
+            unless @currentEl - 1 < @minImage
+                $(".arrleft").attr("href", "#!/bilder/element/#{@currentEl-1}")
+            unless @currentEl + 1 > @maxImage
+                $(".arrright").attr("href", "#!/bilder/element/#{@currentEl+1}")
+        
+        # set up left and right arrow keys
+        $(window).on("keydown", @imageViewerKeyPress)
+
         #lock scrolling
         @currentScrollPos = $(window).scrollTop()
         $(".scrolled").css overflow:"hidden"
@@ -83,6 +106,15 @@ class Bilder extends ChildPage
             $(".bar").addClass("fade")
         , 2000)
 
+    imageViewerKeyPress: (ev) =>
+        keyCode = ev.keyCode
+        # left arrow press
+        if keyCode is 37 and @currentEl > @minImage
+            location.hash = "#!/bilder/element/#{@currentEl - 1}"
+        # right arrow press
+        if keyCode is 39 and @currentEl < @maxImage
+            location.hash = "#!/bilder/element/#{@currentEl + 1}"
+
     imageViewerClose: =>
         #revert Scrolling
         $(".scrolled").css overflow:"initial"
@@ -91,6 +123,8 @@ class Bilder extends ChildPage
         #revert hash
         @c.registerTaker("dontHandle", true)
         window.location.hash = "#!/bilder"
+
+        $(window).off("keydown", @imageViewerKeyPress)
 
         #close viewer
         $(".image-viewer img").off("mousemove", @fadeOutInfo)

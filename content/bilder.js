@@ -10,6 +10,7 @@ Bilder = (function(_super) {
   function Bilder() {
     this.adjustPos = __bind(this.adjustPos, this);
     this.imageViewerClose = __bind(this.imageViewerClose, this);
+    this.imageViewerKeyPress = __bind(this.imageViewerKeyPress, this);
     this.fadeOutInfo = __bind(this.fadeOutInfo, this);
     this.imageViewerOpen = __bind(this.imageViewerOpen, this);
     this.onLoad = __bind(this.onLoad, this);
@@ -24,6 +25,8 @@ Bilder = (function(_super) {
       };
     })(this));
     this.timeout = null;
+    this.minImage = 1;
+    this.maxImage = 0;
   }
 
   Bilder.prototype.notifyHashChange = function(newHash) {
@@ -35,7 +38,7 @@ Bilder = (function(_super) {
       image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
         return function() {
           el.removeClass("loading");
-          return _this.imageViewerOpen(image);
+          return _this.imageViewerOpen(image, true);
         };
       })(this));
     }
@@ -80,6 +83,7 @@ Bilder = (function(_super) {
           for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
             imgptr = _ref[_j];
             _this.genImg(imgptr[0], imgptr[1]);
+            _this.maxImage++;
           }
         }
         return _this.c.release();
@@ -102,8 +106,26 @@ Bilder = (function(_super) {
     return $(window).unbind("resize", this.adjustPos);
   };
 
-  Bilder.prototype.imageViewerOpen = function(image) {
-    var viewer;
+  Bilder.prototype.imageViewerOpen = function(image, links) {
+    var h, viewer;
+    if (links == null) {
+      links = false;
+    }
+    if (!$(".image-viewer").hasClass("nodisplay")) {
+      $(".image-viewer img").remove();
+    }
+    $(".bar").removeClass("fade");
+    h = location.hash;
+    this.currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
+    if (links) {
+      if (!(this.currentEl - 1 < this.minImage)) {
+        $(".arrleft").attr("href", "#!/bilder/element/" + (this.currentEl - 1));
+      }
+      if (!(this.currentEl + 1 > this.maxImage)) {
+        $(".arrright").attr("href", "#!/bilder/element/" + (this.currentEl + 1));
+      }
+    }
+    $(window).on("keydown", this.imageViewerKeyPress);
     this.currentScrollPos = $(window).scrollTop();
     $(".scrolled").css({
       overflow: "hidden"
@@ -134,6 +156,17 @@ Bilder = (function(_super) {
     })(this), 2000);
   };
 
+  Bilder.prototype.imageViewerKeyPress = function(ev) {
+    var keyCode;
+    keyCode = ev.keyCode;
+    if (keyCode === 37 && this.currentEl > this.minImage) {
+      location.hash = "#!/bilder/element/" + (this.currentEl - 1);
+    }
+    if (keyCode === 39 && this.currentEl < this.maxImage) {
+      return location.hash = "#!/bilder/element/" + (this.currentEl + 1);
+    }
+  };
+
   Bilder.prototype.imageViewerClose = function() {
     $(".scrolled").css({
       overflow: "initial"
@@ -141,6 +174,7 @@ Bilder = (function(_super) {
     $(window).scrollTop(this.currentScrollPos);
     this.c.registerTaker("dontHandle", true);
     window.location.hash = "#!/bilder";
+    $(window).off("keydown", this.imageViewerKeyPress);
     $(".image-viewer img").off("mousemove", this.fadeOutInfo);
     clearTimeout(this.timeout);
     $(".bar").removeClass("fade");
