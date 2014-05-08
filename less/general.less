@@ -223,9 +223,17 @@ b {
     .header-nav-dropdown li{
         font-size:1.5em;
         padding-bottom:5px;
+        top:-200px;
+        a{
+            display:block;
+        }
     }
+    .header-nav-dropdown li:hover {
+            background-color:#1a171a;
+        }
 
     .header-nav-dropdown-icon{
+        cursor:pointer;
         position: absolute;
         top: 0;
         right: 30px;
@@ -314,6 +322,18 @@ b {
 
 .infocontent{
     padding: 30px 0 30px 0;
+}
+
+.infositemap{
+    position:absolute;
+    right:6%;
+    h1{
+        font-weight:900;
+        font-size:xx-large;
+    }
+    ul{
+        font-size:larger;
+    }
 }
 
 .footer-left{

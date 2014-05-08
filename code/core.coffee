@@ -19,6 +19,7 @@ class Constants
         , ["kalender", "kalender"]
         , ["bilder","bilder"]
         , ["impressum", "impressum"]
+        , ["unterstutzen", "unterstutzen"]
     ]
 
 
@@ -268,7 +269,7 @@ class IndexPage extends ChildPage
         @maxRotatorImgID = 100
         @imgObj = null
         @imgRotatorEnabled = true
-        @navDropState = false
+        @navDropDown = false
 
     onInsertion: ->
         @injectBackground()
@@ -305,10 +306,8 @@ class IndexPage extends ChildPage
     toggleInfo: ->
         if $("#footer").css("bottom") is "0px"
             $("#footer").animate({bottom: "300px"}, 100)
-            @rotateImg(".footer-left img", 180)
         else
             $("#footer").animate({bottom: "0px"}, 100)
-            @rotateImg(".footer-left img", 0)
 
     imgRotator: (waitFor) ->
         if @currentRotatorImgID is 0
@@ -380,14 +379,14 @@ class IndexPage extends ChildPage
             $("#" + i).css "background-image" : "url(#{@bgSrc + i})"
 
     initNavDropDown: ->
+        nav = $(".header-nav-dropdown")
         $(".header-nav-dropdown-icon").click =>
-            nav = $(".header-nav-dropdown")
-            if @navDropDown
+            if not @navDropDown
                 nav.css top: "50px"
-                @navDropDown = false
+                @navDropDown = true
             else
                 nav.css top: "-200px"
-                @navDropDown = true
+                @navDropDown = false
 
         
 
@@ -420,9 +419,20 @@ class Navigation
                 if name.lastIndexOf(h.substr(3,h.length), 0) is 0
                     result = $(element)
                     break
+            if result is null then result = @inDropdown(name)
             if result is null
                 throw new Error("No object with such a internal name")
             @internalToggle(result)
+
+    inDropdown: (name) ->
+        nav = $(".header-nav-dropdown").children()
+        result = null
+        for element in nav
+            el = $(element).children("a").attr("href")
+            if name.lastIndexOf(el.substr(3, el.length), 0) is 0
+                result = $(element)
+                break
+        return result
 
     reset: ->
         if @preState isnt undefined

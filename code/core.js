@@ -17,7 +17,7 @@ Constants = (function() {
     "ID": 0x00100
   };
 
-  Constants.ApplicationRoutes = [["uberuns/reise", "uberuns-reise"], ["uberuns/team", "uberuns-team"], ["uberuns/timeline", "uberuns-timeline"], ["uberuns", "uberuns"], ["stiftung", "stiftung"], ["presse", "presse"], ["musik", "musik"], ["shop", "shop"], ["kalender", "kalender"], ["bilder", "bilder"], ["impressum", "impressum"]];
+  Constants.ApplicationRoutes = [["uberuns/reise", "uberuns-reise"], ["uberuns/team", "uberuns-team"], ["uberuns/timeline", "uberuns-timeline"], ["uberuns", "uberuns"], ["stiftung", "stiftung"], ["presse", "presse"], ["musik", "musik"], ["shop", "shop"], ["kalender", "kalender"], ["bilder", "bilder"], ["impressum", "impressum"], ["unterstutzen", "unterstutzen"]];
 
   return Constants;
 
@@ -306,7 +306,7 @@ IndexPage = (function(_super) {
     this.maxRotatorImgID = 100;
     this.imgObj = null;
     this.imgRotatorEnabled = true;
-    this.navDropState = false;
+    this.navDropDown = false;
   }
 
   IndexPage.prototype.onInsertion = function() {
@@ -350,15 +350,13 @@ IndexPage = (function(_super) {
 
   IndexPage.prototype.toggleInfo = function() {
     if ($("#footer").css("bottom") === "0px") {
-      $("#footer").animate({
+      return $("#footer").animate({
         bottom: "300px"
       }, 100);
-      return this.rotateImg(".footer-left img", 180);
     } else {
-      $("#footer").animate({
+      return $("#footer").animate({
         bottom: "0px"
       }, 100);
-      return this.rotateImg(".footer-left img", 0);
     }
   };
 
@@ -462,20 +460,20 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.initNavDropDown = function() {
+    var nav;
+    nav = $(".header-nav-dropdown");
     return $(".header-nav-dropdown-icon").click((function(_this) {
       return function() {
-        var nav;
-        nav = $(".header-nav-dropdown");
-        if (_this.navDropDown) {
+        if (!_this.navDropDown) {
           nav.css({
             top: "50px"
           });
-          return _this.navDropDown = false;
+          return _this.navDropDown = true;
         } else {
           nav.css({
             top: "-200px"
           });
-          return _this.navDropDown = true;
+          return _this.navDropDown = false;
         }
       };
     })(this));
@@ -527,10 +525,28 @@ Navigation = (function() {
         }
       }
       if (result === null) {
+        result = this.inDropdown(name);
+      }
+      if (result === null) {
         throw new Error("No object with such a internal name");
       }
       return this.internalToggle(result);
     }
+  };
+
+  Navigation.prototype.inDropdown = function(name) {
+    var el, element, nav, result, _i, _len;
+    nav = $(".header-nav-dropdown").children();
+    result = null;
+    for (_i = 0, _len = nav.length; _i < _len; _i++) {
+      element = nav[_i];
+      el = $(element).children("a").attr("href");
+      if (name.lastIndexOf(el.substr(3, el.length), 0) === 0) {
+        result = $(element);
+        break;
+      }
+    }
+    return result;
   };
 
   Navigation.prototype.reset = function() {

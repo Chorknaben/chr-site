@@ -202,8 +202,16 @@ b {
 .header .header-nav-dropdown li {
   font-size: 1.5em;
   padding-bottom: 5px;
+  top: -200px;
+}
+.header .header-nav-dropdown li a {
+  display: block;
+}
+.header .header-nav-dropdown li:hover {
+  background-color: #1a171a;
 }
 .header .header-nav-dropdown-icon {
+  cursor: pointer;
   position: absolute;
   top: 0;
   right: 30px;
@@ -279,6 +287,17 @@ b {
 .infocontent {
   padding: 30px 0 30px 0;
 }
+.infositemap {
+  position: absolute;
+  right: 6%;
+}
+.infositemap h1 {
+  font-weight: 900;
+  font-size: xx-large;
+}
+.infositemap ul {
+  font-size: larger;
+}
 .footer-left {
   color: white;
   float: left;
@@ -342,6 +361,7 @@ b {
   float: left;
   margin-top: 10px;
   height: 40px;
+  display: block;
 }
 .bottomtile .bottomcontentoffset {
   position: absolute;
@@ -350,6 +370,10 @@ b {
   top: 0;
   bottom: 0;
   background: midnightblue;
+  line-height: 40px;
+  color: white;
+  letter-spacing: 5px;
+  text-align: center;
 }
 .left {
   width: 60%;
@@ -579,7 +603,7 @@ b {
 }
 .image-container a.img-image {
   background: #ffffff url(img/thumb_bg.jpg) no-repeat center center;
-  background-size: 110% 110%;
+  background-size: 120% 120%;
   -webkit-transition: all 0.2s ease-in-out;
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
@@ -871,6 +895,11 @@ b {
 .timeline h1 span {
   font-size: 40px;
 }
+.reise-tile .person {
+  width: 70%;
+  height: 100%;
+  float: left;
+}
 .presse-frame {
   width: 94%;
   position: absolute;
@@ -909,4 +938,62 @@ b {
   bottom: 0;
   margin: auto;
   position: absolute;
+}
+.unterstutzen-tile {
+  background-color: black;
+  height: 100%;
+  width: 30%;
+  margin-right: 10px;
+  float: left;
+}
+.unterstutzen-dimension {
+  height: 550px;
+  width: 88%;
+}
+.musik-dimension {
+  width: 88%;
+  height: 550px;
+}
+.musik-dimension .main-area {
+  height: 100%;
+  width: 39%;
+  float: left;
+  margin-right: 10px;
+  position: relative;
+}
+.musik-dimension .side-area {
+  height: 100%;
+  width: 59%;
+  float: left;
+  background: #1a171a;
+  position: relative;
+}
+.playerdimension {
+  height: 315px;
+  width: 560px;
+}
+.outer {
+  position: absolute;
+  top: 0;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  color: white;
+}
+.outer .program {
+  display: block;
+  width: 100%;
+  height: 50%;
+  margin-bottom: 10px;
+  background: #1a171a;
+}
+.outer .cd {
+  display: block;
+  width: 100%;
+  height: 50%;
+  background: #1a171a;
+}
+.musik-werke {
+  list-style: initial;
+  padding: 20px 40px 40px 40px;
 }
