@@ -450,6 +450,10 @@ class ContentViewer
     constructor: ->
         @core = window.core
         @revertHash = null
+        @left = null
+        @right = null
+        @top = null
+        @height = -> "initial"
 
     open: (contentObj) =>
         $cnt = $(".content-viewer")
@@ -457,20 +461,17 @@ class ContentViewer
         console.log "contentViewer: open"
 
         @revertHash = contentObj.revertHash
+        @left = contentObj.left
+        @right = contentObj.right
+        @top = contentObj.top
+        if contentObj.height
+            @height = contentObj.height
 
-        if contentObj.chapter
-            $.scrollTo(contentObj.chapter.offset().top-contentObj.top, 500)
-
-        unless contentObj.bottom
-            contentObj.bottom = "initial"
+        if contentObj.scrollTo
+            $.scrollTo(contentObj.scrollTo.offset().top-contentObj.top(), 500)
 
         $("html").css cursor:"pointer"
-        $cnt.css
-            left: contentObj.left
-            right: contentObj.right+30
-            top: contentObj.top
-            height: contentObj.bottom
-            cursor:"default"
+        @update()
 
         $cnt.children("h1").html(contentObj.title)
         $cnt.children("h2").html(contentObj.caption)
@@ -480,6 +481,15 @@ class ContentViewer
         $(".content-viewer").click @clickOnViewerHandler
 
         $cnt.removeClass("nodisplay")
+
+        $(window).on("resize", @update)
+
+    update: =>
+        $(".content-viewer").css
+            left: @left()
+            right: @right()
+            top: @top()
+            height: @height()
 
     close: (revertHash) =>
         $cnt = $(".content-viewer")
@@ -495,6 +505,8 @@ class ContentViewer
         window.location.hash = revertHash
 
         $cnt.addClass("nodisplay")
+
+        $(window).off("resize", @update)
 
     closeClickHandler: =>
         @close(@revertHash)

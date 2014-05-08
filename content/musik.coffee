@@ -10,10 +10,10 @@ class Musik extends ChildPage
         console.log newHash
         if newHash is "/programm"
             @contentViewer.open
-                left: $(".main-area").offset().left
-                top: $(".main-area").offset().top
-                right: $(window).width() - ($(".musik-dimension").offset().left + $(".musik-dimension").width())
-                bottom: "520px"
+                left:   -> $(".main-area").offset().left
+                top:    -> $(".main-area").offset().top
+                right:  -> $(window).width() - ($(".musik-dimension").offset().left + $(".musik-dimension").width()) + 30
+                height: -> "520px"
                 chapter: false
                 title: "Was singen die Chorknaben?"
                 caption: "Eine grobe &Uuml;bersicht unseres Repertoires."

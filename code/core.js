@@ -579,9 +579,16 @@ ContentViewer = (function() {
     this.clickOnViewerHandler = __bind(this.clickOnViewerHandler, this);
     this.closeClickHandler = __bind(this.closeClickHandler, this);
     this.close = __bind(this.close, this);
+    this.update = __bind(this.update, this);
     this.open = __bind(this.open, this);
     this.core = window.core;
     this.revertHash = null;
+    this.left = null;
+    this.right = null;
+    this.top = null;
+    this.height = function() {
+      return "initial";
+    };
   }
 
   ContentViewer.prototype.open = function(contentObj) {
@@ -589,28 +596,35 @@ ContentViewer = (function() {
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
     this.revertHash = contentObj.revertHash;
-    if (contentObj.chapter) {
-      $.scrollTo(contentObj.chapter.offset().top - contentObj.top, 500);
+    this.left = contentObj.left;
+    this.right = contentObj.right;
+    this.top = contentObj.top;
+    if (contentObj.height) {
+      this.height = contentObj.height;
     }
-    if (!contentObj.bottom) {
-      contentObj.bottom = "initial";
+    if (contentObj.scrollTo) {
+      $.scrollTo(contentObj.scrollTo.offset().top - contentObj.top(), 500);
     }
     $("html").css({
       cursor: "pointer"
     });
-    $cnt.css({
-      left: contentObj.left,
-      right: contentObj.right + 30,
-      top: contentObj.top,
-      height: contentObj.bottom,
-      cursor: "default"
-    });
+    this.update();
     $cnt.children("h1").html(contentObj.title);
     $cnt.children("h2").html(contentObj.caption);
     $cnt.children("#ccnt").html(contentObj.content);
     $(document).click(this.closeClickHandler);
     $(".content-viewer").click(this.clickOnViewerHandler);
-    return $cnt.removeClass("nodisplay");
+    $cnt.removeClass("nodisplay");
+    return $(window).on("resize", this.update);
+  };
+
+  ContentViewer.prototype.update = function() {
+    return $(".content-viewer").css({
+      left: this.left(),
+      right: this.right(),
+      top: this.top(),
+      height: this.height()
+    });
   };
 
   ContentViewer.prototype.close = function(revertHash) {
@@ -627,7 +641,8 @@ ContentViewer = (function() {
     });
     this.core.registerTaker("dontHandle", true);
     window.location.hash = revertHash;
-    return $cnt.addClass("nodisplay");
+    $cnt.addClass("nodisplay");
+    return $(window).off("resize", this.update);
   };
 
   ContentViewer.prototype.closeClickHandler = function() {

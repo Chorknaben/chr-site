@@ -47,10 +47,18 @@ UberunsReise = (function(_super) {
       w = $(window).width();
       h = $(window).height();
       return this.contentViewer.open({
-        left: $("#uberuns-cnt").offset().left + 10,
-        top: $(".reise-tile").offset().top,
-        right: w - $("#uberuns-cnt").width() - (w * 0.04) - 40,
-        bottom: $("#uberuns-cnt").height() - 20,
+        left: function() {
+          return $("#uberuns-cnt").offset().left + 10;
+        },
+        top: function() {
+          return $(".reise-tile").offset().top;
+        },
+        right: function() {
+          return w - $("#uberuns-cnt").width() - (w * 0.04) - 10;
+        },
+        height: function() {
+          return $("#uberuns-cnt").height() - 20;
+        },
         chapter: false,
         title: "MOSKAU &amp; STALINGRAD",
         caption: "1945",

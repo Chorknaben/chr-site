@@ -44,10 +44,19 @@ Bilder = (function(_super) {
       chapterID = newHash.substr(11, newHash.length);
       chapter = $(".img-chapter").eq(chapterID);
       return this.contentViewer.open({
-        left: firstChapt.left,
-        top: firstChapt.top,
-        right: $(window).width() - rightPt,
-        chapter: chapter,
+        left: function() {
+          return firstChapt.left;
+        },
+        top: function() {
+          return firstChapt.top;
+        },
+        right: function() {
+          return $(window).width() - rightPt + 30;
+        },
+        height: function() {
+          return "100%";
+        },
+        scrollTo: chapter,
         title: "WILLKOMMEN",
         caption: "auf unserer Bilder Seite!",
         revertHash: "#!/bilder",

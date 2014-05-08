@@ -31,10 +31,10 @@ class UberunsReise extends ChildPage
             w = $(window).width()
             h = $(window).height()
             @contentViewer.open
-                left: $("#uberuns-cnt").offset().left + 10
-                top: $(".reise-tile").offset().top 
-                right: w - $("#uberuns-cnt").width() - (w * 0.04) - 40
-                bottom: $("#uberuns-cnt").height() - 20
+                left:   -> $("#uberuns-cnt").offset().left + 10
+                top:    -> $(".reise-tile").offset().top 
+                right:  -> w - $("#uberuns-cnt").width() - (w * 0.04) - 10
+                height: ->  $("#uberuns-cnt").height() - 20
                 chapter: false
                 title: "MOSKAU &amp; STALINGRAD"
                 caption: "1945"

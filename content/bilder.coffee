@@ -26,10 +26,11 @@ class Bilder extends ChildPage
             chapterID = newHash.substr(11,newHash.length)
             chapter = $(".img-chapter").eq(chapterID)
             @contentViewer.open
-                left: firstChapt.left
-                top: firstChapt.top
-                right: $(window).width() - rightPt
-                chapter: chapter
+                left:  -> firstChapt.left
+                top:   -> firstChapt.top
+                right: -> $(window).width() - rightPt + 30
+                height:-> "100%"
+                scrollTo: chapter
                 title: "WILLKOMMEN"
                 caption: "auf unserer Bilder Seite!"
                 revertHash: "#!/bilder"
