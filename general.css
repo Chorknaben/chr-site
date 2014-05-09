@@ -236,6 +236,8 @@ b {
   z-index: 20;
   background: #1a171a;
   color: white;
+  transition: bottom 0.1s linear 0s;
+  -webkit-transition: bottom 0.1s linear 0s;
 }
 #footer img {
   height: 25px;
@@ -270,6 +272,15 @@ b {
   opacity: 0.95;
 }
 #infoarea img {
+  height: initial;
+}
+#feedback {
+  text-align: initial;
+  line-height: initial;
+  background-color: black;
+  opacity: 0.95;
+}
+#feedback img {
   height: initial;
 }
 .infouberuns {

@@ -185,7 +185,7 @@ class Core
         callback = @requestTaker("pendingCallback")
         if callback then callback()
 
-# Abstract Skeleton Class that any Child Page ought to execute.
+# Abstract Skeleton Class that any Child Page ought to implement
 class ChildPage
     constructor: ->
         # Associate with core object
@@ -303,11 +303,42 @@ class IndexPage extends ChildPage
             event.stopPropagation()
             @toggleInfo()
 
+        $("#btnimpressum").click (event) =>
+            event.preventDefault()
+            event.stopPropagation()
+            @toggleImpressum()
+
     toggleInfo: ->
+        bot = $("#footer").css("bottom")
+        if bot isnt "300px" and bot isnt "0px"
+            # not open
+            @toggleImpressum()
+            setTimeout( =>
+                @toggleInfo()
+            , 300)
         if $("#footer").css("bottom") is "0px"
-            $("#footer").animate({bottom: "300px"}, 100)
+            $("#feedback").addClass("nodisplay")
+            $("#infoarea").removeClass("nodisplay")
+            $("#footer").css bottom: "300px"
         else
-            $("#footer").animate({bottom: "0px"}, 100)
+            $("#footer").css bottom: "0px"
+
+    toggleImpressum: ->
+        # TODO already pressed
+        if $("#footer").css("bottom") is "300px"
+            @toggleInfo()
+            setTimeout( =>
+                @toggleImpressum()
+            , 300)
+
+        to = $(window).height() - 50 - 25
+        if $("#footer").css("bottom") is "0px"
+            $("#feedback").removeClass("nodisplay")
+            $("#feedback").css height: to + 1
+            $("#infoarea").addClass("nodisplay")
+            $("#footer").css bottom: to
+        else
+            $("#footer").css bottom: "0px"
 
     imgRotator: (waitFor) ->
         if @currentRotatorImgID is 0

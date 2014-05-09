@@ -339,24 +339,70 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.footerLeftClick = function() {
-    return $(".footer-left").click((function(_this) {
+    $(".footer-left").click((function(_this) {
       return function(event) {
         event.preventDefault();
         event.stopPropagation();
         return _this.toggleInfo();
       };
     })(this));
+    return $("#btnimpressum").click((function(_this) {
+      return function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        return _this.toggleImpressum();
+      };
+    })(this));
   };
 
   IndexPage.prototype.toggleInfo = function() {
+    var bot;
+    bot = $("#footer").css("bottom");
+    if (bot !== "300px" && bot !== "0px") {
+      this.toggleImpressum();
+      setTimeout((function(_this) {
+        return function() {
+          return _this.toggleInfo();
+        };
+      })(this), 300);
+    }
     if ($("#footer").css("bottom") === "0px") {
-      return $("#footer").animate({
+      $("#feedback").addClass("nodisplay");
+      $("#infoarea").removeClass("nodisplay");
+      return $("#footer").css({
         bottom: "300px"
-      }, 100);
+      });
     } else {
-      return $("#footer").animate({
+      return $("#footer").css({
         bottom: "0px"
-      }, 100);
+      });
+    }
+  };
+
+  IndexPage.prototype.toggleImpressum = function() {
+    var to;
+    if ($("#footer").css("bottom") === "300px") {
+      this.toggleInfo();
+      setTimeout((function(_this) {
+        return function() {
+          return _this.toggleImpressum();
+        };
+      })(this), 300);
+    }
+    to = $(window).height() - 50 - 25;
+    if ($("#footer").css("bottom") === "0px") {
+      $("#feedback").removeClass("nodisplay");
+      $("#feedback").css({
+        height: to + 1
+      });
+      $("#infoarea").addClass("nodisplay");
+      return $("#footer").css({
+        bottom: to
+      });
+    } else {
+      return $("#footer").css({
+        bottom: "0px"
+      });
     }
   };
 

@@ -149,6 +149,7 @@ Bilder = (function(_super) {
   Bilder.prototype.fadeOutInfo = function() {
     clearTimeout(this.timeout);
     $(".bar").removeClass("fade");
+    $("body").css;
     return this.timeout = setTimeout((function(_this) {
       return function() {
         return $(".bar").addClass("fade");

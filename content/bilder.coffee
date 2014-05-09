@@ -102,6 +102,7 @@ class Bilder extends ChildPage
     fadeOutInfo: =>
         clearTimeout(@timeout)
         $(".bar").removeClass("fade")
+        $("body").css
         @timeout = setTimeout(=>
             $(".bar").addClass("fade")
         , 2000)
