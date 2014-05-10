@@ -9,10 +9,6 @@ Bilder = (function(_super) {
 
   function Bilder() {
     this.adjustPos = __bind(this.adjustPos, this);
-    this.imageViewerClose = __bind(this.imageViewerClose, this);
-    this.imageViewerKeyPress = __bind(this.imageViewerKeyPress, this);
-    this.fadeOutInfo = __bind(this.fadeOutInfo, this);
-    this.imageViewerOpen = __bind(this.imageViewerOpen, this);
     this.onLoad = __bind(this.onLoad, this);
     Bilder.__super__.constructor.call(this);
     this.catCount = 0;
@@ -22,6 +18,11 @@ Bilder = (function(_super) {
     this.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
       return function(cView) {
         return _this.contentViewer = cView();
+      };
+    })(this));
+    this.core.requestFunction("ImageViewer.requestInstance", (function(_this) {
+      return function(imgView) {
+        return _this.imageViewer = imgView();
       };
     })(this));
     this.timeout = null;
@@ -38,7 +39,28 @@ Bilder = (function(_super) {
       image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
         return function() {
           el.removeClass("loading");
-          return _this.imageViewerOpen(image, true);
+          return _this.imageViewer.open({
+            image: image,
+            navigation: true,
+            minImage: _this.minImage,
+            maxImage: _this.maxImage,
+            arrowKeys: true,
+            leftArrowHandler: function() {
+              var currentEl, h;
+              h = location.hash;
+              currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
+              return $(".arrleft").attr("href", "#!/bilder/element/" + (currentEl - 1));
+            },
+            rightArrowHandler: function() {
+              var currentEl, h;
+              h = location.hash;
+              currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
+              return $(".arrright").attr("href", "#!/bilder/element/" + (currentEl + 1));
+            },
+            escapeKey: true,
+            lockScrolling: true,
+            revertHash: "#!/bilder"
+          });
         };
       })(this));
     }
@@ -104,84 +126,6 @@ Bilder = (function(_super) {
 
   Bilder.prototype.onUnloadChild = function() {
     return $(window).unbind("resize", this.adjustPos);
-  };
-
-  Bilder.prototype.imageViewerOpen = function(image, links) {
-    var h, viewer;
-    if (links == null) {
-      links = false;
-    }
-    if (!$(".image-viewer").hasClass("nodisplay")) {
-      $(".image-viewer img").remove();
-    }
-    $(".bar").removeClass("fade");
-    h = location.hash;
-    this.currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
-    if (links) {
-      if (!(this.currentEl - 1 < this.minImage)) {
-        $(".arrleft").attr("href", "#!/bilder/element/" + (this.currentEl - 1));
-      }
-      if (!(this.currentEl + 1 > this.maxImage)) {
-        $(".arrright").attr("href", "#!/bilder/element/" + (this.currentEl + 1));
-      }
-    }
-    $(window).on("keydown", this.imageViewerKeyPress);
-    this.currentScrollPos = $(window).scrollTop();
-    $(".scrolled").css({
-      overflow: "hidden"
-    });
-    viewer = $(".image-viewer");
-    $(image).addClass("link-cursor");
-    $(image).click((function(_this) {
-      return function() {
-        return _this.imageViewerClose();
-      };
-    })(this));
-    $(image).prependTo($(".image-viewer"));
-    viewer.removeClass("nodisplay");
-    $(".cross").removeClass("nodisplay");
-    if ($(".image-viewer img").height() > $(window).height() - 300) {
-      this.fadeOutInfo();
-      return $(".image-viewer img").on("mousemove", this.fadeOutInfo);
-    }
-  };
-
-  Bilder.prototype.fadeOutInfo = function() {
-    clearTimeout(this.timeout);
-    $(".bar").removeClass("fade");
-    $("body").css;
-    return this.timeout = setTimeout((function(_this) {
-      return function() {
-        return $(".bar").addClass("fade");
-      };
-    })(this), 2000);
-  };
-
-  Bilder.prototype.imageViewerKeyPress = function(ev) {
-    var keyCode;
-    keyCode = ev.keyCode;
-    if (keyCode === 37 && this.currentEl > this.minImage) {
-      location.hash = "#!/bilder/element/" + (this.currentEl - 1);
-    }
-    if (keyCode === 39 && this.currentEl < this.maxImage) {
-      return location.hash = "#!/bilder/element/" + (this.currentEl + 1);
-    }
-  };
-
-  Bilder.prototype.imageViewerClose = function() {
-    $(".scrolled").css({
-      overflow: "initial"
-    });
-    $(window).scrollTop(this.currentScrollPos);
-    this.c.registerTaker("dontHandle", true);
-    window.location.hash = "#!/bilder";
-    $(window).off("keydown", this.imageViewerKeyPress);
-    $(".image-viewer img").off("mousemove", this.fadeOutInfo);
-    clearTimeout(this.timeout);
-    $(".bar").removeClass("fade");
-    $(".image-viewer").addClass("nodisplay");
-    $(".image-viewer").children("img").remove();
-    return $(".cross").addClass("nodisplay");
   };
 
   Bilder.prototype.adjustPos = function() {

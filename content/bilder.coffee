@@ -9,6 +9,10 @@ class Bilder extends ChildPage
         @contentViewer = null
         @core.requestFunction "ContentViewer.requestInstance",
             (cView) => @contentViewer = cView()
+
+        @core.requestFunction "ImageViewer.requestInstance",
+            (imgView) => @imageViewer = imgView()
+            
         @timeout = null
 
         @minImage = 1
@@ -22,7 +26,24 @@ class Bilder extends ChildPage
             image = $("<img>").attr("src", "/images/real/#{id}")
                 .load =>
                     el.removeClass("loading")
-                    @imageViewerOpen(image, true)
+                    @imageViewer.open
+                        image: image
+                        navigation: true
+                        minImage: @minImage
+                        maxImage: @maxImage
+                        arrowKeys: true
+                        leftArrowHandler: =>
+                            h = location.hash
+                            currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length))
+                            $(".arrleft").attr("href", "#!/bilder/element/#{currentEl-1}")
+                        rightArrowHandler: =>
+                            h = location.hash
+                            currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length))
+                            $(".arrright").attr("href", "#!/bilder/element/#{currentEl+1}")
+                        escapeKey: true
+                        lockScrolling: true
+                        revertHash: "#!/bilder"
+
         if newHash.indexOf("/kategorie/") == 0
             rightElem = @findRightMost()
             rightPt = rightElem.offset().left + rightElem.width()
@@ -64,77 +85,6 @@ class Bilder extends ChildPage
         $(window).unbind("resize", @adjustPos)
 
 
-    imageViewerOpen: (image, links=false) =>
-        # is imageViewer already open?
-        if not $(".image-viewer").hasClass("nodisplay")
-            # if so, load the new image
-            $(".image-viewer img").remove()
-
-        # fade info bar in if it isnt already
-        $(".bar").removeClass("fade")
-
-        h = location.hash
-        @currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length))
-        if links
-            unless @currentEl - 1 < @minImage
-                $(".arrleft").attr("href", "#!/bilder/element/#{@currentEl-1}")
-            unless @currentEl + 1 > @maxImage
-                $(".arrright").attr("href", "#!/bilder/element/#{@currentEl+1}")
-        
-        # set up left and right arrow keys
-        $(window).on("keydown", @imageViewerKeyPress)
-
-        #lock scrolling
-        @currentScrollPos = $(window).scrollTop()
-        $(".scrolled").css overflow:"hidden"
-
-        viewer = $(".image-viewer")
-        $(image).addClass("link-cursor")
-        $(image).click =>
-            @imageViewerClose()
-        $(image).prependTo($(".image-viewer"))
-        viewer.removeClass("nodisplay")
-        $(".cross").removeClass("nodisplay")
-        if $(".image-viewer img").height() > $(window).height() - 300
-            @fadeOutInfo()
-            $(".image-viewer img").on("mousemove", @fadeOutInfo)
-
-    fadeOutInfo: =>
-        clearTimeout(@timeout)
-        $(".bar").removeClass("fade")
-        $("body").css
-        @timeout = setTimeout(=>
-            $(".bar").addClass("fade")
-        , 2000)
-
-    imageViewerKeyPress: (ev) =>
-        keyCode = ev.keyCode
-        # left arrow press
-        if keyCode is 37 and @currentEl > @minImage
-            location.hash = "#!/bilder/element/#{@currentEl - 1}"
-        # right arrow press
-        if keyCode is 39 and @currentEl < @maxImage
-            location.hash = "#!/bilder/element/#{@currentEl + 1}"
-
-    imageViewerClose: =>
-        #revert Scrolling
-        $(".scrolled").css overflow:"initial"
-        $(window).scrollTop(@currentScrollPos)
-
-        #revert hash
-        @c.registerTaker("dontHandle", true)
-        window.location.hash = "#!/bilder"
-
-        $(window).off("keydown", @imageViewerKeyPress)
-
-        #close viewer
-        $(".image-viewer img").off("mousemove", @fadeOutInfo)
-        clearTimeout(@timeout)
-        $(".bar").removeClass("fade")
-        $(".image-viewer").addClass("nodisplay")
-        $(".image-viewer").children("img").remove()
-        $(".cross").addClass("nodisplay")
-                
     adjustPos: =>
         #Adjust the positioning of the image grid to be centered exactly.
         width = $(window).width()

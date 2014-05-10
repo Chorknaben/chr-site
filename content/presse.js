@@ -23,21 +23,6 @@ Presse = (function(_super) {
   };
 
   Presse.prototype.onLoad = function() {
-    $.getScript("code/sly.min.js", function() {
-      var sly;
-      return sly = new Sly(".presse-frame", {
-        horizontal: 1,
-        itemNav: 'basic',
-        mouseDragging: 1,
-        touchDragging: 1,
-        releaseSwing: 1,
-        smart: 1,
-        dynamicHandle: 1,
-        speed: 300,
-        easing: 'swing',
-        scrollBy: 1
-      }).init();
-    });
     return window.core.release();
   };
 

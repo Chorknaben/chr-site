@@ -567,6 +567,84 @@ class ContentViewer
     clickOnViewerHandler: (event) =>
         event.stopPropagation()
 
+class ImageViewer
+    open: (conf) =>
+        @conf = conf
+        image = @conf.image
+
+        # is imageViewer already open?
+        if not $(".image-viewer").hasClass("nodisplay")
+            # if so, load the new image
+            $(".image-viewer img").remove()
+
+        # fade info bar in if it isnt already
+        $(".bar").removeClass("fade")
+
+        if @conf.navigation
+            unless @currentEl - 1 < @minImage
+                @conf.leftArrowHandler()
+            unless @currentEl + 1 > @maxImage
+                @conf.rightArrowHandler()
+        
+        if @conf.arrowKeys and @conf.navigation
+            # set up left and right arrow keys
+            $(window).on("keydown", @imageViewerKeyPress)
+
+        #lock scrolling
+        if @conf.lockScrolling
+            @currentScrollPos = $(window).scrollTop()
+            $(".scrolled").css overflow:"hidden"
+
+        viewer = $(".image-viewer")
+        $(image).addClass("link-cursor")
+        $(image).click =>
+            @imageViewerClose()
+        $(image).prependTo($(".image-viewer"))
+        viewer.removeClass("nodisplay")
+        $(".cross").removeClass("nodisplay")
+        if $(".image-viewer img").height() > $(window).height() - 300
+            @fadeOutInfo()
+            $(".image-viewer img").on("mousemove", @fadeOutInfo)
+
+    close: =>
+        #revert Scrolling
+        if @conf.lockScrolling
+            $(".scrolled").css overflow:"initial"
+            $(window).scrollTop(@currentScrollPos)
+
+        #revert hash
+        if @conf.revertHash
+            @c.registerTaker("dontHandle", true)
+            window.location.hash = @conf.revertHash
+
+        if @conf.arrowKeys
+            $(window).off("keydown", @imageViewerKeyPress)
+
+        #close viewer
+        $(".image-viewer img").off("mousemove", @fadeOutInfo)
+        clearTimeout(@timeout)
+        $(".bar").removeClass("fade")
+        $(".image-viewer").addClass("nodisplay")
+        $(".image-viewer").children("img").remove()
+
+    fadeOutInfo: =>
+        clearTimeout(@timeout)
+        $(".bar").removeClass("fade")
+        $("body").css
+        @timeout = setTimeout(=>
+            $(".bar").addClass("fade")
+        , 2000)
+
+    imageViewerKeyPress: (ev) =>
+        keyCode = ev.keyCode
+        # left arrow press
+        if keyCode is 37 and @currentEl > @conf.minImage
+            location.hash = "#!/bilder/element/#{@currentEl - 1}"
+        # right arrow press
+        if keyCode is 39 and @currentEl < @conf.maxImage
+            location.hash = "#!/bilder/element/#{@currentEl + 1}"
+
+
 # Global Objects, associated to all other
 # objects created due to the modular infrastructure
 window.core = new Core
@@ -575,6 +653,9 @@ new Tile(Constants)
 
 window.core.exportFunction "ContentViewer.requestInstance", ->
     new ContentViewer()
+
+window.core.exportFunction "ImageViewer.requestInstance", ->
+    new ImageViewer()
 
 $ ->
     window.nav = new Navigation(".header-nav")
