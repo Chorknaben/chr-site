@@ -65,6 +65,7 @@ Core = (function() {
       return;
     }
     hash = window.location.hash;
+    this.ensureFooterDown();
     if (hash === "#!/") {
       this.raiseIndexPage();
       return;
@@ -148,6 +149,12 @@ Core = (function() {
     } else {
       return debug("Already at Index Page");
     }
+  };
+
+  Core.prototype.ensureFooterDown = function() {
+    return $("#footer").css({
+      bottom: "0px"
+    });
   };
 
   Core.prototype.executeOnce = function(name, func) {
@@ -307,6 +314,11 @@ IndexPage = (function(_super) {
     this.imgObj = null;
     this.imgRotatorEnabled = true;
     this.navDropDown = false;
+    this.contentViewer = this.c.requestFunction("ContentViewer.requestInstance", (function(_this) {
+      return function(cView) {
+        return _this.contentViewer = cView();
+      };
+    })(this));
   }
 
   IndexPage.prototype.onInsertion = function() {
@@ -316,6 +328,7 @@ IndexPage = (function(_super) {
     this.footerLeftClick();
     this.initNavDropDown();
     this.initNewsRotator();
+    this.initKalender();
     this.imgRotator(10000);
     return this.c.exportFunction("ImgRotator.pauseImgRotator", this.pauseImgRotator);
   };
@@ -346,11 +359,18 @@ IndexPage = (function(_super) {
         return _this.toggleInfo();
       };
     })(this));
-    return $("#btnimpressum").click((function(_this) {
+    $("#btnimpressum").click((function(_this) {
       return function(event) {
         event.preventDefault();
         event.stopPropagation();
         return _this.toggleImpressum();
+      };
+    })(this));
+    return $("#startst").click((function(_this) {
+      return function() {
+        return $("#footer").css({
+          bottom: "0px"
+        });
       };
     })(this));
   };
@@ -516,6 +536,34 @@ IndexPage = (function(_super) {
           });
           return _this.navDropDown = false;
         }
+      };
+    })(this));
+  };
+
+  IndexPage.prototype.initKalender = function() {
+    return $("#6").click((function(_this) {
+      return function(event) {
+        _this.contentViewer.open({
+          left: function() {
+            return $(window).width() * 0.06;
+          },
+          top: function() {
+            return $(".smalltiles").children().first().offset().top;
+          },
+          right: function() {
+            return $(window).width() * 0.06;
+          },
+          height: function() {
+            return $(".bigtile-content").height() + 10 + 40;
+          },
+          chapter: false,
+          title: "Kalender",
+          caption: "Konzerte, Gottesdienste, Grillparties",
+          revertHash: "#!/",
+          content: $(".kalendar").html()
+        });
+        event.stopPropagation();
+        return event.preventDefault();
       };
     })(this));
   };

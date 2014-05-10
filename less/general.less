@@ -9,6 +9,11 @@ b {
     font-weight:bold;
 }
 
+a {
+    color:white;
+    text-decoration:none;
+}
+
 #scrolledcontentoff{
     position:relative;
     margin-top:15%;
@@ -16,6 +21,10 @@ b {
 
 .link-cursor{
     cursor:pointer;
+}
+
+.bluelink{
+    color:aqua;
 }
 
 #loading-screen{
@@ -271,11 +280,6 @@ b {
     -webkit-transition: bottom 0.1s linear 0s;
 }
 
-#footer a {
-    text-decoration:none;
-    color:white;
-}
-
 #startst {
     display: block;
     margin-left: auto;
@@ -296,6 +300,7 @@ b {
     float: right;
     position: relative;
     right: 6%;
+    padding-right:10px;
 }
 
 #infoarea{
@@ -316,6 +321,38 @@ b {
     opacity:0.95;
     img{
         height:initial;
+    }
+    h1{
+        position: relative;
+        font-size: xx-large;
+        color: white;
+        z-index: 4;
+        font-weight:900;
+        left: 6%;
+        top: 20px;
+    }
+    .impressum{
+        width: 45%;
+        margin-left:6%;
+        height:100%;
+        margin-top:20px;
+        float:left;
+        p{
+            overflow:auto;
+            height:85%;
+        }
+    }
+    .feedback{
+        position:relative;
+        top:-40px;
+        width:45%;
+        float:left;
+        p{
+            position:relative;
+            left:6%;
+            margin-top:20px;
+            margin-right:6%;
+        }
     }
 }
 
@@ -369,5 +406,18 @@ b {
 
 #scrollcnt{
     top:0;
+}
+
+.feedbackform{
+    margin:6%;
+    input{
+        font-size:2em;
+        width:200px;
+    }
+    select{
+        width:204px;
+        font-size:2em;
+        background-color:white;
+    }
 }
 

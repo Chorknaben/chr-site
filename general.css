@@ -4,12 +4,19 @@ body {
 b {
   font-weight: bold;
 }
+a {
+  color: white;
+  text-decoration: none;
+}
 #scrolledcontentoff {
   position: relative;
   margin-top: 15%;
 }
 .link-cursor {
   cursor: pointer;
+}
+.bluelink {
+  color: aqua;
 }
 #loading-screen {
   top: 50px;
@@ -242,10 +249,6 @@ b {
 #footer img {
   height: 25px;
 }
-#footer a {
-  text-decoration: none;
-  color: white;
-}
 #startst {
   display: block;
   margin-left: auto;
@@ -263,6 +266,7 @@ b {
   float: right;
   position: relative;
   right: 6%;
+  padding-right: 10px;
 }
 #infoarea {
   height: 305px;
@@ -282,6 +286,38 @@ b {
 }
 #feedback img {
   height: initial;
+}
+#feedback h1 {
+  position: relative;
+  font-size: xx-large;
+  color: white;
+  z-index: 4;
+  font-weight: 900;
+  left: 6%;
+  top: 20px;
+}
+#feedback .impressum {
+  width: 45%;
+  margin-left: 6%;
+  height: 100%;
+  margin-top: 20px;
+  float: left;
+}
+#feedback .impressum p {
+  overflow: auto;
+  height: 85%;
+}
+#feedback .feedback {
+  position: relative;
+  top: -40px;
+  width: 45%;
+  float: left;
+}
+#feedback .feedback p {
+  position: relative;
+  left: 6%;
+  margin-top: 20px;
+  margin-right: 6%;
 }
 .infouberuns {
   position: absolute;
@@ -326,6 +362,18 @@ b {
 }
 #scrollcnt {
   top: 0;
+}
+.feedbackform {
+  margin: 6%;
+}
+.feedbackform input {
+  font-size: 2em;
+  width: 200px;
+}
+.feedbackform select {
+  width: 204px;
+  font-size: 2em;
+  background-color: white;
 }
 .tilecontainer {
   margin: auto;

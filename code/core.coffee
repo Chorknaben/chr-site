@@ -59,6 +59,8 @@ class Core
 
         hash = window.location.hash
 
+        @ensureFooterDown()
+
         if hash is "#!/"
             @raiseIndexPage()
             return
@@ -137,6 +139,10 @@ class Core
                 func(true))
         else
             debug "Already at Index Page"
+
+    ensureFooterDown: ->
+        $("#footer").css bottom: "0px"
+
 
 
     executeOnce: (name, func) ->
@@ -271,6 +277,9 @@ class IndexPage extends ChildPage
         @imgRotatorEnabled = true
         @navDropDown = false
 
+        @contentViewer = @c.requestFunction "ContentViewer.requestInstance", 
+            (cView) => @contentViewer = cView()
+
     onInsertion: ->
         @injectBackground()
         @injectTileBackgrounds()
@@ -278,6 +287,7 @@ class IndexPage extends ChildPage
         @footerLeftClick()
         @initNavDropDown()
         @initNewsRotator()
+        @initKalender()
         @imgRotator(10000)
 
         @c.exportFunction("ImgRotator.pauseImgRotator", @pauseImgRotator)
@@ -307,6 +317,9 @@ class IndexPage extends ChildPage
             event.preventDefault()
             event.stopPropagation()
             @toggleImpressum()
+
+        $("#startst").click =>
+            $("#footer").css bottom: "0px"
 
     toggleInfo: ->
         bot = $("#footer").css("bottom")
@@ -413,6 +426,22 @@ class IndexPage extends ChildPage
             else
                 nav.css top: "-200px"
                 @navDropDown = false
+
+    initKalender: ->
+        $("#6").click (event) =>
+            @contentViewer.open
+                left:   -> $(window).width() * 0.06
+                top:    -> $(".smalltiles").children().first().offset().top
+                right:  -> $(window).width() * 0.06
+                height: -> $(".bigtile-content").height() + 10 + 40
+                chapter: false
+                title: "Kalender"
+                caption: "Konzerte, Gottesdienste, Grillparties"
+                revertHash: "#!/"
+                content: $(".kalendar").html()
+                
+            event.stopPropagation()
+            event.preventDefault()
 
 class Navigation
     @preState = null
