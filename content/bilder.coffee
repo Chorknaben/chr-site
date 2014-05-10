@@ -32,14 +32,13 @@ class Bilder extends ChildPage
                         minImage: @minImage
                         maxImage: @maxImage
                         arrowKeys: true
-                        leftArrowHandler: =>
+                        getCurrentElement: ->
                             h = location.hash
-                            currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length))
-                            $(".arrleft").attr("href", "#!/bilder/element/#{currentEl-1}")
-                        rightArrowHandler: =>
-                            h = location.hash
-                            currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length))
-                            $(".arrright").attr("href", "#!/bilder/element/#{currentEl+1}")
+                            parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
+                        toLeftHash: (currentEl) ->
+                            "#!/bilder/element/#{currentEl-1}"
+                        toRightHash: (currentEl) ->
+                            "#!/bilder/element/#{currentEl+1}"
                         escapeKey: true
                         lockScrolling: true
                         revertHash: "#!/bilder"
@@ -78,11 +77,11 @@ class Bilder extends ChildPage
 
     onDOMVisible: ->
         @adjustPos()
-        $(window).bind
-            resize: @adjustPos
+        $(window).on("resize", @adjustPos)
 
     onUnloadChild: ->
-        $(window).unbind("resize", @adjustPos)
+        $(window).off("resize", @adjustPos)
+        $(".image-viewer").addClass("nodisplay")
 
 
     adjustPos: =>

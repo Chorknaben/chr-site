@@ -45,6 +45,8 @@ class Tile
                 # Execute onLoad of inserted Child Page
                 @core.state["childPage"].onLoad()
                 if @core.state["childPage"].acquireLoadingLock()
+                    console.log "here"
+                    console.log @core.state["childPage"]
                     # Continue showing loading screen until Child Page
                     # releases the lock
                     @core.registerTaker("pendingCallback", callback)

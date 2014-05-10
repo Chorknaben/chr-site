@@ -50,6 +50,8 @@ Tile = (function() {
         }))).done(function() {
           _this.core.state["childPage"].onLoad();
           if (_this.core.state["childPage"].acquireLoadingLock()) {
+            console.log("here");
+            console.log(_this.core.state["childPage"]);
             _this.core.registerTaker("pendingCallback", callback);
             return;
           }

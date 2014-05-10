@@ -61,6 +61,7 @@ class Core
 
         @ensureFooterDown()
 
+
         if hash is "#!/"
             @raiseIndexPage()
             return
@@ -106,6 +107,7 @@ class Core
                         # Child page is already loaded
                         @delegateChildPage(route, usefulHash)
                     else
+                        #@ensureImageViewerClosed()
                         @requestFunction "Tile.load", (load) =>
                             load route, =>
                                 @delegateChildPage(route, usefulHash)
@@ -126,14 +128,20 @@ class Core
     raiseIndexPage: ->
         if window.location.hash is "#!/" and @requestTaker("pageChanged")
             debug "Back to Index page"
+
+            #@ensureImageViewerClosed()
+
             $(".tilecontainer").css display: "initial"
             $(".scrolled").css display: "none"
             $(".scrolled").attr("id", "")
+
             @state["childPage"].onUnloadChild()
             @state["childPage"] = new IndexPage()
             @state["currentPage"] = undefined
             @state["currentURL"] = undefined
+
             window.nav.reset()
+
             @requestFunction("ImgRotator.pauseImgRotator", (func) -> 
                 console.log "imgRotator: resume"
                 func(true))
@@ -143,6 +151,11 @@ class Core
     ensureFooterDown: ->
         $("#footer").css bottom: "0px"
 
+    ensureImageViewerClosed: ->
+        @requestFunction "ImageViewer.forceClose",
+            (func) => 
+                func(true)
+        @revokeFunction "ImageViewer.forceClose"
 
 
     executeOnce: (name, func) ->
@@ -179,6 +192,8 @@ class Core
         if func
             success(func)
         else
+            console.log failure
+            console.log $.noop
             failure()
 
     revokeFunction: (name) ->
@@ -568,6 +583,10 @@ class ContentViewer
         event.stopPropagation()
 
 class ImageViewer
+    constructor: ->
+        window.core.exportFunction "ImageViewer.forceClose",
+            @close
+
     open: (conf) =>
         @conf = conf
         image = @conf.image
@@ -581,10 +600,11 @@ class ImageViewer
         $(".bar").removeClass("fade")
 
         if @conf.navigation
+            @currentEl = @conf.getCurrentElement()
             unless @currentEl - 1 < @minImage
-                @conf.leftArrowHandler()
+                $(".arrleft").attr "href", @conf.toLeftHash(@currentEl)
             unless @currentEl + 1 > @maxImage
-                @conf.rightArrowHandler()
+                $(".arrright").attr "href", @conf.toRightHash(@currentEl)
         
         if @conf.arrowKeys and @conf.navigation
             # set up left and right arrow keys
@@ -597,24 +617,32 @@ class ImageViewer
 
         viewer = $(".image-viewer")
         $(image).addClass("link-cursor")
-        $(image).click =>
-            @imageViewerClose()
         $(image).prependTo($(".image-viewer"))
+
+        if @conf.enableDragging
+            #$(".image-viewer img").drags()
+            $(image).click =>
+                @close()
+            console.log "imageViewer.enableDragging: stub"
+        else
+            $(image).click =>
+                @close()
+
         viewer.removeClass("nodisplay")
         $(".cross").removeClass("nodisplay")
         if $(".image-viewer img").height() > $(window).height() - 300
             @fadeOutInfo()
             $(".image-viewer img").on("mousemove", @fadeOutInfo)
 
-    close: =>
+    close: (forceNoHash=false) =>
         #revert Scrolling
         if @conf.lockScrolling
             $(".scrolled").css overflow:"initial"
             $(window).scrollTop(@currentScrollPos)
 
         #revert hash
-        if @conf.revertHash
-            @c.registerTaker("dontHandle", true)
+        if @conf.revertHash and not forceNoHash
+            window.core.registerTaker("dontHandle", true)
             window.location.hash = @conf.revertHash
 
         if @conf.arrowKeys
@@ -639,10 +667,10 @@ class ImageViewer
         keyCode = ev.keyCode
         # left arrow press
         if keyCode is 37 and @currentEl > @conf.minImage
-            location.hash = "#!/bilder/element/#{@currentEl - 1}"
+            location.hash = @conf.toLeftHash(@currentEl)
         # right arrow press
         if keyCode is 39 and @currentEl < @conf.maxImage
-            location.hash = "#!/bilder/element/#{@currentEl + 1}"
+            location.hash = @conf.toRightHash(@currentEl)
 
 
 # Global Objects, associated to all other

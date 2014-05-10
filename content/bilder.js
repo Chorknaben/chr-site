@@ -45,17 +45,16 @@ Bilder = (function(_super) {
             minImage: _this.minImage,
             maxImage: _this.maxImage,
             arrowKeys: true,
-            leftArrowHandler: function() {
-              var currentEl, h;
+            getCurrentElement: function() {
+              var h;
               h = location.hash;
-              currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
-              return $(".arrleft").attr("href", "#!/bilder/element/" + (currentEl - 1));
+              return parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
             },
-            rightArrowHandler: function() {
-              var currentEl, h;
-              h = location.hash;
-              currentEl = parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
-              return $(".arrright").attr("href", "#!/bilder/element/" + (currentEl + 1));
+            toLeftHash: function(currentEl) {
+              return "#!/bilder/element/" + (currentEl - 1);
+            },
+            toRightHash: function(currentEl) {
+              return "#!/bilder/element/" + (currentEl + 1);
             },
             escapeKey: true,
             lockScrolling: true,
@@ -119,13 +118,12 @@ Bilder = (function(_super) {
 
   Bilder.prototype.onDOMVisible = function() {
     this.adjustPos();
-    return $(window).bind({
-      resize: this.adjustPos
-    });
+    return $(window).on("resize", this.adjustPos);
   };
 
   Bilder.prototype.onUnloadChild = function() {
-    return $(window).unbind("resize", this.adjustPos);
+    $(window).off("resize", this.adjustPos);
+    return $(".image-viewer").addClass("nodisplay");
   };
 
   Bilder.prototype.adjustPos = function() {

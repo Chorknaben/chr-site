@@ -993,52 +993,49 @@ a {
   padding-top: 10px;
   text-shadow: 1px 0px 2px rgba(0, 0, 0, 0.8);
 }
-.timeline h1 span {
+.timeline h1 span.reise-name {
   font-size: 40px;
+}
+.timeline h1 span.current-reise {
+  color: coral;
 }
 .reise-tile .person {
   width: 70%;
   height: 100%;
   float: left;
 }
-.presse-frame {
-  width: 94%;
-  position: absolute;
-  padding: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 6%;
-  height: 600px;
-  margin: auto;
+.presse-container {
+  margin-left: 6%;
+  margin-right: 6%;
+  width: 88%;
 }
-.artikel-container {
-  height: 100%;
-  position: relative;
-  background: #fff;
-  display: block;
-}
-.presse-frame .slidee {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  list-style: none;
-}
-.presse-frame .slidee li {
+.presse-container a.img-presse {
+  margin-right: 4px;
+  margin-top: 4px;
   float: left;
-  margin: 0 50px 0 0;
-  padding: 0;
-  width: 750px;
-  height: 100%;
+  height: 420px;
+  width: 676px;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: white;
+  position: relative;
 }
-.presse-frame .slidee li img {
-  width: 750px;
-  height: auto;
-  display: block;
-  top: 0;
-  bottom: 0;
-  margin: auto;
+.presse-container a.img-presse span {
   position: absolute;
+  bottom: 50px;
+  width: 100%;
+  left: 0;
+  height: 100px;
+  background-color: #1a171a;
+  padding-left: 20px;
+  transition: background-color 0.2s linear 0s;
+  -webkit-transition: background-color 0.2s linear 0s;
+}
+.presse-container a.img-presse span h1 {
+  font-size: 4em;
+}
+.presse-container a:hover span {
+  background-color: black;
 }
 .unterstutzen-tile {
   background-color: black;

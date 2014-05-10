@@ -1,0 +1,9 @@
+{ "presse" : [
+    {"name":"Ein Presse Artikel","url":"/img/presse0.jpg","caption":"Bla"},
+    {"name":"Ein Presse Artikel","url":"/img/presse1.jpg","caption":"Bla"},
+    {"name":"Ein Presse Artikel","url":"/img/presse2.jpg","caption":"Bla"},
+    {"name":"Ein Presse Artikel","url":"/img/presse3.jpg","caption":"Bla"},
+    {"name":"Ein Presse Artikel","url":"/img/presse4.jpg","caption":"Bla"},
+    {"name":"Ein Presse Artikel","url":"/img/presse5.jpg","caption":"Bla"}
+
+]}

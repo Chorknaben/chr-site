@@ -157,6 +157,15 @@ Core = (function() {
     });
   };
 
+  Core.prototype.ensureImageViewerClosed = function() {
+    this.requestFunction("ImageViewer.forceClose", (function(_this) {
+      return function(func) {
+        return func(true);
+      };
+    })(this));
+    return this.revokeFunction("ImageViewer.forceClose");
+  };
+
   Core.prototype.executeOnce = function(name, func) {
     if (this.state["tmp" + name] === true) {
 
@@ -205,6 +214,8 @@ Core = (function() {
     if (func) {
       return success(func);
     } else {
+      console.log(failure);
+      console.log($.noop);
       return failure();
     }
   };
@@ -752,6 +763,7 @@ ImageViewer = (function() {
     this.fadeOutInfo = __bind(this.fadeOutInfo, this);
     this.close = __bind(this.close, this);
     this.open = __bind(this.open, this);
+    window.core.exportFunction("ImageViewer.forceClose", this.close);
   }
 
   ImageViewer.prototype.open = function(conf) {
@@ -763,11 +775,12 @@ ImageViewer = (function() {
     }
     $(".bar").removeClass("fade");
     if (this.conf.navigation) {
+      this.currentEl = this.conf.getCurrentElement();
       if (!(this.currentEl - 1 < this.minImage)) {
-        this.conf.leftArrowHandler();
+        $(".arrleft").attr("href", this.conf.toLeftHash(this.currentEl));
       }
       if (!(this.currentEl + 1 > this.maxImage)) {
-        this.conf.rightArrowHandler();
+        $(".arrright").attr("href", this.conf.toRightHash(this.currentEl));
       }
     }
     if (this.conf.arrowKeys && this.conf.navigation) {
@@ -781,12 +794,21 @@ ImageViewer = (function() {
     }
     viewer = $(".image-viewer");
     $(image).addClass("link-cursor");
-    $(image).click((function(_this) {
-      return function() {
-        return _this.imageViewerClose();
-      };
-    })(this));
     $(image).prependTo($(".image-viewer"));
+    if (this.conf.enableDragging) {
+      $(image).click((function(_this) {
+        return function() {
+          return _this.close();
+        };
+      })(this));
+      console.log("imageViewer.enableDragging: stub");
+    } else {
+      $(image).click((function(_this) {
+        return function() {
+          return _this.close();
+        };
+      })(this));
+    }
     viewer.removeClass("nodisplay");
     $(".cross").removeClass("nodisplay");
     if ($(".image-viewer img").height() > $(window).height() - 300) {
@@ -795,15 +817,18 @@ ImageViewer = (function() {
     }
   };
 
-  ImageViewer.prototype.close = function() {
+  ImageViewer.prototype.close = function(forceNoHash) {
+    if (forceNoHash == null) {
+      forceNoHash = false;
+    }
     if (this.conf.lockScrolling) {
       $(".scrolled").css({
         overflow: "initial"
       });
       $(window).scrollTop(this.currentScrollPos);
     }
-    if (this.conf.revertHash) {
-      this.c.registerTaker("dontHandle", true);
+    if (this.conf.revertHash && !forceNoHash) {
+      window.core.registerTaker("dontHandle", true);
       window.location.hash = this.conf.revertHash;
     }
     if (this.conf.arrowKeys) {
@@ -831,10 +856,10 @@ ImageViewer = (function() {
     var keyCode;
     keyCode = ev.keyCode;
     if (keyCode === 37 && this.currentEl > this.conf.minImage) {
-      location.hash = "#!/bilder/element/" + (this.currentEl - 1);
+      location.hash = this.conf.toLeftHash(this.currentEl);
     }
     if (keyCode === 39 && this.currentEl < this.conf.maxImage) {
-      return location.hash = "#!/bilder/element/" + (this.currentEl + 1);
+      return location.hash = this.conf.toRightHash(this.currentEl);
     }
   };
 
