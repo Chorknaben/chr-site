@@ -793,6 +793,7 @@ ImageViewer = (function() {
       });
     }
     viewer = $(".image-viewer");
+    viewer.children("img").remove();
     $(image).addClass("link-cursor");
     $(image).prependTo($(".image-viewer"));
     if (this.conf.enableDragging) {

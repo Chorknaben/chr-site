@@ -616,6 +616,11 @@ class ImageViewer
             $(".scrolled").css overflow:"hidden"
 
         viewer = $(".image-viewer")
+
+        # the imageViewer might not have been closed properly;
+        # remove leftover image if not already
+        viewer.children("img").remove()
+
         $(image).addClass("link-cursor")
         $(image).prependTo($(".image-viewer"))
 
