@@ -975,8 +975,14 @@ a {
 .greyed {
   color: #333;
 }
-.timeline {
-  background: url("/img/moskau.jpg") center center;
+.timeline.spanien {
+  background: url("/img/spanien.jpg") center center;
+}
+.timeline.deutschland {
+  background: url("/img/deutschland.jpg") center center;
+}
+.timeline.ungarn {
+  background: url("/img/ungarn.jpg") center center;
 }
 .timeline .linkcnt {
   display: block;
@@ -1003,6 +1009,9 @@ a {
   width: 70%;
   height: 100%;
   float: left;
+}
+.nomargin {
+  margin-left: 0;
 }
 .presse-container {
   margin-left: 6%;
