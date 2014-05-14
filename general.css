@@ -243,8 +243,8 @@ a {
   z-index: 20;
   background: #1a171a;
   color: white;
-  transition: bottom 0.1s linear 0s;
-  -webkit-transition: bottom 0.1s linear 0s;
+  transition: bottom 0.3s ease-in 0s;
+  -webkit-transition: bottom 0.3s ease-in 0s;
 }
 #footer img {
   height: 25px;
@@ -286,6 +286,12 @@ a {
 }
 #feedback img {
   height: initial;
+  margin-left: 6%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  margin-top: 15px;
 }
 #feedback h1 {
   position: relative;
@@ -364,16 +370,47 @@ a {
   top: 0;
 }
 .feedbackform {
-  margin: 6%;
+  position: absolute;
+  top: 500px;
+  margin-left: 6%;
+  width: 100%;
 }
 .feedbackform input {
   font-size: 2em;
-  width: 200px;
+}
+.feedbackform .name {
+  float: left;
+  width: 47%;
+  margin-right: 5px;
 }
 .feedbackform select {
-  width: 204px;
   font-size: 2em;
   background-color: white;
+  width: 51%;
+  float: right;
+}
+.feedbackform textarea {
+  margin-top: 11px;
+  height: 250px;
+}
+.feedbackform .email {
+  margin-top: 10px;
+  width: 47%;
+}
+.feedbackform .submit {
+  margin-top: 10px;
+  float: right;
+  width: 51%;
+  height: 43px;
+}
+@media screen and (max-height: 980px) {
+  #feedback img {
+    display: none;
+  }
+  .feedbackform {
+    top: initial;
+    margin-top: 20px;
+  }
 }
 .tilecontainer {
   margin: auto;
@@ -1069,8 +1106,8 @@ a {
   width: 88%;
 }
 .presse-container a.img-presse {
-  margin-right: 4px;
-  margin-top: 4px;
+  margin-right: 10px;
+  margin-top: 10px;
   float: left;
   height: 420px;
   width: 676px;
@@ -1091,7 +1128,7 @@ a {
   -webkit-transition: background-color 0.2s linear 0s;
 }
 .presse-container a.img-presse span h1 {
-  font-size: 2em;
+  font-size: 1.9em;
   margin-right: 20px;
 }
 .presse-container a:hover span {

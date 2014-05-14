@@ -276,8 +276,8 @@ a {
     z-index: 20;
     background:@black;
     color:white;
-    transition: bottom 0.1s linear 0s;
-    -webkit-transition: bottom 0.1s linear 0s;
+    transition: bottom 0.3s ease-in 0s;
+    -webkit-transition: bottom 0.3s ease-in 0s;
 }
 
 #startst {
@@ -321,6 +321,12 @@ a {
     opacity:0.95;
     img{
         height:initial;
+        margin-left: 6%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        margin-top: 15px;
     }
     h1{
         position: relative;
@@ -409,15 +415,48 @@ a {
 }
 
 .feedbackform{
-    margin:6%;
+    position:absolute;
+    top:500px;
+    margin-left:6%;
+    width:100%;
     input{
         font-size:2em;
-        width:200px;
     }
+    .name{
+        float:left;
+        width:47%;
+        margin-right:5px;
+    }
+
     select{
-        width:204px;
         font-size:2em;
         background-color:white;
+        width:51%;
+        float:right;
+    }
+    textarea{
+        margin-top:11px;
+        height:250px;
+    }
+    .email{
+        margin-top:10px;
+        width:47%;
+    }
+    .submit{
+        margin-top: 10px;
+        float:right;
+        width:51%;
+        height:43px;
+    }
+}
+
+@media screen and (max-height:980px){
+    #feedback img {
+        display: none;
+    }
+    .feedbackform {
+        top: initial;
+        margin-top: 20px;
     }
 }
 
