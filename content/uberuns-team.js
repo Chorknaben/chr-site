@@ -8,13 +8,56 @@ UberunsTeam = (function(_super) {
 
   function UberunsTeam() {
     this.core = window.core;
+    this.linkIDMapper = [["johannes", 0], ["lechner", 1], ["noah", 2], ["samuel", 3], ["dschingis", 4]];
   }
+
+  UberunsTeam.clickedPreviously = null;
 
   UberunsTeam.prototype.onLoad = function() {};
 
   UberunsTeam.prototype.onUnloadChild = function() {};
 
-  UberunsTeam.prototype.notifyHashChange = function(newHash) {};
+  UberunsTeam.prototype.notifyHashChange = function(newHash) {
+    var el, _i, _len, _ref;
+    _ref = this.linkIDMapper;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      el = _ref[_i];
+      if (("/" + el[0]) === newHash) {
+        this.reset(true);
+        this.handle(el[1]);
+        this.clickedPreviously = el[1];
+        return;
+      }
+    }
+    if (newHash === "/" || newHash === "") {
+      return this.reset();
+    }
+  };
+
+  UberunsTeam.prototype.handle = function(id) {
+    console.log($(".reise-tile").eq(id));
+    $(".reise-tile").eq(id).children(".before-transition").addClass("invisible");
+    return $(".reise-tile").eq(id).children(".after-transition").css({
+      display: "initial"
+    });
+  };
+
+  UberunsTeam.prototype.reset = function(force) {
+    if (force == null) {
+      force = false;
+    }
+    if (!force) {
+      $(".reise-tile").eq(this.clickedPreviously).children(".before-transition").removeClass("invisible");
+      return $(".reise-tile").eq(this.clickedPreviously).children(".after-transition").css({
+        display: "none"
+      });
+    } else {
+      $(".reise-tile").eq(this.clickedPreviously).children(".before-transition").removeClass("invisible");
+      return $(".reise-tile").eq(this.clickedPreviously).children(".after-transition").css({
+        display: "none"
+      });
+    }
+  };
 
   return UberunsTeam;
 
