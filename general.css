@@ -1194,3 +1194,9 @@ a {
   list-style: initial;
   padding: 20px 40px 40px 40px;
 }
+.width-shop {
+  width: 1050px;
+}
+.tile-shop {
+  width: 500px;
+}
