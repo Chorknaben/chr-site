@@ -7,7 +7,7 @@ UberunsTeam = (function(_super) {
   __extends(UberunsTeam, _super);
 
   function UberunsTeam() {
-    this.core = window.core;
+    UberunsTeam.__super__.constructor.call(this);
     this.linkIDMapper = [["johannes", 0], ["lechner", 1], ["noah", 2], ["samuel", 3], ["dschingis", 4]];
   }
 
@@ -35,7 +35,6 @@ UberunsTeam = (function(_super) {
   };
 
   UberunsTeam.prototype.handle = function(id) {
-    console.log($(".reise-tile").eq(id));
     $(".reise-tile").eq(id).children(".before-transition").addClass("invisible");
     return $(".reise-tile").eq(id).children(".after-transition").css({
       display: "initial"

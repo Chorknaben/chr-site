@@ -1040,6 +1040,29 @@ a {
 .reise-tile .invisible {
   opacity: 0;
 }
+.comingsoon-dimension {
+  height: 30%;
+  max-height: 250px;
+  opacity: 0.95;
+  width: 536px;
+  background: #1a171a;
+}
+.comingsoon-dimension span {
+  color: white;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  margin: auto;
+  height: 100px;
+  padding: 20px;
+}
+.comingsoon-dimension span h1 {
+  text-align: center;
+  font-size: 2em;
+}
 .presse-container {
   margin-left: 6%;
   margin-right: 6%;
@@ -1058,7 +1081,7 @@ a {
 }
 .presse-container a.img-presse span {
   position: absolute;
-  bottom: 50px;
+  bottom: 0;
   width: 100%;
   left: 0;
   height: 100px;
@@ -1068,7 +1091,8 @@ a {
   -webkit-transition: background-color 0.2s linear 0s;
 }
 .presse-container a.img-presse span h1 {
-  font-size: 4em;
+  font-size: 2em;
+  margin-right: 20px;
 }
 .presse-container a:hover span {
   background-color: black;
@@ -1076,7 +1100,7 @@ a {
 .unterstutzen-tile {
   background-color: #1a171a;
   height: 100%;
-  width: 30%;
+  width: 32.4%;
   margin-right: 10px;
   float: left;
   position: relative;
@@ -1146,6 +1170,15 @@ a {
   .abs-cnt {
     height: 500px;
     margin-top: 10px;
+  }
+}
+@media screen and (max-width: 1360px) {
+  .abs-cnt {
+    width: 540px;
+  }
+  .unterstutzen-tile {
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
 #musik-cnt {
@@ -1226,4 +1259,57 @@ a {
 }
 .tile-shop {
   width: 500px;
+}
+.stiftung-sidebar {
+  width: 350px;
+  height: 100%;
+  float: left;
+}
+.stiftung-sidebar a {
+  display: block;
+  height: 50%;
+  width: 350px;
+  margin-bottom: 10px;
+  background: #1a171a;
+  position: relative;
+}
+.stiftung-sidebar a img {
+  height: auto;
+  max-height: 80%;
+  margin-left: 35px;
+  margin-top: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100%;
+}
+.stiftung-cnt {
+  max-height: 650px;
+  height: 100%;
+}
+.stiftung-main-area {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 360px;
+  right: 0;
+  margin: auto;
+  background: #1a171a;
+  color: white;
+  padding: 20px;
+}
+.stiftung-main-area h1 {
+  font-size: 3em;
+}
+.stiftung-main-area p {
+  width: 50%;
+  text-align: justify;
+  margin-top: 10px;
+  overflow: auto;
+  position: absolute;
+  bottom: 15px;
+  top: 90px;
 }

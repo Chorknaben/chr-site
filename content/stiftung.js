@@ -6,11 +6,24 @@ var Stiftung,
 Stiftung = (function(_super) {
   __extends(Stiftung, _super);
 
-  function Stiftung() {}
+  function Stiftung() {
+    Stiftung.__super__.constructor.call(this);
+  }
 
   Stiftung.prototype.onLoad = function() {};
 
   Stiftung.prototype.onUnloadChild = function() {};
+
+  Stiftung.prototype.notifyHashChange = function(newHash) {
+    if (newHash === "/" || newHash === "") {
+      $(".stiftung-main-area").eq(1).addClass("nodisplay");
+      $(".stiftung-main-area").eq(0).removeClass("nodisplay");
+    }
+    if (newHash === "/forderverein") {
+      $(".stiftung-main-area").eq(0).addClass("nodisplay");
+      return $(".stiftung-main-area").eq(1).removeClass("nodisplay");
+    }
+  };
 
   return Stiftung;
 

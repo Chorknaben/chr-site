@@ -1,6 +1,6 @@
 class UberunsTeam extends ChildPage
     constructor: ->
-        @core = window.core
+        super()
         # Map the respective persons to a fixed ID.
         # Why not just use a onclick-event, you ask?
         # Using an onclick-event has the disadvantage of, well,
@@ -31,7 +31,6 @@ class UberunsTeam extends ChildPage
             @reset()
 
     handle: (id) ->
-        console.log $(".reise-tile").eq(id)
         $(".reise-tile").eq(id)
             .children(".before-transition")
             .addClass("invisible")
