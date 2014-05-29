@@ -395,7 +395,7 @@ IndexPage = (function(_super) {
         return function() {
           return _this.toggleInfo();
         };
-      })(this), 300);
+      })(this), 310);
     }
     if ($("#footer").css("bottom") === "0px") {
       $("#feedback").addClass("nodisplay");
@@ -418,7 +418,7 @@ IndexPage = (function(_super) {
         return function() {
           return _this.toggleImpressum();
         };
-      })(this), 300);
+      })(this), 320);
     }
     to = $(window).height() - 50 - 25;
     if ($("#footer").css("bottom") === "0px") {
@@ -510,7 +510,11 @@ IndexPage = (function(_super) {
 
   IndexPage.prototype.makeImage = function(onload, lum) {
     this.imgObj = new Image();
-    this.imgObj.onload = onload(this.imgObj);
+    this.imgObj.onload = (function(_this) {
+      return function() {
+        return onload(_this.imgObj);
+      };
+    })(this);
     this.imgObj.src = "/images/real/" + this.currentRotatorImgID;
     if (lum) {
       this.imgObj.classList.add("luminanz");

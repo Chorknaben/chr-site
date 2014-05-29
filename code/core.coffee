@@ -343,7 +343,7 @@ class IndexPage extends ChildPage
             @toggleImpressum()
             setTimeout( =>
                 @toggleInfo()
-            , 300)
+            , 310)
         if $("#footer").css("bottom") is "0px"
             $("#feedback").addClass("nodisplay")
             $("#infoarea").removeClass("nodisplay")
@@ -357,7 +357,7 @@ class IndexPage extends ChildPage
             @toggleInfo()
             setTimeout( =>
                 @toggleImpressum()
-            , 300)
+            , 320)
 
         to = $(window).height() - 50 - 25
         if $("#footer").css("bottom") is "0px"
@@ -421,7 +421,8 @@ class IndexPage extends ChildPage
 
     makeImage: (onload,lum) ->
         @imgObj = new Image()
-        @imgObj.onload = onload(@imgObj)
+        @imgObj.onload = =>
+            onload(@imgObj)
         @imgObj.src = "/images/real/#{@currentRotatorImgID}"
         if lum then @imgObj.classList.add("luminanz")
         if @imgRotatorEnabled then @currentRotatorImgID++
