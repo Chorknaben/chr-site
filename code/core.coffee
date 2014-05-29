@@ -437,13 +437,27 @@ class IndexPage extends ChildPage
         nav = $(".header-nav-dropdown")
         $(".header-nav-dropdown-icon").click =>
             if not @navDropDown
+                console.log "enter"
                 nav.css top: "50px"
                 @navDropDown = true
+                @ignoreFirstShot = true
+                $(document).on("click.nav", @leaveNavDropDown)
             else
-                nav.css top: "-200px"
-                @navDropDown = false
+                console.log "leave"
+                @leaveNavDropDown()
+
+    leaveNavDropDown: =>
+        if @ignoreFirstShot
+            @ignoreFirstShot=false
+            return
+        console.log "leave"
+        $(".header-nav-dropdown").css top: "-200px"
+        @navDropDown = false
+        $(document).off("click.nav")
+
 
     initKalender: ->
+        pos = $("#6").offset()
         $("#6").click (event) =>
             @contentViewer.open
                 left:   -> $(window).width() * 0.06
@@ -455,6 +469,13 @@ class IndexPage extends ChildPage
                 caption: "Konzerte, Gottesdienste, Grillparties"
                 revertHash: "#!/"
                 content: $(".kalendar").html()
+                animate: true
+                startingPos:
+                    left: pos.left
+                    top: pos.top
+                    width: $("#6").width()
+                    height: $("#6").height()
+                    
                 
             event.stopPropagation()
             event.preventDefault()
@@ -539,6 +560,31 @@ class ContentViewer
         if contentObj.scrollTo
             $.scrollTo(contentObj.scrollTo.offset().top-contentObj.top(), 500)
 
+        if contentObj.animate
+            pos = contentObj.startingPos
+            @clearPadding()
+            $cnt.css 
+                left: pos.left
+                top: pos.top
+                width: pos.width 
+                height: pos.height
+                background:"#1a171a"
+            $cnt.removeClass("nodisplay")
+
+            $cnt.css
+                width: $(window).width() - @right() - @left()
+                left: @left()
+            setTimeout(=>
+                $cnt.css
+                    height: @height()
+                    top: @top()
+                @continue(contentObj, $cnt)
+            , 200)
+        else
+            @continue(contentObj, $cnt)
+
+
+    continue: (contentObj, $cnt) ->
         $("html").css cursor:"pointer"
         @update()
 
@@ -546,12 +592,18 @@ class ContentViewer
         $cnt.children("h2").html(contentObj.caption)
         $cnt.children("#ccnt").html(contentObj.content)
 
-        $(document).click @closeClickHandler
-        $(".content-viewer").click @clickOnViewerHandler
+        $(document).bind("click.content", @closeClickHandler)
+        $(".content-viewer").bind("click.content", @clickOnViewerHandler)
 
         $cnt.removeClass("nodisplay")
-
         $(window).on("resize", @update)
+
+    clearPadding: ->
+        $(".content-viewer").css padding: 0
+
+    setPadding: ->
+        $(".content-viewer").css padding: "30px 50px 0 50px"
+        
 
     update: =>
         $(".content-viewer").css
@@ -564,8 +616,8 @@ class ContentViewer
         $cnt = $(".content-viewer")
         console.log "contentViewer: close"
 
-        $(document).unbind("click", @closeClickHandler)
-        $(".content-viewer").unbind("click", @clickOnViewerHandler)
+        $(document).unbind("click.content", @closeClickHandler)
+        $(".content-viewer").unbind("click.content", @clickOnViewerHandler)
 
         $("html").css cursor: "default"
         $cnt.css cursor: "default"

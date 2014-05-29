@@ -45,6 +45,7 @@ a {
   background: #1a171a;
   color: white;
   padding: 30px 50px 0 50px;
+  -webkit-transition: all 0.2s ease-in 0s;
 }
 .content-viewer h1 {
   font-size: 50px;

@@ -310,6 +310,7 @@ IndexPage = (function(_super) {
   __extends(IndexPage, _super);
 
   function IndexPage() {
+    this.leaveNavDropDown = __bind(this.leaveNavDropDown, this);
     this.pauseImgRotator = __bind(this.pauseImgRotator, this);
     var w;
     IndexPage.__super__.constructor.call(this);
@@ -541,21 +542,37 @@ IndexPage = (function(_super) {
     return $(".header-nav-dropdown-icon").click((function(_this) {
       return function() {
         if (!_this.navDropDown) {
+          console.log("enter");
           nav.css({
             top: "50px"
           });
-          return _this.navDropDown = true;
+          _this.navDropDown = true;
+          _this.ignoreFirstShot = true;
+          return $(document).on("click.nav", _this.leaveNavDropDown);
         } else {
-          nav.css({
-            top: "-200px"
-          });
-          return _this.navDropDown = false;
+          console.log("leave");
+          return _this.leaveNavDropDown();
         }
       };
     })(this));
   };
 
+  IndexPage.prototype.leaveNavDropDown = function() {
+    if (this.ignoreFirstShot) {
+      this.ignoreFirstShot = false;
+      return;
+    }
+    console.log("leave");
+    $(".header-nav-dropdown").css({
+      top: "-200px"
+    });
+    this.navDropDown = false;
+    return $(document).off("click.nav");
+  };
+
   IndexPage.prototype.initKalender = function() {
+    var pos;
+    pos = $("#6").offset();
     return $("#6").click((function(_this) {
       return function(event) {
         _this.contentViewer.open({
@@ -575,7 +592,14 @@ IndexPage = (function(_super) {
           title: "Kalender",
           caption: "Konzerte, Gottesdienste, Grillparties",
           revertHash: "#!/",
-          content: $(".kalendar").html()
+          content: $(".kalendar").html(),
+          animate: true,
+          startingPos: {
+            left: pos.left,
+            top: pos.top,
+            width: $("#6").width(),
+            height: $("#6").height()
+          }
         });
         event.stopPropagation();
         return event.preventDefault();
@@ -696,7 +720,7 @@ ContentViewer = (function() {
   }
 
   ContentViewer.prototype.open = function(contentObj) {
-    var $cnt;
+    var $cnt, pos;
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
     this.revertHash = contentObj.revertHash;
@@ -709,6 +733,36 @@ ContentViewer = (function() {
     if (contentObj.scrollTo) {
       $.scrollTo(contentObj.scrollTo.offset().top - contentObj.top(), 500);
     }
+    if (contentObj.animate) {
+      pos = contentObj.startingPos;
+      this.clearPadding();
+      $cnt.css({
+        left: pos.left,
+        top: pos.top,
+        width: pos.width,
+        height: pos.height,
+        background: "#1a171a"
+      });
+      $cnt.removeClass("nodisplay");
+      $cnt.css({
+        width: $(window).width() - this.right() - this.left(),
+        left: this.left()
+      });
+      return setTimeout((function(_this) {
+        return function() {
+          $cnt.css({
+            height: _this.height(),
+            top: _this.top()
+          });
+          return _this["continue"](contentObj, $cnt);
+        };
+      })(this), 200);
+    } else {
+      return this["continue"](contentObj, $cnt);
+    }
+  };
+
+  ContentViewer.prototype["continue"] = function(contentObj, $cnt) {
     $("html").css({
       cursor: "pointer"
     });
@@ -716,10 +770,22 @@ ContentViewer = (function() {
     $cnt.children("h1").html(contentObj.title);
     $cnt.children("h2").html(contentObj.caption);
     $cnt.children("#ccnt").html(contentObj.content);
-    $(document).click(this.closeClickHandler);
-    $(".content-viewer").click(this.clickOnViewerHandler);
+    $(document).bind("click.content", this.closeClickHandler);
+    $(".content-viewer").bind("click.content", this.clickOnViewerHandler);
     $cnt.removeClass("nodisplay");
     return $(window).on("resize", this.update);
+  };
+
+  ContentViewer.prototype.clearPadding = function() {
+    return $(".content-viewer").css({
+      padding: 0
+    });
+  };
+
+  ContentViewer.prototype.setPadding = function() {
+    return $(".content-viewer").css({
+      padding: "30px 50px 0 50px"
+    });
   };
 
   ContentViewer.prototype.update = function() {
@@ -735,8 +801,8 @@ ContentViewer = (function() {
     var $cnt;
     $cnt = $(".content-viewer");
     console.log("contentViewer: close");
-    $(document).unbind("click", this.closeClickHandler);
-    $(".content-viewer").unbind("click", this.clickOnViewerHandler);
+    $(document).unbind("click.content", this.closeClickHandler);
+    $(".content-viewer").unbind("click.content", this.clickOnViewerHandler);
     $("html").css({
       cursor: "default"
     });
