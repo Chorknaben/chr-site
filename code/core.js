@@ -710,90 +710,69 @@ ContentViewer = (function() {
     this.update = __bind(this.update, this);
     this.open = __bind(this.open, this);
     this.core = window.core;
-    this.revertHash = null;
-    this.left = null;
-    this.right = null;
-    this.top = null;
-    this.height = function() {
-      return "initial";
-    };
+    this.contentObj = null;
   }
 
   ContentViewer.prototype.open = function(contentObj) {
     var $cnt, pos;
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
-    this.revertHash = contentObj.revertHash;
-    this.left = contentObj.left;
-    this.right = contentObj.right;
-    this.top = contentObj.top;
-    if (contentObj.height) {
-      this.height = contentObj.height;
+    this.contentObj = contentObj;
+    if (!this.contentObj.height) {
+      this.contentObj.height = function() {
+        return "initial";
+      };
     }
-    if (contentObj.scrollTo) {
-      $.scrollTo(contentObj.scrollTo.offset().top - contentObj.top(), 500);
+    if (this.contentObj.scrollTo) {
+      $.scrollTo(this.contentObj.scrollTo.offset().top - this.contentObj.top(), 500);
     }
-    if (contentObj.animate) {
-      pos = contentObj.startingPos;
-      this.clearPadding();
+    if (this.contentObj.animate) {
+      pos = this.contentObj.startingPos;
+      $cnt.removeClass("nodisplay");
       $cnt.css({
         left: pos.left,
         top: pos.top,
         width: pos.width,
         height: pos.height,
-        background: "#1a171a"
+        "z-index": 6
       });
-      $cnt.removeClass("nodisplay");
       $cnt.css({
-        width: $(window).width() - this.right() - this.left(),
-        left: this.left()
+        opacity: 1,
+        width: $(window).width() - this.contentObj.right() - this.contentObj.left(),
+        left: this.contentObj.left(),
+        height: this.contentObj.height(),
+        top: this.contentObj.top()
       });
-      return setTimeout((function(_this) {
-        return function() {
-          $cnt.css({
-            height: _this.height(),
-            top: _this.top()
-          });
-          return _this["continue"](contentObj, $cnt);
-        };
-      })(this), 200);
+      $(".content-viewer-padding").css({
+        opacity: 1
+      });
+      return this["continue"]($cnt);
     } else {
-      return this["continue"](contentObj, $cnt);
+      return this["continue"]($cnt);
     }
   };
 
-  ContentViewer.prototype["continue"] = function(contentObj, $cnt) {
+  ContentViewer.prototype["continue"] = function($cnt) {
+    var $content;
     $("html").css({
       cursor: "pointer"
     });
     this.update();
-    $cnt.children("h1").html(contentObj.title);
-    $cnt.children("h2").html(contentObj.caption);
-    $cnt.children("#ccnt").html(contentObj.content);
+    $content = $cnt.children("div");
+    $content.children("h1").html(this.contentObj.title);
+    $content.children("h2").html(this.contentObj.caption);
+    $content.children("#ccontent").html(this.contentObj.content);
     $(document).bind("click.content", this.closeClickHandler);
     $(".content-viewer").bind("click.content", this.clickOnViewerHandler);
-    $cnt.removeClass("nodisplay");
     return $(window).on("resize", this.update);
-  };
-
-  ContentViewer.prototype.clearPadding = function() {
-    return $(".content-viewer").css({
-      padding: 0
-    });
-  };
-
-  ContentViewer.prototype.setPadding = function() {
-    return $(".content-viewer").css({
-      padding: "30px 50px 0 50px"
-    });
   };
 
   ContentViewer.prototype.update = function() {
     return $(".content-viewer").css({
-      left: this.left(),
-      right: this.right(),
-      top: this.top(),
-      height: this.height()
+      left: this.contentObj.left(),
+      right: this.contentObj.right(),
+      top: this.contentObj.top(),
+      height: this.contentObj.height()
     });
   };
 
@@ -811,12 +790,36 @@ ContentViewer = (function() {
     });
     this.core.registerTaker("dontHandle", true);
     window.location.hash = revertHash;
-    $cnt.addClass("nodisplay");
+    if (this.contentObj.animate) {
+      $cnt.css({
+        left: this.contentObj.startingPos.left,
+        width: this.contentObj.startingPos.width,
+        top: this.contentObj.startingPos.top,
+        height: this.contentObj.startingPos.height
+      });
+      $cnt.children("div").css({
+        "transition-delay": "0s",
+        "-webkit-transition-delay": "0s",
+        opacity: 0
+      });
+      setTimeout((function(_this) {
+        return function() {
+          $cnt.css({
+            opacity: 0
+          });
+          return setTimeout(function() {
+            return $cnt.addClass("nodisplay");
+          }, 400);
+        };
+      })(this), 600);
+    } else {
+      $cnt.addClass("nodisplay");
+    }
     return $(window).off("resize", this.update);
   };
 
   ContentViewer.prototype.closeClickHandler = function() {
-    return this.close(this.revertHash);
+    return this.close(this.contentObj.revertHash);
   };
 
   ContentViewer.prototype.clickOnViewerHandler = function(event) {

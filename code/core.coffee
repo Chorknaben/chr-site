@@ -539,78 +539,67 @@ class Navigation
 class ContentViewer
     constructor: ->
         @core = window.core
-        @revertHash = null
-        @left = null
-        @right = null
-        @top = null
-        @height = -> "initial"
+        @contentObj = null
 
     open: (contentObj) =>
         $cnt = $(".content-viewer")
         #todo click another while open? think about that bitch..
         console.log "contentViewer: open"
 
-        @revertHash = contentObj.revertHash
-        @left = contentObj.left
-        @right = contentObj.right
-        @top = contentObj.top
-        if contentObj.height
-            @height = contentObj.height
+        @contentObj = contentObj
 
-        if contentObj.scrollTo
-            $.scrollTo(contentObj.scrollTo.offset().top-contentObj.top(), 500)
+        if not @contentObj.height
+            @contentObj.height = -> "initial"
 
-        if contentObj.animate
-            pos = contentObj.startingPos
-            @clearPadding()
+        if @contentObj.scrollTo
+            $.scrollTo(@contentObj.scrollTo.offset().top-@contentObj.top(), 500)
+
+        if @contentObj.animate
+            pos = @contentObj.startingPos
+
+            # Spawn the Content-Viewer at the desired location
+            $cnt.removeClass("nodisplay")
             $cnt.css 
                 left: pos.left
                 top: pos.top
                 width: pos.width 
                 height: pos.height
-                background:"#1a171a"
-            $cnt.removeClass("nodisplay")
+                "z-index" : 6
 
             $cnt.css
-                width: $(window).width() - @right() - @left()
-                left: @left()
-            setTimeout(=>
-                $cnt.css
-                    height: @height()
-                    top: @top()
-                @continue(contentObj, $cnt)
-            , 200)
+                opacity: 1
+                width: $(window).width() - @contentObj.right() - @contentObj.left()
+                left: @contentObj.left()
+                height: @contentObj.height()
+                top: @contentObj.top()
+
+            $(".content-viewer-padding").css
+                opacity: 1
+            @continue($cnt)
         else
-            @continue(contentObj, $cnt)
+            @continue($cnt)
 
 
-    continue: (contentObj, $cnt) ->
+    continue: ($cnt) ->
         $("html").css cursor:"pointer"
         @update()
+        $content = $cnt.children("div")
 
-        $cnt.children("h1").html(contentObj.title)
-        $cnt.children("h2").html(contentObj.caption)
-        $cnt.children("#ccnt").html(contentObj.content)
+        $content.children("h1").html(@contentObj.title)
+        $content.children("h2").html(@contentObj.caption)
+        $content.children("#ccontent").html(@contentObj.content)
 
         $(document).bind("click.content", @closeClickHandler)
         $(".content-viewer").bind("click.content", @clickOnViewerHandler)
 
-        $cnt.removeClass("nodisplay")
         $(window).on("resize", @update)
-
-    clearPadding: ->
-        $(".content-viewer").css padding: 0
-
-    setPadding: ->
-        $(".content-viewer").css padding: "30px 50px 0 50px"
-        
 
     update: =>
         $(".content-viewer").css
-            left: @left()
-            right: @right()
-            top: @top()
-            height: @height()
+            left: @contentObj.left()
+            right: @contentObj.right()
+            top: @contentObj.top()
+            height: @contentObj.height()
 
     close: (revertHash) =>
         $cnt = $(".content-viewer")
@@ -624,13 +613,31 @@ class ContentViewer
 
         @core.registerTaker("dontHandle", true)
         window.location.hash = revertHash
-
-        $cnt.addClass("nodisplay")
+        if @contentObj.animate
+            $cnt.css
+                left: @contentObj.startingPos.left
+                width: @contentObj.startingPos.width
+                top: @contentObj.startingPos.top
+                height: @contentObj.startingPos.height
+            $cnt.children("div").css
+                "transition-delay": "0s"
+                "-webkit-transition-delay": "0s"
+                opacity: 0
+            setTimeout( =>
+                $cnt.css
+                    opacity: 0
+                setTimeout( =>
+                    $cnt.addClass("nodisplay")
+                , 400)
+            , 600)
+                
+        else
+            $cnt.addClass("nodisplay")
 
         $(window).off("resize", @update)
 
     closeClickHandler: =>
-        @close(@revertHash)
+        @close(@contentObj.revertHash)
 
     clickOnViewerHandler: (event) =>
         event.stopPropagation()
