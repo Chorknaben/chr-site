@@ -349,7 +349,11 @@ IndexPage = (function(_super) {
     return $("<img>", {
       src: this.bgSrc + "bg"
     }).load(function() {
-      return $(this).appendTo("#bg");
+      $(this).appendTo("#bg");
+      return $("#bg").css({
+        opacity: 1,
+        background: "initial"
+      });
     });
   };
 

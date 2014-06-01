@@ -313,6 +313,9 @@ class IndexPage extends ChildPage
         $ "<img>", src: @bgSrc + "bg"
             .load ->
                 $(@).appendTo("#bg")
+                $("#bg").css
+                    opacity: 1
+                    background:"initial"
 
     preloadImage: ->
         img = new Image()
