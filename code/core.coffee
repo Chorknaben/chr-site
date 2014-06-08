@@ -260,22 +260,6 @@ class ChildPage
     # An Hash is being delegated to the subpage
     notifyHashChange: (newHash) ->
 
-
-class Context
-    #necessity unsure
-    @internalState: {}
-    constructor: (@pageName) ->
-        @runDetection(@pageName)
-
-    getCorrelations: ->
-        return @internalState
-
-    runDetection: (pageName) ->
-        # Complete internalState using a limited
-        # amount of clues
-
-
-
 class IndexPage extends ChildPage
     constructor: ->
         super()
@@ -462,6 +446,7 @@ class IndexPage extends ChildPage
     initKalender: ->
         pos = $("#6").offset()
         $("#6").click (event) =>
+            @template = _.template($("#calendar-template").html())
             @contentViewer.open
                 left:   -> $(window).width() * 0.06
                 top:    -> $(".smalltiles").children().first().offset().top
@@ -471,13 +456,19 @@ class IndexPage extends ChildPage
                 title: "Kalender"
                 caption: "Konzerte, Gottesdienste, Grillparties"
                 revertHash: "#!/"
-                content: $(".kalendar").html()
+                content: "<div id=\"calendar-full\"></div>"
                 animate: true
                 startingPos:
                     left: pos.left
                     top: pos.top
                     width: $("#6").width()
                     height: $("#6").height()
+
+            $("#calendar-full").clndr({
+                daysOfTheWeek: ['S','M','D',"M","D","F","S"]
+                render: (data) =>
+                    @template(data)
+            })
                     
                 
             event.stopPropagation()
@@ -548,7 +539,7 @@ class ContentViewer
         $cnt = $(".content-viewer")
         #todo click another while open? think about that bitch..
         console.log "contentViewer: open"
-
+        
         @contentObj = contentObj
 
         if not @contentObj.height
@@ -585,12 +576,13 @@ class ContentViewer
 
     continue: ($cnt) ->
         $("html").css cursor:"pointer"
+        $("html .content-viewer").css cursor:"initial"
         @update()
         $content = $cnt.children("div")
 
         $content.children("h1").html(@contentObj.title)
         $content.children("h2").html(@contentObj.caption)
-        $content.children("#ccontent").html(@contentObj.content)
+        $content.children("#ccnt").html(@contentObj.content)
 
         $(document).bind("click.content", @closeClickHandler)
         $(".content-viewer").bind("click.content", @clickOnViewerHandler)
@@ -617,20 +609,23 @@ class ContentViewer
         @core.registerTaker("dontHandle", true)
         window.location.hash = revertHash
         if @contentObj.animate
+            # revert contentViewer to original position
             $cnt.css
                 left: @contentObj.startingPos.left
                 width: @contentObj.startingPos.width
                 top: @contentObj.startingPos.top
                 height: @contentObj.startingPos.height
-            $cnt.children("div").css
-                "transition-delay": "0s"
-                "-webkit-transition-delay": "0s"
-                opacity: 0
+
+            # now turn off timing transition because we want this
+            # opacity to be transitioned immediately.
+            $cnt.children("div").addClass("nodisplay")
             setTimeout( =>
                 $cnt.css
                     opacity: 0
                 setTimeout( =>
                     $cnt.addClass("nodisplay")
+                    $cnt.children("div").removeClass("nodisplay")
+                    $(".content-viewer-padding").css opacity:0
                 , 400)
             , 600)
                 
@@ -638,6 +633,12 @@ class ContentViewer
             $cnt.addClass("nodisplay")
 
         $(window).off("resize", @update)
+        @clear()
+
+    clear: ->
+        $(".content-viewer-padding h1").empty()
+        $(".content-viewer-padding h2").empty()
+        $("#ccnt").empty()
 
     closeClickHandler: =>
         @close(@contentObj.revertHash)
