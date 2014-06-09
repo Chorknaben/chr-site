@@ -42,9 +42,17 @@
                     top:0; bottom:0;
                     margin:auto;
                 }
+                img.icon-back{
+                    margin-left: 60px;
+                    height:40px;
+                }
             }
         }
     }
+}
+
+#uberuns{
+    transition: margin-left .7s;
 }
 
 .hoveroverlay:hover{
@@ -61,6 +69,34 @@
     height:100%;
     cursor:pointer;
     background:url(img/marc-0.jpg) no-repeat center center;
+    transition: opacity .35s;
+}
+
+.testblock.text{
+    opacity: 0;
+}
+
+.testblock.hint{
+    animation: testblock-hint 1s;
+    -webkit-animation: testblock-hint 1s;
+}
+
+@keyframes testblock-hint{
+    50% {
+       opacity: 0.9;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes testblock-hint{
+    50% {
+       opacity: 0.9;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .hiddentext{
@@ -72,6 +108,7 @@
     background-color:@black;
     color:white;
 }
+
 
 // versteckte fragmente
 #prettymargin{
@@ -213,10 +250,13 @@
        position: absolute;
        left: 0;
        right: 0;
-       margin: auto;
        text-align: center;
        padding-top: 10px; 
-       text-shadow:1px 0px 2px rgba(0,0,0,0.8);
+       bottom:0;
+       height:60px;
+       opacity:0.85;
+       background:#1a171a;
+       transition:background .2s, opacity .2s;
        span.reise-name{
            font-size:40px;
        }
@@ -224,10 +264,14 @@
            color:coral; 
        }
     }
+    h1.fade{
+        opacity:1;
+    }
 }
 
 .nomargin{
     margin-left:0;
+    padding-right:10px;
 }
 
 .reise-tile .striegel{

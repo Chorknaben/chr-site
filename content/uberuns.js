@@ -8,6 +8,7 @@ Uberuns = (function(_super) {
 
   function Uberuns() {
     this.core = window.core;
+    this.core.state["uberuns-doesnothing"] = true;
   }
 
   Uberuns.prototype.onDOMVisible = function() {};
@@ -17,21 +18,37 @@ Uberuns = (function(_super) {
   Uberuns.prototype.onLoad = function() {
     $(".testblock").hover(function() {
       return setTimeout(function() {
+        this.core.state["uberuns-doesnothing"] = false;
         if ($(".testblock:hover").length > 0) {
-          return $(".testblock").animate({
-            opacity: 0
-          }, 350);
+          return $(".testblock").addClass("text");
         }
       }, 700);
     }, function() {
-      return $(this).animate({
-        opacity: 1
-      }, 350);
+      return $(this).removeClass("text");
     });
     $(".testblock").click(function() {
-      return $(".testblock").animate({
-        opacity: 0
-      }, 350);
+      this.core.state["uberuns-doesnothing"] = false;
+      return $(".testblock").addClass("text");
+    });
+    setTimeout((function(_this) {
+      return function() {
+        if (_this.core.state["uberuns-doesnothing"]) {
+          return $(".testblock").addClass("hint");
+        }
+      };
+    })(this), 3000);
+    $(".icon-container").click(function(event) {
+      console.log("asdasd");
+      $("#uberuns").css({
+        "margin-left": -($(window).width() * 0.06 + $(".deadcenter").width() - 50)
+      });
+      setTimeout((function(_this) {
+        return function() {
+          return location.hash = $(_this).attr("href");
+        };
+      })(this), 400);
+      event.stopPropagation();
+      return event.preventDefault();
     });
     return window.core.release();
   };

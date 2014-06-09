@@ -1,38 +1,50 @@
 class Uberuns extends ChildPage
     constructor: ->
         @core = window.core
+        @core.state["uberuns-doesnothing"] = true
 
     onDOMVisible: ->
 
     notifyHashChange: (newHash) ->
 
     onLoad: ->
+        # User accesses information text mainly by hovering over the image
         $(".testblock").hover(->
             setTimeout( ->
+                @core.state["uberuns-doesnothing"] = false
                 if $(".testblock:hover").length > 0
-                    $(".testblock").animate({opacity:0}, 350)
+                    $(".testblock").addClass("text")
             , 700)
         ,->
-            $(this).animate({opacity:1}, 350)
+            $(this).removeClass("text")
         )
-        $(".testblock").click ->
-            $(".testblock").animate({opacity:0}, 350)
 
-        #$.getScript "code/sly.min.js", ->
-        #    sly = new Sly(".uberuns-frame", {
-        #        horizontal: 1
-        #        itemNav:    'basic'
-        #        #activateOn: 'click'
-        #        mouseDragging: 1
-        #        touchDragging: 1
-        #        releaseSwing: 1
-        #        smart: 1
-        #        dynamicHandle: 1
-        #        speed: 300
-        #        easing: 'swing'
-        #        scrollBy:   1
-        #    }).init()
-        #    #$(".presse-frame").css top: $(window).height()/2 - $(".presse-frame").height()/2
+        # User can also click on the image to achieve the same
+        # effect
+        $(".testblock").click ->
+            @core.state["uberuns-doesnothing"] = false
+            $(".testblock").addClass("text")
+
+        # If the user does nothing for 3 secs, hint him that
+        # he could hover over that huge image right there
+        setTimeout( =>
+            if @core.state["uberuns-doesnothing"]
+                $(".testblock").addClass("hint")
+        , 3000)
+
+        # We're going to to a little animation with these buttons,
+        # so attach onclick events to them
+        $(".icon-container").click (event) ->
+            console.log "asdasd"
+            $("#uberuns").css {"margin-left" : - ( $(window).width() * 0.06 + $(".deadcenter").width() - 50 )}
+            setTimeout( =>
+                location.hash = $(this).attr("href")
+            , 400)
+
+            event.stopPropagation()
+            event.preventDefault()
+        
+
         window.core.release()
 
     mouseEnter: ->

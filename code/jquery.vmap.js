@@ -105,6 +105,7 @@
 
     if (this.mode == 'svg') {
       this.canvas = this.createSvgNode('svg');
+
     } else {
       this.canvas = this.createVmlNode('group');
       this.canvas.style.position = 'absolute';
@@ -726,7 +727,8 @@
         this.transX = minTransX;
       }
 
-      this.canvas.applyTransformParams(this.scale, this.transX, this.transY);
+      // intervention
+      this.canvas.applyTransformParams(this.scale,this.baseTransX*2,0);
     },
 
     makeDraggable: function () {

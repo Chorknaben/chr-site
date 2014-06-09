@@ -14,7 +14,6 @@ class UberunsTeam extends ChildPage
           , ["dschingis", 4]]
 
         @clickedPreviously = null
-        @over = false
 
     onLoad: ->
         # However, we still attach hover events to every element in order
@@ -22,11 +21,10 @@ class UberunsTeam extends ChildPage
         $(".reise-tile").hover( ->
             setTimeout(=>
                 if $(this).mouseIsOver()
-                    console.log this
                     window.location.hash = $(this).children("a").attr("href")
             , 350)
+        )
         
-        , => @over = false)
 
     onUnloadChild: ->
 

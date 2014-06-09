@@ -21,11 +21,21 @@ UberunsReise = (function(_super) {
   }
 
   UberunsReise.prototype.onLoad = function() {
-    return $.when($.getScript("/code/jquery.vmap.js"), $.getScript("/code/jquery.vmap.europe.js"), $.Deferred(function(deferred) {
+    var i, _i, _results;
+    $.when($.getScript("/code/jquery.vmap.js"), $.getScript("/code/jquery.vmap.europe.js"), $.Deferred(function(deferred) {
       return $(deferred.resolve);
     })).done(function() {
       return window.core.release();
     });
+    _results = [];
+    for (i = _i = 0; _i <= 2; i = ++_i) {
+      _results.push($(".reise-tile").eq(i).hover(function() {
+        return $(this).find("h1").addClass("fade");
+      }, function() {
+        return $(this).find("h1").removeClass("fade");
+      }));
+    }
+    return _results;
   };
 
   UberunsReise.prototype.onDOMVisible = function() {
@@ -41,11 +51,13 @@ UberunsReise = (function(_super) {
   };
 
   UberunsReise.prototype.notifyHashChange = function(newHash) {
-    var h, number, w;
+    var elem, h, number, offs, w;
     if (newHash.lastIndexOf("/info/", 0) === 0) {
       number = parseInt(newHash.substr(6, newHash.length));
       w = $(window).width();
       h = $(window).height();
+      elem = $("#rt" + number);
+      offs = elem.offset();
       return this.contentViewer.open({
         left: function() {
           return $("#uberuns-cnt").offset().left + 10;
@@ -54,16 +66,23 @@ UberunsReise = (function(_super) {
           return $(".reise-tile").offset().top;
         },
         right: function() {
-          return w - $("#uberuns-cnt").width() - (w * 0.04) - 10;
+          return w - $("#uberuns-cnt").width() - (w * 0.04) - 2;
         },
         height: function() {
-          return $("#uberuns-cnt").height() - 20;
+          return $("#uberuns-cnt").height() + 10;
         },
         chapter: false,
         title: "MOSKAU &amp; STALINGRAD",
         caption: "1945",
         revertHash: "#!/uberuns/reise",
-        content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
+        content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>",
+        animate: true,
+        startingPos: {
+          left: offs.left,
+          top: offs.top,
+          width: elem.width(),
+          height: elem.height()
+        }
       });
     }
   };
@@ -94,7 +113,19 @@ UberunsReise = (function(_super) {
       color: '#ffffff',
       hoverColor: '#999999',
       enableZoom: false,
-      showTooltip: false
+      showTooltip: true,
+      colors: {
+        de: "#34ef34",
+        es: "#9b4f37",
+        gb: "#34ef34",
+        at: "#34ef34",
+        dk: "#34ef34",
+        cz: "#34ef34",
+        fr: "#34ef34",
+        it: "#34ef34",
+        se: "#34ef34",
+        no: "#34ef34"
+      }
     });
   };
 

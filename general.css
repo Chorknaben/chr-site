@@ -482,6 +482,47 @@ a {
     margin-top: 20px;
   }
 }
+.jqvmap-label {
+  position: absolute;
+  display: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: #292929;
+  color: white;
+  font-family: sans-serif, Verdana;
+  font-size: smaller;
+  padding: 3px;
+}
+.jqvmap-zoomin,
+.jqvmap-zoomout {
+  position: absolute;
+  left: 10px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: #000000;
+  padding: 3px;
+  color: white;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  line-height: 10px;
+  text-align: center;
+}
+.jqvmap-zoomin {
+  top: 10px;
+}
+.jqvmap-zoomout {
+  top: 30px;
+}
+.jqvmap-region {
+  cursor: pointer;
+}
+.jqvmap-ajax_response {
+  width: 100%;
+  height: 500px;
+}
 .tilecontainer {
   margin: auto;
   position: absolute;
@@ -969,6 +1010,13 @@ a {
   bottom: 0;
   margin: auto;
 }
+#uberuns-cnt .side-area .side-margin .icon-container img.icon-back {
+  margin-left: 60px;
+  height: 40px;
+}
+#uberuns {
+  transition: margin-left 0.7s;
+}
 .hoveroverlay:hover {
   opacity: 0.8;
 }
@@ -981,6 +1029,30 @@ a {
   height: 100%;
   cursor: pointer;
   background: url(img/marc-0.jpg) no-repeat center center;
+  transition: opacity .35s;
+}
+.testblock.text {
+  opacity: 0;
+}
+.testblock.hint {
+  animation: testblock-hint 1s;
+  -webkit-animation: testblock-hint 1s;
+}
+@keyframes testblock-hint {
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes testblock-hint {
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 .hiddentext {
   height: 100%;
@@ -1114,10 +1186,13 @@ a {
   position: absolute;
   left: 0;
   right: 0;
-  margin: auto;
   text-align: center;
   padding-top: 10px;
-  text-shadow: 1px 0px 2px rgba(0, 0, 0, 0.8);
+  bottom: 0;
+  height: 60px;
+  opacity: 0.85;
+  background: #1a171a;
+  transition: background .2s, opacity .2s;
 }
 .timeline h1 span.reise-name {
   font-size: 40px;
@@ -1125,8 +1200,12 @@ a {
 .timeline h1 span.current-reise {
   color: coral;
 }
+.timeline h1.fade {
+  opacity: 1;
+}
 .nomargin {
   margin-left: 0;
+  padding-right: 10px;
 }
 .reise-tile .striegel {
   background: url("/img/person.jpg") center center;
