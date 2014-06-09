@@ -66,3 +66,6 @@
 
     }
 })(jQuery);
+jQuery.fn.mouseIsOver = function () {
+    return $(this).parent().find($(this).selector + ":hover").length > 0;
+}; 

@@ -15,6 +15,8 @@ class Uberuns extends ChildPage
         ,->
             $(this).animate({opacity:1}, 350)
         )
+        $(".testblock").click ->
+            $(".testblock").animate({opacity:0}, 350)
 
         #$.getScript "code/sly.min.js", ->
         #    sly = new Sly(".uberuns-frame", {

@@ -13,7 +13,24 @@ UberunsTeam = (function(_super) {
 
   UberunsTeam.clickedPreviously = null;
 
-  UberunsTeam.prototype.onLoad = function() {};
+  UberunsTeam.over = false;
+
+  UberunsTeam.prototype.onLoad = function() {
+    return $(".reise-tile").hover(function() {
+      return setTimeout((function(_this) {
+        return function() {
+          if ($(_this).mouseIsOver()) {
+            console.log(_this);
+            return window.location.hash = $(_this).children("a").attr("href");
+          }
+        };
+      })(this), 350);
+    }, (function(_this) {
+      return function() {
+        return _this.over = false;
+      };
+    })(this));
+  };
 
   UberunsTeam.prototype.onUnloadChild = function() {};
 

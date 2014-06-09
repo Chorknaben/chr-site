@@ -28,6 +28,11 @@ Uberuns = (function(_super) {
         opacity: 1
       }, 350);
     });
+    $(".testblock").click(function() {
+      return $(".testblock").animate({
+        opacity: 0
+      }, 350);
+    });
     return window.core.release();
   };
 
