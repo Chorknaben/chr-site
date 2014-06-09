@@ -755,9 +755,9 @@ ContentViewer = (function() {
     if (this.contentObj.scrollTo) {
       $.scrollTo(this.contentObj.scrollTo.offset().top - this.contentObj.top(), 500);
     }
+    $cnt.removeClass("nodisplay");
     if (this.contentObj.animate) {
       pos = this.contentObj.startingPos;
-      $cnt.removeClass("nodisplay");
       $cnt.css({
         left: pos.left,
         top: pos.top,
@@ -777,6 +777,12 @@ ContentViewer = (function() {
       });
       return this["continue"]($cnt);
     } else {
+      $(".content-viewer-padding").css({
+        opacity: 1
+      });
+      $cnt.css({
+        opacity: 1
+      });
       return this["continue"]($cnt);
     }
   };

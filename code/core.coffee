@@ -576,11 +576,11 @@ class ContentViewer
         if @contentObj.scrollTo
             $.scrollTo(@contentObj.scrollTo.offset().top-@contentObj.top(), 500)
 
+        $cnt.removeClass("nodisplay")
         if @contentObj.animate
             pos = @contentObj.startingPos
 
             # Spawn the Content-Viewer at the desired location
-            $cnt.removeClass("nodisplay")
             $cnt.css 
                 left: pos.left
                 top: pos.top
@@ -599,6 +599,10 @@ class ContentViewer
                 opacity: 1
             @continue($cnt)
         else
+            $(".content-viewer-padding").css
+                opacity: 1
+            $cnt.css
+                opacity: 1
             @continue($cnt)
 
 
