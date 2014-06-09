@@ -70,6 +70,10 @@ Core = (function() {
       this.raiseIndexPage();
       return;
     }
+    if (hash === "#!/kalender") {
+      this.delegateChildPage("", "#!/kalender");
+      return;
+    }
     matching = this.resolveLocator(hash);
     switch (matching.msg) {
       case "match":
@@ -147,6 +151,7 @@ Core = (function() {
         return func(true);
       });
     } else {
+      this.state["childPage"].closeCalendar();
       return debug("Already at Index Page");
     }
   };
@@ -556,49 +561,80 @@ IndexPage = (function(_super) {
     return $(document).off("click.nav");
   };
 
-  IndexPage.prototype.initKalender = function() {
-    var pos;
-    pos = $("#6").offset();
-    return $("#6").click((function(_this) {
-      return function(event) {
-        _this.template = _.template($("#calendar-template").html());
-        _this.contentViewer.open({
-          left: function() {
+  IndexPage.prototype.notifyHashChange = function(newHash) {
+    var minHgt, pos;
+    console.log(newHash);
+    if (newHash === "#!/kalender") {
+      pos = $("#6").offset();
+      minHgt = $(".bigtile-content").height() + 10 + 40 > 420;
+      console.log(minHgt);
+      this.template = _.template($("#calendar-template").html());
+      this.contentViewer.open({
+        left: function() {
+          if (minHgt) {
             return $(window).width() * 0.06;
-          },
-          top: function() {
+          } else {
+            return 0;
+          }
+        },
+        top: function() {
+          if (minHgt) {
             return $(".smalltiles").children().first().offset().top;
-          },
-          right: function() {
+          } else {
+            return 50;
+          }
+        },
+        right: function() {
+          if (minHgt) {
             return $(window).width() * 0.06;
-          },
-          height: function() {
+          } else {
+            return 0;
+          }
+        },
+        height: function() {
+          if (minHgt) {
             return $(".bigtile-content").height() + 10 + 40;
-          },
-          chapter: false,
-          title: "Kalender",
-          caption: "Konzerte, Gottesdienste, Grillparties",
-          revertHash: "#!/",
-          content: "<div id=\"calendar-full\"></div>",
-          animate: true,
-          startingPos: {
-            left: pos.left,
-            top: pos.top,
-            width: $("#6").width(),
-            height: $("#6").height()
+          } else {
+            return $(window).height() - 50 - 25;
           }
-        });
-        $("#calendar-full").clndr({
-          daysOfTheWeek: ['S', 'M', 'D', "M", "D", "F", "S"],
-          render: function(data) {
+        },
+        chapter: false,
+        title: "Kalender",
+        caption: "Konzerte, Gottesdienste, Grillparties",
+        revertHash: "#!/",
+        content: "<div id=\"calendar-full\"></div>",
+        animate: true,
+        onClose: (function(_this) {
+          return function() {
+            return _this.contentViewerOpen = false;
+          };
+        })(this),
+        startingPos: {
+          left: pos.left,
+          top: pos.top,
+          width: $("#6").width(),
+          height: $("#6").height()
+        }
+      });
+      this.contentViewerOpen = true;
+      return $("#calendar-full").clndr({
+        daysOfTheWeek: ['So', 'Mo', 'Di', "Mi", "Do", "Fr", "Sa"],
+        render: (function(_this) {
+          return function(data) {
             return _this.template(data);
-          }
-        });
-        event.stopPropagation();
-        return event.preventDefault();
-      };
-    })(this));
+          };
+        })(this)
+      });
+    }
   };
+
+  IndexPage.prototype.closeCalendar = function() {
+    if (this.contentViewerOpen) {
+      return this.contentViewer.close("#!/");
+    }
+  };
+
+  IndexPage.prototype.initKalender = function() {};
 
   return IndexPage;
 
@@ -812,7 +848,10 @@ ContentViewer = (function() {
       $cnt.addClass("nodisplay");
     }
     $(window).off("resize", this.update);
-    return this.clear();
+    this.clear();
+    if (this.contentObj.onClose) {
+      return this.contentObj.onClose();
+    }
   };
 
   ContentViewer.prototype.clear = function() {
@@ -963,8 +1002,8 @@ $(function() {
   window.nav = new Navigation(".header-nav");
   c = window.core;
   c.initializeHashNavigation();
-  c.handleHash();
   c.insertChildPage(new IndexPage());
+  c.handleHash();
   $(window).scroll(c.getScrollHandler);
   return window.onhashchange = c.handleHash;
 });

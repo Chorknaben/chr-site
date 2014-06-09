@@ -66,6 +66,11 @@ class Core
             @raiseIndexPage()
             return
 
+        # Calendar is a exception.
+        if hash is "#!/kalender"
+            @delegateChildPage("", "#!/kalender")
+            return
+
         # Top priority: test if Hash can be resolved to a route.
         # Only the relevant part, that is, everything after #!/ will
         # be tested for being a route.
@@ -146,6 +151,8 @@ class Core
                 console.log "imgRotator: resume"
                 func(true))
         else
+            #TODO check calendar open
+            @state["childPage"].closeCalendar()
             debug "Already at Index Page"
 
     ensureFooterDown: ->
@@ -442,37 +449,58 @@ class IndexPage extends ChildPage
         @navDropDown = false
         $(document).off("click.nav")
 
+    notifyHashChange: (newHash) ->
+        console.log newHash
+        if newHash is "#!/kalender"
+            pos = $("#6").offset()
+            # If the clients screen does not fit the calendar, open it fullscreen
+            minHgt = $(".bigtile-content").height() + 10 + 40 > 420
+            console.log minHgt
 
-    initKalender: ->
-        pos = $("#6").offset()
-        $("#6").click (event) =>
             @template = _.template($("#calendar-template").html())
             @contentViewer.open
-                left:   -> $(window).width() * 0.06
-                top:    -> $(".smalltiles").children().first().offset().top
-                right:  -> $(window).width() * 0.06
-                height: -> $(".bigtile-content").height() + 10 + 40
+                left:   -> 
+                    if minHgt then $(window).width() * 0.06 else 0
+                top:    -> 
+                    if minHgt then $(".smalltiles").children().first().offset().top else 50
+                right:  -> 
+                    if minHgt then $(window).width() * 0.06 else 0
+                height: -> 
+                    if minHgt then $(".bigtile-content").height() + 10 + 40 else 
+                        $(window).height() - 50 - 25
                 chapter: false
                 title: "Kalender"
                 caption: "Konzerte, Gottesdienste, Grillparties"
                 revertHash: "#!/"
                 content: "<div id=\"calendar-full\"></div>"
                 animate: true
+                onClose: =>
+                    @contentViewerOpen = false
                 startingPos:
                     left: pos.left
                     top: pos.top
                     width: $("#6").width()
                     height: $("#6").height()
 
+            @contentViewerOpen = true
             $("#calendar-full").clndr({
-                daysOfTheWeek: ['S','M','D',"M","D","F","S"]
+                daysOfTheWeek: ['So','Mo','Di',"Mi","Do","Fr","Sa"]
                 render: (data) =>
                     @template(data)
             })
-                    
-                
-            event.stopPropagation()
-            event.preventDefault()
+
+    closeCalendar: ->
+        if @contentViewerOpen
+            @contentViewer.close("#!/")
+
+
+    initKalender: ->
+        #pos = $("#6").offset()
+        #$("#6").click (event) =>
+        #            
+        #        
+        #    event.stopPropagation()
+        #    event.preventDefault()
 
 class Navigation
     @preState = null
@@ -635,6 +663,9 @@ class ContentViewer
         $(window).off("resize", @update)
         @clear()
 
+        if @contentObj.onClose
+            @contentObj.onClose()
+
     clear: ->
         $(".content-viewer-padding h1").empty()
         $(".content-viewer-padding h2").empty()
@@ -759,11 +790,13 @@ $ ->
 
     # Important initialization code
     c = window.core
+    #
+    # Initial Page is the Index Page
     c.initializeHashNavigation()
+    c.insertChildPage(new IndexPage())
+
     c.handleHash()
 
-    # Initial Page is the Index Page
-    c.insertChildPage(new IndexPage())
 
     $(window).scroll c.getScrollHandler
 

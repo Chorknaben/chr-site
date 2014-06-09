@@ -39,6 +39,73 @@ a {
     display:none;
 }
 
+.clndr{
+    .clndr-grid{
+        width:65%;
+        float:left;
+        .days-of-the-week{
+            background:#e50019;
+            color:white;
+           height:40px; 
+           width:100%;
+           //display:table;
+            .header-day{
+                //display:table-cell;
+                text-align:center;
+                //vertical-align:middle;
+                font-weight:bold;
+                line-height:40px;
+                float:left;
+                width:14.18%;
+            } 
+            .header-day:last-child{
+                margin-right:0;
+            }
+        }
+        .days{
+            .day{
+               text-align: center;
+                float: left;
+                width: 14.275%;
+                height: 50px;
+                line-height: 50px;
+                font-weight: bold;
+                background: #1a171a;
+                color: white;
+                border-bottom: 2px solid gray; 
+            }
+            .next-month{
+                color:gray;
+            }
+            .today{
+                background:#2b282b;
+            }
+        }
+
+    }
+
+    .event-listing{
+        width:35%;
+        float:right;
+        display:table;
+
+        .event-listing-title{
+            height:40px;
+            background:#d22473;
+            vertical-align:middle;
+            font-weight:bold;
+            display:table-cell;
+            text-align:center;
+        }
+        .event-item{
+            .event-item-name{
+            }
+            .event-item-location{
+            }
+        }
+    }
+}
+
 .contentoffset{
     position:absolute;
     margin-top:5%;

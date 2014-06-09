@@ -29,6 +29,56 @@ a {
   background: black;
   display: none;
 }
+.clndr .clndr-grid {
+  width: 65%;
+  float: left;
+}
+.clndr .clndr-grid .days-of-the-week {
+  background: #e50019;
+  color: white;
+  height: 40px;
+  width: 100%;
+}
+.clndr .clndr-grid .days-of-the-week .header-day {
+  text-align: center;
+  font-weight: bold;
+  line-height: 40px;
+  float: left;
+  width: 14.18%;
+}
+.clndr .clndr-grid .days-of-the-week .header-day:last-child {
+  margin-right: 0;
+}
+.clndr .clndr-grid .days .day {
+  text-align: center;
+  float: left;
+  width: 14.275%;
+  height: 50px;
+  line-height: 50px;
+  font-weight: bold;
+  background: #1a171a;
+  color: white;
+  border-bottom: 2px solid gray;
+}
+.clndr .clndr-grid .days .next-month {
+  color: gray;
+}
+.clndr .clndr-grid .days .today {
+  background: #2b282b;
+}
+.clndr .event-listing {
+  width: 35%;
+  float: right;
+  display: table;
+}
+.clndr .event-listing .event-listing-title {
+  height: 40px;
+  background: #d22473;
+  vertical-align: middle;
+  font-weight: bold;
+  display: table-cell;
+  text-align: center;
+}
 .contentoffset {
   position: absolute;
   margin-top: 5%;

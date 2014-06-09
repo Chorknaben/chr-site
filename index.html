@@ -15,9 +15,9 @@
 <script type="text/javascript" src="code/jquery.morecustoms.js" async defer></script>
 <script type="text/javascript" src="code/jquery.scrollTo.min.js" async defer></script>
 
-<script type="text/javascript" src="code/clndr.js" async defer></script>
-<script type="text/javascript" src="code/moment.min.js" async defer></script>
-<script type="text/javascript" src="code/underscore.js" async defer></script>
+<script type="text/javascript" src="code/clndr.js"></script>
+<script type="text/javascript" src="code/moment.min.js"></script>
+<script type="text/javascript" src="code/underscore.js"></script>
 
 <script type="text/javascript" src="code/tilec.js"></script>
 <script type="text/javascript" src="code/core.js"></script>
@@ -270,13 +270,14 @@ Ham hock prosciutto chicken sirloin, landjaeger kevin shoulder jerky. Pig landja
         <% }); %>
       </div>
       <div class="days clearfix">
-        <% _.each(days, function(day) { %>
+        <%
+        _.each(days, function(day) { %>
           <div class="<%= day.classes %>" id="<%= day.id %>"><span class="day-number"><%= day.day %></span></div>
         <% }); %>
       </div>
     </div>
     <div class="event-listing">
-      <div class="event-listing-title">EVENTS THIS MONTH</div>
+      <div class="event-listing-title">AUFTRITTE DIESEN MONAT</div>
       <% _.each(eventsThisMonth, function(event) { %>
           <div class="event-item">
             <div class="event-item-name"><%= event.title %></div>
