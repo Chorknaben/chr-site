@@ -105,7 +105,7 @@ Core = (function() {
               return _this.delegateChildPage(route, usefulHash);
             } else {
               return _this.requestFunction("Tile.load", function(load) {
-                return load(route, function() {
+                return load(route, true, function() {
                   return _this.delegateChildPage(route, usefulHash);
                 });
               });
@@ -141,6 +141,12 @@ Core = (function() {
         display: "none"
       });
       $(".scrolled").attr("id", "");
+      $("#bg").css({
+        opacity: 1
+      });
+      $(".tilecontainer").css({
+        opacity: 1
+      });
       this.state["childPage"].onUnloadChild();
       this.state["childPage"] = new IndexPage();
       this.state["currentPage"] = void 0;
@@ -767,7 +773,7 @@ ContentViewer = (function() {
       });
       $cnt.css({
         opacity: 1,
-        width: $(window).width() - this.contentObj.right() - this.contentObj.left(),
+        width: !this.contentObj.width ? $(window).width() - this.contentObj.right() - this.contentObj.left() : this.contentObj.width(),
         left: this.contentObj.left(),
         height: this.contentObj.height(),
         top: this.contentObj.top()
@@ -808,8 +814,8 @@ ContentViewer = (function() {
   ContentViewer.prototype.update = function() {
     return $(".content-viewer").css({
       left: this.contentObj.left(),
-      right: this.contentObj.right(),
       top: this.contentObj.top(),
+      width: !this.contentObj.width ? $(window).width() - this.contentObj.right() - this.contentObj.left() : this.contentObj.width(),
       height: this.contentObj.height()
     });
   };

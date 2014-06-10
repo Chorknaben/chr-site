@@ -46,7 +46,7 @@ Uberuns = (function(_super) {
         return function() {
           return location.hash = $(_this).attr("href");
         };
-      })(this), 400);
+      })(this), 1000);
       event.stopPropagation();
       return event.preventDefault();
     });

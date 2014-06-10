@@ -15,7 +15,10 @@ Tile = (function() {
     this.core.exportFunction("Tile.load", this.load);
   }
 
-  Tile.prototype.load = function(urlWhat, callback, originalSite, urlOverride, bare) {
+  Tile.prototype.load = function(urlWhat, animate, callback, originalSite, urlOverride, bare) {
+    if (animate == null) {
+      animate = false;
+    }
     if (originalSite == null) {
       originalSite = void 0;
     }
@@ -31,7 +34,9 @@ Tile = (function() {
     this.core.state["globalHashResponseDisabled"] = true;
     return $("#result").load("content/" + urlWhat + ".html", (function(_this) {
       return function() {
-        _this.setLoadingScreen(true);
+        if (animate) {
+          _this.setLoadingScreen(true);
+        }
         $(_this.core.state["blurredbg"]).appendTo("#blurbg");
         if (!originalSite) {
           $(".scrolled").attr("id", urlWhat);
@@ -55,30 +60,36 @@ Tile = (function() {
             _this.core.registerTaker("pendingCallback", callback);
             return;
           }
-          return _this.finalizeLoading(callback);
+          return _this.finalizeLoading(callback, animate);
         });
       };
     })(this));
   };
 
-  Tile.prototype.finalizeLoading = function(callback) {
+  Tile.prototype.finalizeLoading = function(callback, animate) {
     var moreHash;
     if (callback == null) {
       callback = void 0;
+    }
+    if (animate == null) {
+      animate = true;
     }
     moreHash = this.core.requestTaker("backupHash");
     if (typeof moreHash !== "undefined") {
       window.location.hash = moreHash;
     }
-    this.setLoadingScreen(false);
+    if (animate) {
+      this.setLoadingScreen(false);
+    } else {
+      $(".tilecontainer").css({
+        display: "none"
+      });
+      this.core.state["childPage"].onDOMVisible();
+    }
     $("#result").css({
       display: "initial"
     });
-    $(".tilecontainer").css({
-      display: "none"
-    });
     this.core.state["globalHashResponseDisabled"] = false;
-    this.core.state["childPage"].onDOMVisible();
     if (callback) {
       return callback();
     }
@@ -86,12 +97,37 @@ Tile = (function() {
 
   Tile.prototype.setLoadingScreen = function(toggle) {
     if (toggle) {
-      return $("#loading-screen").css({
-        display: "block"
+      $("#bg").css({
+        opacity: 0
       });
+      $(".tilecontainer").css({
+        opacity: 0
+      });
+      return setTimeout((function(_this) {
+        return function() {
+          return _this.animationEnded = true;
+        };
+      })(this), 400);
     } else {
-      return $("#loading-screen").css({
-        display: "none"
+      if (!this.animationEnded) {
+        setTimeout((function(_this) {
+          return function() {
+            return _this.setLoadingScreen(false);
+          };
+        })(this), 50);
+        return;
+      }
+      $(".rootnode").css({
+        opacity: 1
+      });
+      $("#loading-screen").css({
+        opacity: 0
+      });
+      this.core.state["childPage"].onDOMVisible();
+      return setTimeout(function() {
+        return $("#loading-screen").css({
+          display: "none"
+        }, 200);
       });
     }
   };

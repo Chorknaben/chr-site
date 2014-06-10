@@ -114,7 +114,7 @@ class Core
                     else
                         #@ensureImageViewerClosed()
                         @requestFunction "Tile.load", (load) =>
-                            load route, =>
+                            load route, true, =>
                                 @delegateChildPage(route, usefulHash)
             }
 
@@ -139,6 +139,9 @@ class Core
             $(".tilecontainer").css display: "initial"
             $(".scrolled").css display: "none"
             $(".scrolled").attr("id", "")
+
+            $("#bg").css opacity: 1
+            $(".tilecontainer").css opacity: 1
 
             @state["childPage"].onUnloadChild()
             @state["childPage"] = new IndexPage()
@@ -590,7 +593,10 @@ class ContentViewer
 
             $cnt.css
                 opacity: 1
-                width: $(window).width() - @contentObj.right() - @contentObj.left()
+                width: 
+                    if not @contentObj.width
+                        $(window).width() - @contentObj.right() - @contentObj.left()
+                    else @contentObj.width()
                 left: @contentObj.left()
                 height: @contentObj.height()
                 top: @contentObj.top()
@@ -624,9 +630,13 @@ class ContentViewer
     update: =>
         $(".content-viewer").css
             left: @contentObj.left()
-            right: @contentObj.right()
             top: @contentObj.top()
+            width:
+                if not @contentObj.width
+                    $(window).width() - @contentObj.right() - @contentObj.left()
+                else @contentObj.width()
             height: @contentObj.height()
+            
 
     close: (revertHash) =>
         $cnt = $(".content-viewer")

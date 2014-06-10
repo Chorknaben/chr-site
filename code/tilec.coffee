@@ -9,7 +9,7 @@ class Tile
         @core.exportFunction("Tile.load", @load)
         #@core.exportFunction("Tile.navDown", @navigationDown)
 
-    load: (urlWhat, callback, originalSite=undefined, urlOverride=undefined, bare=false) =>
+    load: (urlWhat, animate=false, callback, originalSite=undefined, urlOverride=undefined, bare=false) =>
         # Animations happening on Click
         # --------
         unless bare
@@ -19,7 +19,8 @@ class Tile
         # --------
         @core.state["globalHashResponseDisabled"] = true
         $("#result").load "content/#{ urlWhat }.html", =>
-            @setLoadingScreen(true)
+            if animate
+                @setLoadingScreen(true)
 
             # Insert background Image
             $(@core.state["blurredbg"]).appendTo("#blurbg")
@@ -51,27 +52,43 @@ class Tile
                     # releases the lock
                     @core.registerTaker("pendingCallback", callback)
                     return
-                @finalizeLoading(callback)
+                @finalizeLoading(callback, animate)
 
-    finalizeLoading: (callback=undefined) =>
+    finalizeLoading: (callback=undefined, animate=true) =>
         moreHash = @core.requestTaker("backupHash")
         if typeof moreHash isnt "undefined"
             #maybe re-get-the-loading-lock!
             window.location.hash = moreHash
-        @setLoadingScreen(false)
-        $("#result").css display: "initial"
-        $(".tilecontainer").css display: "none"
+        if animate
+            @setLoadingScreen(false)
+        else
+            $(".tilecontainer").css display: "none"
+            @core.state["childPage"].onDOMVisible()
 
+        $("#result").css display: "initial"
         @core.state["globalHashResponseDisabled"] = false
 
-        @core.state["childPage"].onDOMVisible()
         if callback then callback()
-        #callback() here
-
-
 
     setLoadingScreen: (toggle) ->
         if toggle
-            $("#loading-screen").css display: "block"
+            #$("#loading-screen").css 
+            #    opacity:0.5
+            #    display:"block"
+            $("#bg").css
+                opacity:0
+            $(".tilecontainer").css
+                opacity:0
+            setTimeout(=>
+                @animationEnded = true
+            , 400)
         else
-            $("#loading-screen").css display: "none"
+            if not @animationEnded
+                setTimeout(=> 
+                    @setLoadingScreen(false)
+                , 50)
+                return
+            $(".rootnode").css opacity: 1
+            $("#loading-screen").css opacity:0
+            @core.state["childPage"].onDOMVisible()
+            setTimeout(-> $("#loading-screen").css display:"none", 200)

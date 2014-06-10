@@ -39,7 +39,7 @@ class Uberuns extends ChildPage
             $("#uberuns").css {"margin-left" : - ( $(window).width() * 0.06 + $(".deadcenter").width() - 50 )}
             setTimeout( =>
                 location.hash = $(this).attr("href")
-            , 400)
+            , 1000)
 
             event.stopPropagation()
             event.preventDefault()

@@ -3,6 +3,7 @@
 body {
     //font-family: 'Exo 2', Helvetica, Arial, sans-serif;
     font-family: "Exo 2", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    background:#1a171a;
 }
 
 b {
@@ -36,7 +37,16 @@ a {
     z-index: 4;
     opacity: 0.8;
     background: black;
+    opacity:0;
+    transition: opacity .2s;
     display:none;
+    -webkit-transition: opacity .2s;
+}
+
+.rootnode{
+    opacity:0;
+    transition: opacity .8s;
+    -webkit-transition: opacity .8s;
 }
 
 .clndr{
@@ -223,7 +233,7 @@ a {
     position: fixed;
     width: 100%;
     display: block;
-    z-index: -5;
+    z-index: -6;
     top:50px;
     left:0;
     right:0;

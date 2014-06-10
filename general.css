@@ -1,5 +1,6 @@
 body {
   font-family: "Exo 2", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  background: #1a171a;
 }
 b {
   font-weight: bold;
@@ -27,7 +28,15 @@ a {
   z-index: 4;
   opacity: 0.8;
   background: black;
+  opacity: 0;
+  transition: opacity .2s;
   display: none;
+  -webkit-transition: opacity .2s;
+}
+.rootnode {
+  opacity: 0;
+  transition: opacity .8s;
+  -webkit-transition: opacity .8s;
 }
 .clndr .clndr-grid {
   width: 65%;
@@ -186,7 +195,7 @@ a {
   position: fixed;
   width: 100%;
   display: block;
-  z-index: -5;
+  z-index: -6;
   top: 50px;
   left: 0;
   right: 0;
@@ -532,6 +541,9 @@ a {
   right: 0;
   width: 88%;
   height: 40%;
+  -webkit-transition: opacity .2s;
+  transition: opacity .2s;
+  opacity: 1;
 }
 .hoveroverlay {
   background-color: black;
@@ -980,21 +992,21 @@ a {
   max-height: 96%;
   margin: 2%;
 }
-#uberuns-cnt .side-area {
+.side-area {
   margin-top: 10px;
-  width: 25%;
+  width: 110px;
   float: right;
   position: relative;
   height: 100%;
 }
-#uberuns-cnt .side-area .side-margin {
+.side-area .side-margin {
   margin-left: 10px;
   position: absolute;
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
-#uberuns-cnt .side-area .side-margin .icon-container {
+.side-area .side-margin .icon-container {
   display: block;
   width: 100%;
   height: 33%;
@@ -1002,7 +1014,7 @@ a {
   margin-bottom: 10px;
   background-color: coral;
 }
-#uberuns-cnt .side-area .side-margin .icon-container img {
+.side-area .side-margin .icon-container img {
   position: absolute;
   left: 0;
   right: 0;
@@ -1010,9 +1022,12 @@ a {
   bottom: 0;
   margin: auto;
 }
-#uberuns-cnt .side-area .side-margin .icon-container img.icon-back {
+.side-area .side-margin .icon-container img.icon-back {
   margin-left: 60px;
   height: 40px;
+}
+.wide {
+  width: 25%;
 }
 #uberuns {
   transition: margin-left 0.7s;
@@ -1092,7 +1107,7 @@ a {
   height: 600px;
   width: 1500px;
 }
-#uberuns-cnt #reise-onleft {
+#reise-onleft {
   position: fixed;
   left: -60px;
   height: 75.5%;
