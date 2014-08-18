@@ -65,7 +65,7 @@ class Tile
             $(".tilecontainer").css display: "none"
             @core.state["childPage"].onDOMVisible()
 
-        $("#result").css display: "initial"
+        $("#result").css display: "block"
         @core.state["globalHashResponseDisabled"] = false
 
         if callback then callback()

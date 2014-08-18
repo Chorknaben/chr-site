@@ -87,7 +87,7 @@ Tile = (function() {
       this.core.state["childPage"].onDOMVisible();
     }
     $("#result").css({
-      display: "initial"
+      display: "block"
     });
     this.core.state["globalHashResponseDisabled"] = false;
     if (callback) {

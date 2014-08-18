@@ -551,12 +551,12 @@ class Navigation
 
     reset: ->
         if @preState isnt undefined
-            @preState.css "font-weight" : "initial"
+            @preState.css "font-weight" : "normal"
 
     internalToggle: (toggleThis) ->
         console.log @preState
         if @preState isnt undefined
-            @preState.css "font-weight" : "initial"
+            @preState.css "font-weight" : "normal"
         toggleThis.css    "font-weight" : "bold"
         @preState = toggleThis
 

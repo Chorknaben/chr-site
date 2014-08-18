@@ -715,7 +715,7 @@ Navigation = (function() {
   Navigation.prototype.reset = function() {
     if (this.preState !== void 0) {
       return this.preState.css({
-        "font-weight": "initial"
+        "font-weight": "normal"
       });
     }
   };
@@ -724,7 +724,7 @@ Navigation = (function() {
     console.log(this.preState);
     if (this.preState !== void 0) {
       this.preState.css({
-        "font-weight": "initial"
+        "font-weight": "normal"
       });
     }
     toggleThis.css({
