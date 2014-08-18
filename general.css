@@ -384,13 +384,19 @@ a {
 #feedback .impressum {
   width: 45%;
   margin-left: 6%;
-  height: 100%;
+  height: 85%;
+  overflow: auto;
+  text-align: justify;
   margin-top: 20px;
   float: left;
+  padding-right: 6px;
 }
-#feedback .impressum p {
-  overflow: auto;
-  height: 85%;
+#feedback .impressum h2 {
+  font-size: larger;
+  font-weight: bold;
+}
+#feedback .impressum h3 {
+  font-weight: bold;
 }
 #feedback .feedback {
   position: relative;
@@ -403,6 +409,7 @@ a {
   left: 6%;
   margin-top: 20px;
   margin-right: 6%;
+  text-align: justify;
 }
 .infouberuns {
   position: absolute;
