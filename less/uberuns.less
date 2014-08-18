@@ -76,48 +76,31 @@
     transition: opacity .35s;
 }
 
-.testblock.text{
-    opacity: 0;
-}
-
-.testblock.hint{
-    animation: testblock-hint 1s;
-    -webkit-animation: testblock-hint 1s;
-}
-
-@keyframes testblock-hint{
-    50% {
-       opacity: 0.9;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-@-webkit-keyframes testblock-hint{
-    50% {
-       opacity: 0.9;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
 .hiddentext{
     height: 100%;
     position: absolute;
     top: 0;
     width: 100%;
-    z-index: -1;
     background-color:@black;
     color:white;
+    opacity:0;
+    transition:opacity .35s;
+    -webkit-transition:opacity .35s;
+}
+.hiddentext.visible{
+    opacity:0.8;
+}
+
+#uberuns-gemeinschaft{
+    font-size:1.5em;
 }
 
 
 // versteckte fragmente
 #prettymargin{
     margin: 100px 0 0 50px;
-    text-align:initial;
+    text-align:justify;
+    width:50%;
 }
 #bitches{
     font-size: 3em;

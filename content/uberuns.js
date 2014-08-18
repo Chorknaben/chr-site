@@ -16,29 +16,12 @@ Uberuns = (function(_super) {
   Uberuns.prototype.notifyHashChange = function(newHash) {};
 
   Uberuns.prototype.onLoad = function() {
-    $(".testblock").hover(function() {
-      return setTimeout(function() {
-        this.core.state["uberuns-doesnothing"] = false;
-        if ($(".testblock:hover").length > 0) {
-          return $(".testblock").addClass("text");
-        }
-      }, 700);
+    $(".hiddentext").hover(function() {
+      return $(".hiddentext").addClass("visible");
     }, function() {
-      return $(this).removeClass("text");
+      return $(".hiddentext").removeClass("visible");
     });
-    $(".testblock").click(function() {
-      this.core.state["uberuns-doesnothing"] = false;
-      return $(".testblock").addClass("text");
-    });
-    setTimeout((function(_this) {
-      return function() {
-        if (_this.core.state["uberuns-doesnothing"]) {
-          return $(".testblock").addClass("hint");
-        }
-      };
-    })(this), 3000);
     $(".icon-container").click(function(event) {
-      console.log("asdasd");
       $("#uberuns").css({
         "margin-left": -($(window).width() * 0.06 + $(".deadcenter").width() - 50)
       });
