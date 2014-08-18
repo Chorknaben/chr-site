@@ -1,5 +1,5 @@
 body {
-  font-family: "Exo 2", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   background: #1a171a;
 }
 b {
@@ -361,7 +361,7 @@ a {
   text-align: initial;
   line-height: initial;
   background-color: black;
-  opacity: 0.95;
+  font-size: large;
 }
 #feedback img {
   height: initial;
@@ -449,38 +449,31 @@ a {
   top: 0;
 }
 .feedbackform {
-  position: absolute;
-  top: 500px;
   margin-left: 6%;
+  margin-top: 50px;
   width: 100%;
 }
-.feedbackform input {
-  font-size: 2em;
-}
 .feedbackform .name {
-  float: left;
-  width: 47%;
-  margin-right: 5px;
+  width: 100%;
 }
 .feedbackform select {
-  font-size: 2em;
-  background-color: white;
-  width: 51%;
-  float: right;
+  float: left;
+  width: 30%;
 }
 .feedbackform textarea {
-  margin-top: 11px;
-  height: 250px;
+  min-height: 140px;
 }
 .feedbackform .email {
-  margin-top: 10px;
-  width: 47%;
+  float: right;
+  width: 70%;
 }
 .feedbackform .submit {
-  margin-top: 10px;
-  float: right;
-  width: 51%;
-  height: 43px;
+  margin: 0;
+  font-size: large;
+  width: 100%;
+}
+.feedbackform #linearform {
+  width: 260px;
 }
 @media screen and (max-height: 980px) {
   #feedback img {
@@ -1127,6 +1120,11 @@ a {
   margin-top: 10px;
   position: relative;
 }
+.reise-tile p {
+  color: white;
+  text-align: justify;
+  padding: 10px 0 0 10px;
+}
 .text {
   color: white;
 }
@@ -1197,6 +1195,7 @@ a {
   width: 100%;
 }
 .timeline h1 {
+  overflow: hidden;
   color: white;
   position: absolute;
   left: 0;
@@ -1422,6 +1421,7 @@ a {
 }
 #musik-cnt .side-area {
   height: 100%;
+  margin-top: 0;
   width: 59%;
   float: left;
   background: #1a171a;
@@ -1519,6 +1519,7 @@ a {
   font-size: 3em;
 }
 .stiftung-main-area p {
+  padding-right: 5px;
   width: 50%;
   text-align: justify;
   margin-top: 10px;

@@ -25,6 +25,12 @@ class UberunsReise extends ChildPage
         $(window).on("resize", @reisehack)
         @setupMap()
         $(window).on("resize", @resizeMap)
+        @overflowText()
+        $(window).on("resize", @overflowText)
+
+    overflowText: ->
+        console.log("i exec")
+        $($(".reise-tile")[4]).overflowTo($(".reise-tile")[5])
 
     onUnloadChild: ->
         $(window).off("resize", @reisehack)

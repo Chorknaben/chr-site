@@ -42,7 +42,14 @@ UberunsReise = (function(_super) {
     this.reisehack();
     $(window).on("resize", this.reisehack);
     this.setupMap();
-    return $(window).on("resize", this.resizeMap);
+    $(window).on("resize", this.resizeMap);
+    this.overflowText();
+    return $(window).on("resize", this.overflowText);
+  };
+
+  UberunsReise.prototype.overflowText = function() {
+    console.log("i exec");
+    return $($(".reise-tile")[4]).overflowTo($(".reise-tile")[5]);
   };
 
   UberunsReise.prototype.onUnloadChild = function() {
