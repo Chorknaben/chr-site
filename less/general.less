@@ -15,10 +15,6 @@ a {
     text-decoration:none;
 }
 
-.betabanner{
-    
-}
-
 #scrolledcontentoff{
     position:relative;
     margin-top:15%;
@@ -58,7 +54,7 @@ a {
         width:65%;
         float:left;
         .days-of-the-week{
-            background:#e50019;
+            background:gray;
             color:white;
            height:40px; 
            width:100%;
@@ -74,6 +70,53 @@ a {
             } 
             .header-day:last-child{
                 margin-right:0;
+            }
+        }
+        .controls{
+            position:relative;
+            height:40px;
+            font-weight:bold;
+            .clndr-previous-button{
+                width: 15%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-transition: background-color 0.5s;
+                -moz-transition: background-color 0.5s;
+                -ms-transition: background-color 0.5s;
+                -o-transition: background-color 0.5s;
+                transition: background-color 0.5s;
+            }
+            .month{
+                width: 70%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                display: inline-block;
+                text-align: center;
+                text-transform: uppercase;
+                letter-spacing: 4px;
+            }
+            .clndr-next-button{
+                width: 15%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-transition: background-color 0.5s;
+                -moz-transition: background-color 0.5s;
+                -ms-transition: background-color 0.5s;
+                -o-transition: background-color 0.5s;
+                transition: background-color 0.5s;
+                position:absolute;
             }
         }
         .days{
@@ -94,6 +137,11 @@ a {
             .today{
                 background:#2b282b;
             }
+            .event{
+                .day-number{
+                    border-bottom:2px solid brown;
+                }
+            }
         }
 
     }
@@ -105,14 +153,17 @@ a {
 
         .event-listing-title{
             height:40px;
-            background:#d22473;
+            background:#1a171a;
             vertical-align:middle;
             font-weight:bold;
-            display:table-cell;
             text-align:center;
+            letter-spacing: 3px;
         }
         .event-item{
+            padding:10px;
+            padding-left:30px;
             .event-item-name{
+                font-weight:bold;
             }
             .event-item-location{
             }

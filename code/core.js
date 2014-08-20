@@ -572,8 +572,7 @@ IndexPage = (function(_super) {
     console.log(newHash);
     if (newHash === "#!/kalender") {
       pos = $("#6").offset();
-      minHgt = $(".bigtile-content").height() + 10 + 40 > 420;
-      console.log(minHgt);
+      minHgt = false;
       this.template = _.template($("#calendar-template").html());
       this.contentViewer.open({
         left: function() {
@@ -625,6 +624,20 @@ IndexPage = (function(_super) {
       this.contentViewerOpen = true;
       return $("#calendar-full").clndr({
         daysOfTheWeek: ['So', 'Mo', 'Di', "Mi", "Do", "Fr", "Sa"],
+        events: [
+          {
+            date: '2014-08-20',
+            time: '20:00 (Einlass 19:00)',
+            title: 'Jahreskonzert',
+            url: 'http://0.0.0.0/#!/jahreskonzert',
+            location: 'In der Stadtpfarrkirche Biberach'
+          }, {
+            date: '2014-08-25',
+            time: '19:15',
+            title: 'Abendlied',
+            location: 'In der Stadtpfarrkirche Biberach'
+          }
+        ],
         render: (function(_this) {
           return function(data) {
             return _this.template(data);
@@ -1012,6 +1025,7 @@ window.core.exportFunction("ImageViewer.requestInstance", function() {
 $(function() {
   var c;
   window.nav = new Navigation(".header-nav");
+  moment.lang("de");
   c = window.core;
   c.initializeHashNavigation();
   c.insertChildPage(new IndexPage());

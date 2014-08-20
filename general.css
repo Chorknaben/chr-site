@@ -43,7 +43,7 @@ a {
   float: left;
 }
 .clndr .clndr-grid .days-of-the-week {
-  background: #e50019;
+  background: gray;
   color: white;
   height: 40px;
   width: 100%;
@@ -57,6 +57,53 @@ a {
 }
 .clndr .clndr-grid .days-of-the-week .header-day:last-child {
   margin-right: 0;
+}
+.clndr .clndr-grid .controls {
+  position: relative;
+  height: 40px;
+  font-weight: bold;
+}
+.clndr .clndr-grid .controls .clndr-previous-button {
+  width: 15%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -ms-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+}
+.clndr .clndr-grid .controls .month {
+  width: 70%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.clndr .clndr-grid .controls .clndr-next-button {
+  width: 15%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-transition: background-color 0.5s;
+  -moz-transition: background-color 0.5s;
+  -ms-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+  position: absolute;
 }
 .clndr .clndr-grid .days .day {
   text-align: center;
@@ -75,6 +122,9 @@ a {
 .clndr .clndr-grid .days .today {
   background: #2b282b;
 }
+.clndr .clndr-grid .days .event .day-number {
+  border-bottom: 2px solid brown;
+}
 .clndr .event-listing {
   width: 35%;
   float: right;
@@ -82,11 +132,18 @@ a {
 }
 .clndr .event-listing .event-listing-title {
   height: 40px;
-  background: #d22473;
+  background: #1a171a;
   vertical-align: middle;
   font-weight: bold;
-  display: table-cell;
   text-align: center;
+  letter-spacing: 3px;
+}
+.clndr .event-listing .event-item {
+  padding: 10px;
+  padding-left: 30px;
+}
+.clndr .event-listing .event-item .event-item-name {
+  font-weight: bold;
 }
 .contentoffset {
   position: absolute;

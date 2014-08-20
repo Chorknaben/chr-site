@@ -234,6 +234,11 @@
 </div>
 <script type="text/template" id="calendar-template">
 <div class="clndr-grid">
+      <div class="controls">
+          <div class="clndr-previous-button">‹</div>
+          <div class="month"><%= month %></div>
+          <div class="clndr-next-button">›</div>
+      </div>
       <div class="days-of-the-week clearfix">
         <% _.each(daysOfTheWeek, function(day) { %>
           <div class="header-day"><%= day %></div>
@@ -247,11 +252,11 @@
       </div>
     </div>
     <div class="event-listing">
-      <div class="event-listing-title">AUFTRITTE DIESEN MONAT</div>
+      <div class="event-listing-title">AUFTRITTE DIESEN MONAT:</div>
       <% _.each(eventsThisMonth, function(event) { %>
           <div class="event-item">
-            <div class="event-item-name"><%= event.title %></div>
-            <div class="event-item-location"><%= event.location %></div>
+            <div class="event-item-name"><%= event.title %>, <%= moment(event.date, "YYYY-MM-DD").format("DD.MM.YYYY") %></div>
+            <div class="event-item-location"><%= event.location %>, <%= event.time %></div>
           </div>
         <% }); %>
 </div>
