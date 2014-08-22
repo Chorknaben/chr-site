@@ -8,6 +8,7 @@ class UberunsReise extends ChildPage
         $.when(
             $.getScript("/code/jquery.vmap.js"),
             $.getScript("/code/jquery.vmap.europe.js"),
+            $.getScript("/code/jquery.vmap.world.js"),
             $.Deferred (deferred) ->
                 $(deferred.resolve)
         ).done( ->
@@ -100,6 +101,14 @@ class UberunsReise extends ChildPage
                 it: "#34ef34"
                 se: "#34ef34"
                 no: "#34ef34"
+
+        $("#map-world").vectorMap
+            map: 'world_en',
+            backgroundColor: "#1a171a",
+            color: '#ffffff',
+            hoverColor: '#999999',
+            enableZoom: false,
+            showTooltip: true,
 
     reisehack: =>
         # TODO minor hack, solve using css

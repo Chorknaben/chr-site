@@ -22,7 +22,7 @@ UberunsReise = (function(_super) {
 
   UberunsReise.prototype.onLoad = function() {
     var i, _i, _results;
-    $.when($.getScript("/code/jquery.vmap.js"), $.getScript("/code/jquery.vmap.europe.js"), $.Deferred(function(deferred) {
+    $.when($.getScript("/code/jquery.vmap.js"), $.getScript("/code/jquery.vmap.europe.js"), $.getScript("/code/jquery.vmap.world.js"), $.Deferred(function(deferred) {
       return $(deferred.resolve);
     })).done(function() {
       return window.core.release();
@@ -114,7 +114,7 @@ UberunsReise = (function(_super) {
       width: wReiseTile
     });
     console.log($("#map").width());
-    return $('#map').vectorMap({
+    $('#map').vectorMap({
       map: 'europe_en',
       backgroundColor: "#1a171a",
       color: '#ffffff',
@@ -133,6 +133,14 @@ UberunsReise = (function(_super) {
         se: "#34ef34",
         no: "#34ef34"
       }
+    });
+    return $("#map-world").vectorMap({
+      map: 'world_en',
+      backgroundColor: "#1a171a",
+      color: '#ffffff',
+      hoverColor: '#999999',
+      enableZoom: false,
+      showTooltip: true
     });
   };
 
