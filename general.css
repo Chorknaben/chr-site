@@ -1464,6 +1464,17 @@ a {
 }
 .unterstutzen-image {
   background-color: white;
+  width: 100%;
+  height: 200px;
+  margin-top: 20px;
+  position: relative;
+}
+.unterstutzen-image img {
+  height: auto;
+  max-width: 100%;
+  top: 0;
+  bottom: 0;
+  padding: 0;
 }
 @media screen and (max-height: 800px) {
   .abs-cnt {
@@ -1562,7 +1573,7 @@ a {
 }
 .product-image {
   height: 220px;
-  background-color: white;
+  background-color: #444444;
   margin-top: 20px;
 }
 .tile-shop p.shop-description {
