@@ -463,14 +463,14 @@ class IndexPage extends ChildPage
             @template = _.template($("#calendar-template").html())
             @contentViewer.open
                 left:   -> 
-                    if minHgt then $(window).width() * 0.06 else 0
+                    if minHgt then $(window).width() * 0.06 else 50
                 top:    -> 
-                    if minHgt then $(".smalltiles").children().first().offset().top else 50
+                    if minHgt then $(".smalltiles").children().first().offset().top else 50 + 25
                 right:  -> 
-                    if minHgt then $(window).width() * 0.06 else 0
+                    if minHgt then $(window).width() * 0.06 else 50
                 height: -> 
                     if minHgt then $(".bigtile-content").height() + 10 + 40 else 
-                        $(window).height() - 50 - 25
+                        $(window).height() - 50 - 25 - 50
                 chapter: false
                 title: "Kalender"
                 caption: "Konzerte, Gottesdienste, Grillparties"
@@ -494,6 +494,17 @@ class IndexPage extends ChildPage
                 ]
                 render: (data) =>
                     @template(data)
+                doneRendering: ->
+
+                    # Light up the corresponding event when hovering over the event.
+                    $(".event").hover ->
+                        day = $(this).children(".day-number").html()
+                        $(".event-item." + day).css "background-color": "#0D0C0D"
+                    , ->
+                        day = $(this).children(".day-number").html()
+                        $(".event-item." + day).css "background-color": "#1a171a"
+
+
             })
 
     closeCalendar: ->

@@ -579,28 +579,28 @@ IndexPage = (function(_super) {
           if (minHgt) {
             return $(window).width() * 0.06;
           } else {
-            return 0;
+            return 50;
           }
         },
         top: function() {
           if (minHgt) {
             return $(".smalltiles").children().first().offset().top;
           } else {
-            return 50;
+            return 50 + 25;
           }
         },
         right: function() {
           if (minHgt) {
             return $(window).width() * 0.06;
           } else {
-            return 0;
+            return 50;
           }
         },
         height: function() {
           if (minHgt) {
             return $(".bigtile-content").height() + 10 + 40;
           } else {
-            return $(window).height() - 50 - 25;
+            return $(window).height() - 50 - 25 - 50;
           }
         },
         chapter: false,
@@ -642,7 +642,22 @@ IndexPage = (function(_super) {
           return function(data) {
             return _this.template(data);
           };
-        })(this)
+        })(this),
+        doneRendering: function() {
+          return $(".event").hover(function() {
+            var day;
+            day = $(this).children(".day-number").html();
+            return $(".event-item." + day).css({
+              "background-color": "#0D0C0D"
+            });
+          }, function() {
+            var day;
+            day = $(this).children(".day-number").html();
+            return $(".event-item." + day).css({
+              "background-color": "#1a171a"
+            });
+          });
+        }
       });
     }
   };

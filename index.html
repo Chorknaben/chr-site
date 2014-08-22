@@ -254,7 +254,7 @@
     <div class="event-listing">
       <div class="event-listing-title">AUFTRITTE DIESEN MONAT:</div>
       <% _.each(eventsThisMonth, function(event) { %>
-          <div class="event-item">
+          <div class="event-item <%= moment(event.date, 'YYYY-MM-DD').format('DD') %>">
             <div class="event-item-name"><%= event.title %>, <%= moment(event.date, "YYYY-MM-DD").format("DD.MM.YYYY") %></div>
             <div class="event-item-location"><%= event.location %>, <%= event.time %></div>
           </div>

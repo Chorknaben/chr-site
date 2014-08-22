@@ -130,6 +130,7 @@ a {
                 background: #1a171a;
                 color: white;
                 border-bottom: 2px solid gray; 
+                transition: background-color 0.1s;
             }
             .next-month{
                 color:gray;
@@ -138,9 +139,13 @@ a {
                 background:#2b282b;
             }
             .event{
+                cursor:pointer;
                 .day-number{
-                    border-bottom:2px solid brown;
+                    border-bottom:2px solid green;
                 }
+            }
+            .event:hover{
+                background-color:#0D0C0D;
             }
         }
 
@@ -160,8 +165,9 @@ a {
             letter-spacing: 3px;
         }
         .event-item{
-            padding:10px;
-            padding-left:30px;
+            margin: 0 5px 5px 25px;
+            padding: 5px 5px 5px 5px;
+            transition: background-color 0.1s;
             .event-item-name{
                 font-weight:bold;
             }

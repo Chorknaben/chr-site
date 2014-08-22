@@ -115,6 +115,7 @@ a {
   background: #1a171a;
   color: white;
   border-bottom: 2px solid gray;
+  transition: background-color 0.1s;
 }
 .clndr .clndr-grid .days .next-month {
   color: gray;
@@ -122,8 +123,14 @@ a {
 .clndr .clndr-grid .days .today {
   background: #2b282b;
 }
+.clndr .clndr-grid .days .event {
+  cursor: pointer;
+}
 .clndr .clndr-grid .days .event .day-number {
-  border-bottom: 2px solid brown;
+  border-bottom: 2px solid green;
+}
+.clndr .clndr-grid .days .event:hover {
+  background-color: #0D0C0D;
 }
 .clndr .event-listing {
   width: 35%;
@@ -139,8 +146,9 @@ a {
   letter-spacing: 3px;
 }
 .clndr .event-listing .event-item {
-  padding: 10px;
-  padding-left: 30px;
+  margin: 0 5px 5px 25px;
+  padding: 5px 5px 5px 5px;
+  transition: background-color 0.1s;
 }
 .clndr .event-listing .event-item .event-item-name {
   font-weight: bold;
