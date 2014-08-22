@@ -1462,6 +1462,9 @@ a {
 .button.shoppen {
   background-color: orange;
 }
+.unterstutzen-image {
+  background-color: white;
+}
 @media screen and (max-height: 800px) {
   .abs-cnt {
     height: 500px;
@@ -1556,6 +1559,17 @@ a {
 }
 .tile-shop {
   width: 500px;
+}
+.product-image {
+  height: 220px;
+  background-color: white;
+  margin-top: 20px;
+}
+.tile-shop p.shop-description {
+  top: 300px;
+}
+.tile-shop p.shop-description .price {
+  font-weight: bold;
 }
 .stiftung-sidebar {
   width: 350px;
