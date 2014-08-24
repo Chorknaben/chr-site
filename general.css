@@ -653,6 +653,7 @@ a {
   margin-top: 10px;
   height: 40px;
   display: block;
+  position: relative;
 }
 .bottomtile .bottomcontentoffset {
   position: absolute;
@@ -669,7 +670,6 @@ a {
 }
 .left {
   width: 60%;
-  position: relative;
 }
 .right {
   width: 40%;
@@ -1098,7 +1098,7 @@ a {
 .testblock {
   height: 100%;
   cursor: pointer;
-  background: url(img/uberuns-uberuns.JPG) no-repeat center center;
+  background: url("img/uberuns-uberuns.JPG") no-repeat center center;
   transition: opacity .35s;
 }
 .hiddentext {

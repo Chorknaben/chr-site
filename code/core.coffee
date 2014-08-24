@@ -304,12 +304,18 @@ class IndexPage extends ChildPage
     injectBackground: ->
         # Determine the resolution of the client and send it to the server.
         # The server will return a matching background image.
+        console.log "injectBackground"
         $ "<img>", src: @bgSrc + "bg"
             .load ->
+                console.log "asdasdasddsadsadsa"
+                console.log @
                 $(@).appendTo("#bg")
                 $("#bg").css
-                    opacity: 1
+                    opacity: "1"
                     background:"initial"
+
+                if window.ie
+                    $("#bg")[0].style.filter = "alpha(opacity=100)"
 
     preloadImage: ->
         img = new Image()
@@ -396,15 +402,21 @@ class IndexPage extends ChildPage
             console.log "newsRotator: init"
             $(".right").children("p").html("+++ #{@news[0]} +++")
             $(".right").children("p").css opacity: 1
+            if window.ie
+                $(".right").children("p")[0].style.filter = "alpha(opacity=100)"
             @currentNewsID++
             @newsRotator(waitFor)
             
         else
             setTimeout(=> 
                 $(".right").children("p").css opacity:0
+                if window.ie
+                    $(".right").children("p")[0].style.filter = "alpha(opacity=0)"
                 setTimeout(=>
                     $(".right").children("p").html("+++ #{@news[@currentNewsID]} +++")
                     $(".right").children("p").css opacity: 1
+                    if window.ie
+                        $(".right").children("p")[0].style.filter = "alpha(opacity=100)"
                     if @currentNewsID >= @news.length
                         @currentNewsID = 0
                     else @currentNewsID++
@@ -817,6 +829,13 @@ window.core.exportFunction "ImageViewer.requestInstance", ->
 $ ->
     window.nav = new Navigation(".header-nav")
     moment.lang("de")
+
+    if window.ie
+        svgs = document.getElementsByTagName("img")
+        for svg in svgs
+            attr= svg.getAttribute("src");
+            if attr.indexOf(".svg", attr.length - 4) != -1
+                svg.setAttribute("src",attr+".png");
 
     # Important initialization code
     c = window.core

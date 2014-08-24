@@ -339,14 +339,20 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.injectBackground = function() {
+    console.log("injectBackground");
     return $("<img>", {
       src: this.bgSrc + "bg"
     }).load(function() {
+      console.log("asdasdasddsadsadsa");
+      console.log(this);
       $(this).appendTo("#bg");
-      return $("#bg").css({
-        opacity: 1,
+      $("#bg").css({
+        opacity: "1",
         background: "initial"
       });
+      if (window.ie) {
+        return $("#bg")[0].style.filter = "alpha(opacity=100)";
+      }
     });
   };
 
@@ -477,6 +483,9 @@ IndexPage = (function(_super) {
       $(".right").children("p").css({
         opacity: 1
       });
+      if (window.ie) {
+        $(".right").children("p")[0].style.filter = "alpha(opacity=100)";
+      }
       this.currentNewsID++;
       return this.newsRotator(waitFor);
     } else {
@@ -485,11 +494,17 @@ IndexPage = (function(_super) {
           $(".right").children("p").css({
             opacity: 0
           });
+          if (window.ie) {
+            $(".right").children("p")[0].style.filter = "alpha(opacity=0)";
+          }
           return setTimeout(function() {
             $(".right").children("p").html("+++ " + _this.news[_this.currentNewsID] + " +++");
             $(".right").children("p").css({
               opacity: 1
             });
+            if (window.ie) {
+              $(".right").children("p")[0].style.filter = "alpha(opacity=100)";
+            }
             if (_this.currentNewsID >= _this.news.length) {
               _this.currentNewsID = 0;
             } else {
@@ -1038,9 +1053,19 @@ window.core.exportFunction("ImageViewer.requestInstance", function() {
 });
 
 $(function() {
-  var c;
+  var attr, c, svg, svgs, _i, _len;
   window.nav = new Navigation(".header-nav");
   moment.lang("de");
+  if (window.ie) {
+    svgs = document.getElementsByTagName("img");
+    for (_i = 0, _len = svgs.length; _i < _len; _i++) {
+      svg = svgs[_i];
+      attr = svg.getAttribute("src");
+      if (attr.indexOf(".svg", attr.length - 4) !== -1) {
+        svg.setAttribute("src", attr + ".png");
+      }
+    }
+  }
   c = window.core;
   c.initializeHashNavigation();
   c.insertChildPage(new IndexPage());
