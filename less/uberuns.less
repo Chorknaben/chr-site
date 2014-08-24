@@ -38,17 +38,17 @@
             margin-bottom:10px;
             background-color:coral;
             overflow:hidden;
-            img{
-                position:absolute;
-                left:0; right:0;
-                top:0; bottom:0;
-                margin:auto;
-                width:100%;
-            }
-            img.icon-back{
-                margin-left: 60px;
-                height:40px;
-            }
+            // img{
+            //     position:absolute;
+            //     left:0; right:0;
+            //     top:0; bottom:0;
+            //     margin:auto;
+            //     width:100%;
+            // }
+            // img.icon-back{
+            //     margin-left: 60px;
+            //     height:40px;
+            // }
         }
     }
 }
@@ -340,6 +340,83 @@
 .has-jqvmap{
     overflow:hidden;
 }
+
+.reise-imgcontainer{
+    float:left;
+    position:relative;
+    height:100%;
+    width:80%;
+    background-color:#905e36;
+    img{
+        max-width:100%;
+        max-height:100%;
+        position:absolute;
+        left:0;
+        right:0;
+        margin:auto;
+    }
+}
+
+.reise-sidebarcontainer{
+    height:100%;
+    width:20%;
+    position: relative;
+    background-color:#c99d64;
+    float:right;
+    img{
+        max-height:100%;
+        position:absolute;
+        position:absolute;
+        left:0;
+        right:0;
+        margin:auto;
+    }
+}
+
+.team-shadows{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-style:solid;
+    border-left-width:10px;
+    border-style: solid;
+    -webkit-border-image: 
+      -webkit-gradient(linear, 100% 0, 0 0, from(black), to(rgba(0, 0, 0, 0))) 1 100%;
+    -webkit-border-image: 
+      -webkit-linear-gradient(right, black, rgba(0, 0, 0, 0)) 1 100%;
+    -moz-border-image:
+      -moz-linear-gradient(right, black, rgba(0, 0, 0, 0)) 1 100%;  
+    -o-border-image:
+      -o-linear-gradient(right, black, rgba(0, 0, 0, 0)) 1 100%;
+    border-image:
+      linear-gradient(to right, black, rgba(0, 0, 0, 0)) 1 100%; 
+}
+
+.shad{
+    margin-left: -10px;
+    padding-bottom: 10px;
+    float: left;
+    width: 100%;
+    background-image: linear-gradient(to bottom, #000000, rgba(255, 255, 255, 0));
+    background-image: -webkit-linear-gradient(bottom, #000000, rgba(255,255,255,0));
+    background-image: -o-linear-gradient(bottom, #000000, rgba(255,255,255,0));
+    background-image: -moz-linear-gradient( top bottom, #000000, rgba(255,255,255,0));
+    position:absolute;
+    margin-top:-7px;
+}
+
+.pos-a{
+    top:25%;
+    margin-top:-5px;
+}
+.pos-b{
+    top:50%;
+}
+.pos-c{
+    top:75%;
+}
+
+.shad > div { background: #fff; }
 
 @media screen and (max-width:1177px){
    .reise-tile{
