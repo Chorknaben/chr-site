@@ -147,6 +147,11 @@ Core = (function() {
       $(".tilecontainer").css({
         opacity: 1
       });
+      if (window.ie) {
+        $(".tilecontainer").css({
+          display: "block"
+        });
+      }
       this.state["childPage"].onUnloadChild();
       this.state["childPage"] = new IndexPage();
       this.state["currentPage"] = void 0;
@@ -158,6 +163,9 @@ Core = (function() {
       });
     } else {
       this.state["childPage"].closeCalendar();
+      $(".tilecontainer").css({
+        display: "block"
+      });
       return debug("Already at Index Page");
     }
   };

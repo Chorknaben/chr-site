@@ -11,7 +11,16 @@ Uberuns = (function(_super) {
     this.core.state["uberuns-doesnothing"] = true;
   }
 
-  Uberuns.prototype.onDOMVisible = function() {};
+  Uberuns.prototype.onDOMVisible = function() {
+    if (window.ie) {
+      $(".reise-imgcontainer").css({
+        display: "none"
+      });
+      return $(".reise-sidebarcontainer").css({
+        display: "none"
+      });
+    }
+  };
 
   Uberuns.prototype.notifyHashChange = function(newHash) {};
 

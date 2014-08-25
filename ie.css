@@ -1,0 +1,98 @@
+/* Uberuns IE8 Bugs.... */
+
+#uberuns-cnt div.main-area{
+	position:static;
+}
+
+#uberuns-cnt .hiddentext{
+	width:75%;
+	top:auto;
+    height:90%;
+}
+#uberuns-cnt .testblock{
+    height:90%;
+}
+
+#uberuns-cnt .side-area{
+	left:75%;
+	position:absolute;
+    height:90%;
+} 
+
+.testblock{
+	position:absolute;
+	width:75%;
+}
+
+.ie8-fallback-tile{
+	display:block;
+}
+/*#uberuns-reise .reise-tile{
+    display:none;
+    height:500px;
+    width:80%;
+    margin:auto;
+    margin-top:10px;
+    position:relative;
+    overflow:auto;
+    left:0;
+    right:0;
+    float:none;
+} 
+*/.wrapper .timeline{
+    display:block;
+}
+/*.spanien{
+    margin-bottom:100px;
+}
+*//*#uberuns-team .reise-tile{
+    display:block;
+    height:80%;
+
+}
+*/
+a.icon-container img{
+	display:none;
+}
+
+.abs-cnt{
+    bottom:auto;
+    top:auto;
+    margin-top:20px;
+}
+
+.stiftung-cnt{
+    height:550px;
+}
+#stiftung .abs-cnt{
+    margin-top:40px;
+}
+
+#musik-cnt .offsetwrapper{
+    margin:40px auto 0 auto;
+    bottom:auto;
+    top:auto;
+}
+
+#musik-cnt .outer a{
+    height:100%;
+}
+
+#musik-cnt .outer a.cd{
+    border-bottom:#1a171a 10px solid;
+}
+
+#musik-cnt .side-area iframe{
+    height:200%;
+}
+
+
+/*ubreuns reise*/
+#uberuns-team .wrapper, #uberuns-reise .wrapper{
+    height:auto;
+}
+#uberuns-team #uberuns-cnt, #uberuns-reise #uberuns-cnt{
+    position: absolute;
+    width:100%;
+    height:90%;
+}

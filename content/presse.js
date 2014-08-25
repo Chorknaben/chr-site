@@ -24,10 +24,13 @@ Presse = (function(_super) {
 
   Presse.prototype.notifyHashChange = function(hash) {
     var id, img;
+    console.log("notifyHashChange");
     if (hash.lastIndexOf("/artikel/", 0) === 0) {
       id = parseInt(hash.substr(9, hash.length));
-      return img = $("<img>").attr("src", "/img/presse" + (id - 1) + ".jpg").load((function(_this) {
+      console.log("notifyHashChange2");
+      return img = $("<img>").bind("load", (function(_this) {
         return function() {
+          console.log("ohai my schatzipitz");
           return _this.imageViewer.open({
             image: img,
             navigation: true,
@@ -51,7 +54,7 @@ Presse = (function(_super) {
             enableDragging: true
           });
         };
-      })(this));
+      })(this)).attr("src", "/img/presse" + (id - 1) + ".jpg");
     }
   };
 

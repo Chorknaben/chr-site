@@ -31,11 +31,18 @@ Bilder = (function(_super) {
   }
 
   Bilder.prototype.notifyHashChange = function(newHash) {
-    var chapter, chapterID, el, firstChapt, id, image, rightElem, rightPt;
+    var chapter, chapterID, el, elem, elems, firstChapt, id, image, rightElem, rightPt, _i, _len;
     if (newHash.indexOf("/element/") === 0) {
       id = parseInt(newHash.substr(9, newHash.length));
-      el = $("a[href='/#!/bilder" + newHash + "']");
-      console.log(el);
+      elems = $("a");
+      el = void 0;
+      for (_i = 0, _len = elems.length; _i < _len; _i++) {
+        elem = elems[_i];
+        if (elem.getAttribute("href") === ("/#!/bilder" + newHash)) {
+          el = $(elem);
+          break;
+        }
+      }
       el.addClass("loading");
       image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
         return function() {

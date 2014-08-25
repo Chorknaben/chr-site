@@ -36,7 +36,7 @@
             position:relative;
             // todo table-row
             margin-bottom:10px;
-            background-color:coral;
+            background-color:#1a171a;
             overflow:hidden;
             // img{
             //     position:absolute;
@@ -417,6 +417,30 @@
 }
 
 .shad > div { background: #fff; }
+
+.ie8-fallback-tile{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:100%;
+    background-color: #1a171a;
+    display:none;
+    .ie8-fallback-cnt{
+        position:relative;
+        width:100%;
+        height:100%;
+        .ie8-fallback-text{
+            position:absolute;
+            top:0;left:0;right:0;bottom:0;
+            margin:auto;
+            width:250px; height:100px;
+            p{
+                height:50px;
+                font-size:100px;
+            }
+        }
+    }
+}
 
 @media screen and (max-width:1177px){
    .reise-tile{

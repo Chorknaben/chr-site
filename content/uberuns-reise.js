@@ -39,12 +39,14 @@ UberunsReise = (function(_super) {
   };
 
   UberunsReise.prototype.onDOMVisible = function() {
-    this.reisehack();
-    $(window).on("resize", this.reisehack);
+    if (!window.ie) {
+      this.reisehack();
+      $(window).on("resize", this.reisehack);
+      this.overflowText();
+      $(window).on("resize", this.overflowText);
+    }
     this.setupMap();
-    $(window).on("resize", this.resizeMap);
-    this.overflowText();
-    return $(window).on("resize", this.overflowText);
+    return $(window).on("resize", this.resizeMap);
   };
 
   UberunsReise.prototype.overflowText = function() {

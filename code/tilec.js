@@ -101,7 +101,7 @@ Tile = (function() {
         opacity: 0
       });
       $(".tilecontainer").css({
-        opacity: 0
+        display: "none"
       });
       return setTimeout((function(_this) {
         return function() {

@@ -45,9 +45,11 @@ UberunsTeam = (function(_super) {
   };
 
   UberunsTeam.prototype.handle = function(id) {
-    $(".reise-tile").eq(id).children(".before-transition").addClass("invisible");
-    return $(".reise-tile").eq(id).children(".after-transition").css({
-      display: "initial"
+    var childs;
+    childs = document.querySelectorAll(".reise-tile");
+    $(childs[id]).children(".before-transition").addClass("invisible");
+    return $(childs[id]).children(".after-transition").css({
+      display: "block"
     });
   };
 

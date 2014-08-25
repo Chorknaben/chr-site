@@ -21,8 +21,12 @@ class Bilder extends ChildPage
     notifyHashChange: (newHash) ->
         if newHash.indexOf("/element/") == 0
             id = parseInt(newHash.substr(9,newHash.length))
-            el = $("a[href='/#!/bilder#{newHash}']")
-            console.log el
+            elems = $("a")
+            el = undefined
+            for elem in elems
+                if elem.getAttribute("href") is "/#!/bilder#{newHash}"
+                    el = $(elem)
+                    break
             el.addClass("loading")
             image = $("<img>").attr("src", "/images/real/#{id}")
                 .load =>

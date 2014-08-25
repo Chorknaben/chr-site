@@ -22,12 +22,13 @@ class UberunsReise extends ChildPage
             ,-> $(this).find("h1").removeClass("fade"))
 
     onDOMVisible: =>
-        @reisehack()
-        $(window).on("resize", @reisehack)
+        unless window.ie
+            @reisehack()
+            $(window).on("resize", @reisehack)
+            @overflowText()
+            $(window).on("resize", @overflowText)
         @setupMap()
         $(window).on("resize", @resizeMap)
-        @overflowText()
-        $(window).on("resize", @overflowText)
 
     overflowText: ->
         console.log("i exec")

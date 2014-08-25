@@ -78,7 +78,7 @@ class Tile
             $("#bg").css
                 opacity:0
             $(".tilecontainer").css
-                opacity:0
+                display:"none"
             setTimeout(=>
                 @animationEnded = true
             , 400)

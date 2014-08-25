@@ -40,13 +40,13 @@ class UberunsTeam extends ChildPage
             @reset()
 
     handle: (id) ->
-        $(".reise-tile").eq(id)
+        childs = document.querySelectorAll(".reise-tile")
+        $(childs[id])
             .children(".before-transition")
             .addClass("invisible")
-
-        $(".reise-tile").eq(id)
+        $(childs[id])
             .children(".after-transition")
-            .css display: "initial"
+            .css display: "block"
 
     reset: (force = false) ->
         if not force

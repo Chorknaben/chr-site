@@ -4,6 +4,9 @@ class Uberuns extends ChildPage
         @core.state["uberuns-doesnothing"] = true
 
     onDOMVisible: ->
+        if window.ie
+            $(".reise-imgcontainer").css display:"none"
+            $(".reise-sidebarcontainer").css display:"none"
 
     notifyHashChange: (newHash) ->
 

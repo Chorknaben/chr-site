@@ -9,10 +9,12 @@ class Presse extends ChildPage
         return true
 
     notifyHashChange: (hash) ->
+        console.log("notifyHashChange")
         if hash.lastIndexOf("/artikel/",0) is 0
             id = parseInt(hash.substr(9, hash.length))
-            img = $("<img>").attr("src", "/img/presse#{id-1}.jpg")
-                .load =>
+            console.log("notifyHashChange2")
+            img = $("<img>").bind("load", =>
+                    console.log("ohai my schatzipitz")
                     @imageViewer.open
                         image: img
                         navigation: true
@@ -30,6 +32,7 @@ class Presse extends ChildPage
                         lockScrolling: true
                         revertHash: "#!/presse"
                         enableDragging: true
+                ).attr("src","/img/presse#{id-1}.jpg")
 
     onDOMVisible: ->
         @adjustPos()

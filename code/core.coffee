@@ -143,6 +143,9 @@ class Core
             $("#bg").css opacity: 1
             $(".tilecontainer").css opacity: 1
 
+            if window.ie
+                $(".tilecontainer").css display: "block"
+
             @state["childPage"].onUnloadChild()
             @state["childPage"] = new IndexPage()
             @state["currentPage"] = undefined
@@ -156,6 +159,7 @@ class Core
         else
             #TODO check calendar open
             @state["childPage"].closeCalendar()
+            $(".tilecontainer").css display:"block"
             debug "Already at Index Page"
 
     ensureFooterDown: ->
