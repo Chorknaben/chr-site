@@ -13,26 +13,45 @@ class Presse extends ChildPage
         if hash.lastIndexOf("/artikel/",0) is 0
             id = parseInt(hash.substr(9, hash.length))
             console.log("notifyHashChange2")
-            img = $("<img>").bind("load", =>
-                    console.log("ohai my schatzipitz")
-                    @imageViewer.open
-                        image: img
-                        navigation: true
-                        minImage: 1
-                        maxImage: @articleCount
-                        arrowKeys: true
-                        getCurrentElement: ->
-                            h = location.hash
-                            parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
-                        toLeftHash: (currentEl) ->
-                            "#!/presse/artikel/#{currentEl-1}"
-                        toRightHash: (currentEl) ->
-                            "#!/presse/artikel/#{currentEl+1}"
-                        escapeKey: true
-                        lockScrolling: true
-                        revertHash: "#!/presse"
-                        enableDragging: true
-                ).attr("src","/img/presse#{id-1}.jpg")
+            if window.ie 
+                @imageViewer.open
+                    imagesource: "/img/presse#{id-1}.jpg"
+                    handleImageLoading: true
+                    navigation: true
+                    minImage: 1
+                    maxImage: @articleCount
+                    arrowKeys: true
+                    getCurrentElement: ->
+                        h = location.hash
+                        parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
+                    toLeftHash: (currentEl) ->
+                        "#!/presse/artikel/#{currentEl-1}"
+                    toRightHash: (currentEl) ->
+                        "#!/presse/artikel/#{currentEl+1}"
+                    escapeKey: true
+                    lockScrolling: true
+                    revertHash: "#!/presse"
+                    enableDragging: true
+            else
+                img = $("<img>").bind("load", =>
+                        @imageViewer.open
+                            image: img
+                            navigation: true
+                            minImage: 1
+                            maxImage: @articleCount
+                            arrowKeys: true
+                            getCurrentElement: ->
+                                h = location.hash
+                                parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
+                            toLeftHash: (currentEl) ->
+                                "#!/presse/artikel/#{currentEl-1}"
+                            toRightHash: (currentEl) ->
+                                "#!/presse/artikel/#{currentEl+1}"
+                            escapeKey: true
+                            lockScrolling: true
+                            revertHash: "#!/presse"
+                            enableDragging: true
+                    ).attr("src","/img/presse#{id-1}.jpg")
 
     onDOMVisible: ->
         @adjustPos()

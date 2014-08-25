@@ -1038,9 +1038,6 @@ a {
 .nodisplay {
   display: none;
 }
-#bilder {
-  overflow-x: hidden;
-}
 #uberuns-cnt {
   display: table-row;
   height: 100%;
@@ -1368,10 +1365,9 @@ a {
   height: 100%;
   border-left-width: 10px;
   border-style: solid;
-  -webkit-border-image: -webkit-gradient(linear, 100% 0, 0 0, from(#000000), to(rgba(0, 0, 0, 0))) 1 100%;
-  -webkit-border-image: -webkit-linear-gradient(right, #000000, rgba(0, 0, 0, 0)) 1 100%;
-  -moz-border-image: -moz-linear-gradient(right, #000000, rgba(0, 0, 0, 0)) 1 100%;
-  -o-border-image: -o-linear-gradient(right, #000000, rgba(0, 0, 0, 0)) 1 100%;
+  -webkit-border-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 0), #000000) 1 100%;
+  -moz-border-image: -moz-linear-gradient(right, rgba(0, 0, 0, 0), #000000) 1 100%;
+  -o-border-image: -o-linear-gradient(right, rgba(0, 0, 0, 0), #000000) 1 100%;
   border-image: linear-gradient(to right, #000000, rgba(0, 0, 0, 0)) 1 100%;
 }
 .shad {
@@ -1379,10 +1375,10 @@ a {
   padding-bottom: 10px;
   float: left;
   width: 100%;
-  background-image: linear-gradient(to bottom, #000000, rgba(255, 255, 255, 0));
-  background-image: -webkit-linear-gradient(bottom, #000000, rgba(255, 255, 255, 0));
-  background-image: -o-linear-gradient(bottom, #000000, rgba(255, 255, 255, 0));
-  background-image: -moz-linear-gradient(top bottom, #000000, rgba(255, 255, 255, 0));
+  background-image: linear-gradient(to bottom, #000000, rgba(0, 0, 0, 0), #000000);
+  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0), #000000);
+  background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0), #000000);
+  background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0), #000000);
   position: absolute;
   margin-top: -7px;
 }
@@ -1483,9 +1479,6 @@ a {
 }
 .presse-container a:hover span {
   background-color: black;
-}
-#presse {
-  overflow-x: hidden;
 }
 .unterstutzen-tile {
   background-color: #1a171a;

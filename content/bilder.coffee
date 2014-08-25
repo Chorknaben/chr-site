@@ -28,25 +28,44 @@ class Bilder extends ChildPage
                     el = $(elem)
                     break
             el.addClass("loading")
-            image = $("<img>").attr("src", "/images/real/#{id}")
-                .load =>
-                    el.removeClass("loading")
-                    @imageViewer.open
-                        image: image
-                        navigation: true
-                        minImage: @minImage
-                        maxImage: @maxImage
-                        arrowKeys: true
-                        getCurrentElement: ->
-                            h = location.hash
-                            parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
-                        toLeftHash: (currentEl) ->
-                            "#!/bilder/element/#{currentEl-1}"
-                        toRightHash: (currentEl) ->
-                            "#!/bilder/element/#{currentEl+1}"
-                        escapeKey: true
-                        lockScrolling: true
-                        revertHash: "#!/bilder"
+            if window.ie
+                @imageViewer.open
+                    imagesource: "/images/real/#{id}"
+                    handleImageLoading: true
+                    navigation: true
+                    minImage: @minImage
+                    maxImage: @maxImage
+                    arrowKeys: true
+                    getCurrentElement: ->
+                        h = location.hash
+                        parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
+                    toLeftHash: (currentEl) ->
+                        "#!/bilder/element/#{currentEl-1}"
+                    toRightHash: (currentEl) ->
+                        "#!/bilder/element/#{currentEl+1}"
+                    escapeKey: true
+                    lockScrolling: true
+                    revertHash: "#!/bilder"
+            else
+                image = $("<img>").attr("src", "/images/real/#{id}")
+                    .load =>
+                        el.removeClass("loading")
+                        @imageViewer.open
+                            image: image
+                            navigation: true
+                            minImage: @minImage
+                            maxImage: @maxImage
+                            arrowKeys: true
+                            getCurrentElement: ->
+                                h = location.hash
+                                parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
+                            toLeftHash: (currentEl) ->
+                                "#!/bilder/element/#{currentEl-1}"
+                            toRightHash: (currentEl) ->
+                                "#!/bilder/element/#{currentEl+1}"
+                            escapeKey: true
+                            lockScrolling: true
+                            revertHash: "#!/bilder"
 
         if newHash.indexOf("/kategorie/") == 0
             rightElem = @findRightMost()

@@ -44,32 +44,57 @@ Bilder = (function(_super) {
         }
       }
       el.addClass("loading");
-      image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
-        return function() {
-          el.removeClass("loading");
-          return _this.imageViewer.open({
-            image: image,
-            navigation: true,
-            minImage: _this.minImage,
-            maxImage: _this.maxImage,
-            arrowKeys: true,
-            getCurrentElement: function() {
-              var h;
-              h = location.hash;
-              return parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
-            },
-            toLeftHash: function(currentEl) {
-              return "#!/bilder/element/" + (currentEl - 1);
-            },
-            toRightHash: function(currentEl) {
-              return "#!/bilder/element/" + (currentEl + 1);
-            },
-            escapeKey: true,
-            lockScrolling: true,
-            revertHash: "#!/bilder"
-          });
-        };
-      })(this));
+      if (window.ie) {
+        this.imageViewer.open({
+          imagesource: "/images/real/" + id,
+          handleImageLoading: true,
+          navigation: true,
+          minImage: this.minImage,
+          maxImage: this.maxImage,
+          arrowKeys: true,
+          getCurrentElement: function() {
+            var h;
+            h = location.hash;
+            return parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
+          },
+          toLeftHash: function(currentEl) {
+            return "#!/bilder/element/" + (currentEl - 1);
+          },
+          toRightHash: function(currentEl) {
+            return "#!/bilder/element/" + (currentEl + 1);
+          },
+          escapeKey: true,
+          lockScrolling: true,
+          revertHash: "#!/bilder"
+        });
+      } else {
+        image = $("<img>").attr("src", "/images/real/" + id).load((function(_this) {
+          return function() {
+            el.removeClass("loading");
+            return _this.imageViewer.open({
+              image: image,
+              navigation: true,
+              minImage: _this.minImage,
+              maxImage: _this.maxImage,
+              arrowKeys: true,
+              getCurrentElement: function() {
+                var h;
+                h = location.hash;
+                return parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
+              },
+              toLeftHash: function(currentEl) {
+                return "#!/bilder/element/" + (currentEl - 1);
+              },
+              toRightHash: function(currentEl) {
+                return "#!/bilder/element/" + (currentEl + 1);
+              },
+              escapeKey: true,
+              lockScrolling: true,
+              revertHash: "#!/bilder"
+            });
+          };
+        })(this));
+      }
     }
     if (newHash.indexOf("/kategorie/") === 0) {
       rightElem = this.findRightMost();

@@ -945,9 +945,8 @@ ImageViewer = (function() {
   }
 
   ImageViewer.prototype.open = function(conf) {
-    var image, viewer;
+    var image, img, viewer;
     this.conf = conf;
-    image = this.conf.image;
     if (!$(".image-viewer").hasClass("nodisplay")) {
       $(".image-viewer img").remove();
     }
@@ -972,22 +971,24 @@ ImageViewer = (function() {
     }
     viewer = $(".image-viewer");
     viewer.children("img").remove();
-    $(image).addClass("link-cursor");
-    $(image).prependTo($(".image-viewer"));
-    if (this.conf.enableDragging) {
-      $(image).click((function(_this) {
-        return function() {
-          return _this.close();
-        };
-      })(this));
-      console.log("imageViewer.enableDragging: stub");
+    if (this.conf.handleImageLoading) {
+      img = new Image();
+      $(img).prependTo($(".image-viewer"));
+      viewer.children("img").addClass("link-cursor");
+      img.src = this.conf.imagesource;
     } else {
-      $(image).click((function(_this) {
-        return function() {
-          return _this.close();
-        };
-      })(this));
+      image = this.conf.image;
+      $(image).addClass("link-cursor");
+      $(image).prependTo($(".image-viewer"));
     }
+    if (this.conf.enableDragging) {
+      console.log("imageViewer.enableDragging: stub");
+    }
+    $(".image-viewer img").click((function(_this) {
+      return function() {
+        return _this.close();
+      };
+    })(this));
     viewer.removeClass("nodisplay");
     $(".cross").removeClass("nodisplay");
     if ($(".image-viewer img").height() > $(window).height() - 300) {

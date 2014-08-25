@@ -729,7 +729,6 @@ class ImageViewer
 
     open: (conf) =>
         @conf = conf
-        image = @conf.image
 
         # is imageViewer already open?
         if not $(".image-viewer").hasClass("nodisplay")
@@ -755,23 +754,27 @@ class ImageViewer
             @currentScrollPos = $(window).scrollTop()
             $(".scrolled").css overflow:"hidden"
 
+
         viewer = $(".image-viewer")
 
         # the imageViewer might not have been closed properly;
         # remove leftover image if not already
         viewer.children("img").remove()
-
-        $(image).addClass("link-cursor")
-        $(image).prependTo($(".image-viewer"))
+        if @conf.handleImageLoading
+            img = new Image()
+            $(img).prependTo($(".image-viewer"))
+            viewer.children("img").addClass("link-cursor")
+            img.src = @conf.imagesource
+        else
+            image = @conf.image
+            $(image).addClass("link-cursor")
+            $(image).prependTo($(".image-viewer"))
 
         if @conf.enableDragging
             #$(".image-viewer img").drags()
-            $(image).click =>
-                @close()
             console.log "imageViewer.enableDragging: stub"
-        else
-            $(image).click =>
-                @close()
+        $(".image-viewer img").click =>
+            @close()
 
         viewer.removeClass("nodisplay")
         $(".cross").removeClass("nodisplay")

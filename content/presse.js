@@ -28,33 +28,58 @@ Presse = (function(_super) {
     if (hash.lastIndexOf("/artikel/", 0) === 0) {
       id = parseInt(hash.substr(9, hash.length));
       console.log("notifyHashChange2");
-      return img = $("<img>").bind("load", (function(_this) {
-        return function() {
-          console.log("ohai my schatzipitz");
-          return _this.imageViewer.open({
-            image: img,
-            navigation: true,
-            minImage: 1,
-            maxImage: _this.articleCount,
-            arrowKeys: true,
-            getCurrentElement: function() {
-              var h;
-              h = location.hash;
-              return parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
-            },
-            toLeftHash: function(currentEl) {
-              return "#!/presse/artikel/" + (currentEl - 1);
-            },
-            toRightHash: function(currentEl) {
-              return "#!/presse/artikel/" + (currentEl + 1);
-            },
-            escapeKey: true,
-            lockScrolling: true,
-            revertHash: "#!/presse",
-            enableDragging: true
-          });
-        };
-      })(this)).attr("src", "/img/presse" + (id - 1) + ".jpg");
+      if (window.ie) {
+        return this.imageViewer.open({
+          imagesource: "/img/presse" + (id - 1) + ".jpg",
+          handleImageLoading: true,
+          navigation: true,
+          minImage: 1,
+          maxImage: this.articleCount,
+          arrowKeys: true,
+          getCurrentElement: function() {
+            var h;
+            h = location.hash;
+            return parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
+          },
+          toLeftHash: function(currentEl) {
+            return "#!/presse/artikel/" + (currentEl - 1);
+          },
+          toRightHash: function(currentEl) {
+            return "#!/presse/artikel/" + (currentEl + 1);
+          },
+          escapeKey: true,
+          lockScrolling: true,
+          revertHash: "#!/presse",
+          enableDragging: true
+        });
+      } else {
+        return img = $("<img>").bind("load", (function(_this) {
+          return function() {
+            return _this.imageViewer.open({
+              image: img,
+              navigation: true,
+              minImage: 1,
+              maxImage: _this.articleCount,
+              arrowKeys: true,
+              getCurrentElement: function() {
+                var h;
+                h = location.hash;
+                return parseInt(h.substr(h.lastIndexOf("/") + 1, h.length));
+              },
+              toLeftHash: function(currentEl) {
+                return "#!/presse/artikel/" + (currentEl - 1);
+              },
+              toRightHash: function(currentEl) {
+                return "#!/presse/artikel/" + (currentEl + 1);
+              },
+              escapeKey: true,
+              lockScrolling: true,
+              revertHash: "#!/presse",
+              enableDragging: true
+            });
+          };
+        })(this)).attr("src", "/img/presse" + (id - 1) + ".jpg");
+      }
     }
   };
 
