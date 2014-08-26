@@ -71,6 +71,7 @@ Core = (function() {
       return;
     }
     if (hash === "#!/kalender") {
+      this.raiseIndexPage();
       this.delegateChildPage("", "#!/kalender");
       return;
     }
@@ -132,7 +133,7 @@ Core = (function() {
   };
 
   Core.prototype.raiseIndexPage = function() {
-    if (window.location.hash === "#!/" && this.requestTaker("pageChanged")) {
+    if ((window.location.hash === "#!/" && this.requestTaker("pageChanged")) || (location.hash === "#!/kalender")) {
       debug("Back to Index page");
       $(".tilecontainer").css({
         display: "initial"
@@ -337,7 +338,9 @@ IndexPage = (function(_super) {
   IndexPage.prototype.onInsertion = function() {
     this.injectBackground();
     this.injectTileBackgrounds();
-    this.preloadImage();
+    if (!window.mobile) {
+      this.preloadImage();
+    }
     this.footerLeftClick();
     this.initNavDropDown();
     this.initNewsRotator();
@@ -599,6 +602,9 @@ IndexPage = (function(_super) {
       this.template = _.template($("#calendar-template").html());
       this.contentViewer.open({
         left: function() {
+          if (window.mobile) {
+            return 0;
+          }
           if (minHgt) {
             return $(window).width() * 0.06;
           } else {
@@ -613,6 +619,9 @@ IndexPage = (function(_super) {
           }
         },
         right: function() {
+          if (window.mobile) {
+            return 0;
+          }
           if (minHgt) {
             return $(window).width() * 0.06;
           } else {
@@ -620,6 +629,9 @@ IndexPage = (function(_super) {
           }
         },
         height: function() {
+          if (window.mobile) {
+            return $(window).height() - 75;
+          }
           if (minHgt) {
             return $(".bigtile-content").height() + 10 + 40;
           } else {
@@ -1062,9 +1074,13 @@ window.core.exportFunction("ImageViewer.requestInstance", function() {
 });
 
 $(function() {
-  var attr, c, svg, svgs, _i, _len;
+  var attr, c, isMobile, svg, svgs, _i, _len;
   window.nav = new Navigation(".header-nav");
   moment.lang("de");
+  isMobile = window.matchMedia("only screen and (max-width: 760px)");
+  if (isMobile.matches) {
+    window.mobile = true;
+  }
   if (window.ie) {
     svgs = document.getElementsByTagName("img");
     for (_i = 0, _len = svgs.length; _i < _len; _i++) {

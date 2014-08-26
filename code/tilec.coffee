@@ -23,7 +23,8 @@ class Tile
                 @setLoadingScreen(true)
 
             # Insert background Image
-            $(@core.state["blurredbg"]).appendTo("#blurbg")
+            unless window.mobile
+                $(@core.state["blurredbg"]).appendTo("#blurbg")
 
             if not originalSite
                 $(".scrolled").attr("id", urlWhat)

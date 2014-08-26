@@ -6,6 +6,11 @@ class Musik extends ChildPage
             (cView) => @contentViewer = cView()
         console.log @contentViewer
 
+    onLoad: ->
+        if window.ie
+            attr = $(".cd img").attr("src")
+            $(".cd img").attr("src", attr + ".png")
+
     notifyHashChange: (newHash) ->
         console.log newHash
         if newHash is "/programm"

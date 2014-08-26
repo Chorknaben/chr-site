@@ -37,7 +37,9 @@ Tile = (function() {
         if (animate) {
           _this.setLoadingScreen(true);
         }
-        $(_this.core.state["blurredbg"]).appendTo("#blurbg");
+        if (!window.mobile) {
+          $(_this.core.state["blurredbg"]).appendTo("#blurbg");
+        }
         if (!originalSite) {
           $(".scrolled").attr("id", urlWhat);
         } else {

@@ -17,6 +17,14 @@ Musik = (function(_super) {
     console.log(this.contentViewer);
   }
 
+  Musik.prototype.onLoad = function() {
+    var attr;
+    if (window.ie) {
+      attr = $(".cd img").attr("src");
+      return $(".cd img").attr("src", attr + ".png");
+    }
+  };
+
   Musik.prototype.notifyHashChange = function(newHash) {
     var elem, offs;
     console.log(newHash);
