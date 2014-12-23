@@ -73,16 +73,17 @@ class Bilder extends ChildPage
             firstChapt = $(".image-container").children().eq(0).offset()
             chapterID = newHash.substr(11,newHash.length)
             chapter = $(".img-chapter").eq(chapterID)
+
             @contentViewer.open
                 left:  -> firstChapt.left
                 top:   -> firstChapt.top
                 right: -> $(window).width() - rightPt + 30
                 height:-> "100%"
                 scrollTo: chapter
-                title: "WILLKOMMEN"
-                caption: "auf unserer Bilder Seite!"
+                title: @tree[chapterID].category.title
+                caption: @tree[chapterID].category.caption
                 revertHash: "#!/bilder"
-                content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>"
+                content: @tree[chapterID].category.content
                 animate: false
 
     onLoad: =>
@@ -90,6 +91,7 @@ class Bilder extends ChildPage
         $.ajax({
             url: "test.json"
         }).done (tree) =>
+            @tree = tree
             for c in tree
                 @genCat(c.category.title, c.category.caption, c.category.content)
                 for imgptr in c.category.childs

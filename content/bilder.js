@@ -116,10 +116,10 @@ Bilder = (function(_super) {
           return "100%";
         },
         scrollTo: chapter,
-        title: "WILLKOMMEN",
-        caption: "auf unserer Bilder Seite!",
+        title: this.tree[chapterID].category.title,
+        caption: this.tree[chapterID].category.caption,
         revertHash: "#!/bilder",
-        content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>",
+        content: this.tree[chapterID].category.content,
         animate: false
       });
     }
@@ -131,6 +131,7 @@ Bilder = (function(_super) {
     }).done((function(_this) {
       return function(tree) {
         var c, imgptr, _i, _j, _len, _len1, _ref;
+        _this.tree = tree;
         for (_i = 0, _len = tree.length; _i < _len; _i++) {
           c = tree[_i];
           _this.genCat(c.category.title, c.category.caption, c.category.content);
