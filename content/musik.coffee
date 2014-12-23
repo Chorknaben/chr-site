@@ -10,6 +10,10 @@ class Musik extends ChildPage
         if window.ie
             attr = $(".cd img").attr("src")
             $(".cd img").attr("src", attr + ".png")
+        audio = document.getElementsByTagName('audio')
+        console.log audio
+        audi = audiojs.create(audio[0])
+
 
     notifyHashChange: (newHash) ->
         console.log newHash

@@ -8,7 +8,41 @@ Shop = (function(_super) {
 
   function Shop() {
     Shop.__super__.constructor.call(this);
+    window.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
+      return function(cView) {
+        return _this.contentViewer = cView();
+      };
+    })(this));
+    this.mode = "";
   }
+
+  Shop.prototype.notifyHashChange = function(newHash) {
+    var bothtiles;
+    if (newHash === "/cd" || newHash === "/dvd") {
+      console.log("ohai");
+      this.mode = newHash;
+      bothtiles = $(".unterstutzen-tile");
+      return this.contentViewer.open({
+        left: function() {
+          return $(bothtiles[0]).offset().left;
+        },
+        top: function() {
+          return $(bothtiles[0]).offset().top;
+        },
+        height: function() {
+          return $(bothtiles[1]).height();
+        },
+        width: function() {
+          return 1010;
+        },
+        title: "Unsere " + this.mode.substring(1).toUpperCase(),
+        caption: "Mehr Informationen",
+        revertHash: "#!/shop",
+        content: $("#contentviewwrapper").html(),
+        animate: false
+      });
+    }
+  };
 
   return Shop;
 

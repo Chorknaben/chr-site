@@ -1669,6 +1669,12 @@ a {
   list-style: initial;
   padding: 20px 40px 40px 40px;
 }
+.audiojs {
+  background-image: black;
+}
+.audiojs p {
+  height: 67%;
+}
 .width-shop {
   width: 1050px;
 }
@@ -1685,6 +1691,25 @@ a {
 }
 .tile-shop p.shop-description .price {
   font-weight: bold;
+}
+#cdcontent {
+  position: absolute;
+  width: 910px;
+  height: 350px;
+}
+#cdcontent .cdleft {
+  position: relative;
+  width: 60%;
+  height: 100%;
+  float: left;
+  background-color: green;
+}
+#cdcontent .cdright {
+  position: relative;
+  width: 40%;
+  height: 100%;
+  float: right;
+  background-color: blue;
 }
 .stiftung-sidebar {
   width: 350px;

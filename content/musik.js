@@ -18,11 +18,14 @@ Musik = (function(_super) {
   }
 
   Musik.prototype.onLoad = function() {
-    var attr;
+    var attr, audi, audio;
     if (window.ie) {
       attr = $(".cd img").attr("src");
-      return $(".cd img").attr("src", attr + ".png");
+      $(".cd img").attr("src", attr + ".png");
     }
+    audio = document.getElementsByTagName('audio');
+    console.log(audio);
+    return audi = audiojs.create(audio[0]);
   };
 
   Musik.prototype.notifyHashChange = function(newHash) {
