@@ -398,9 +398,18 @@ class IndexPage extends ChildPage
             , waitFor)
 
     initNewsRotator: ->
-        $.getJSON "newsticker.json", (data) =>
-            @news = data.news
-            @newsRotator(7500)
+        $("#newsticker").newsTicker({
+                row_height:40,
+                max_rows: 1,
+                pauseOnHover: 1,
+                duration:8000;
+                speed:600;
+                prevButton: $(".up")
+                nextButton: $(".down")
+            })
+        # $.getJSON "newsticker.json", (data) =>
+        #     @news = data.news
+        #     @newsRotator(7500)
 
     newsRotator: (waitFor) ->
         if @currentNewsID is 0

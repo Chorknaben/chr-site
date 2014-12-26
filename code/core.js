@@ -477,12 +477,15 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.initNewsRotator = function() {
-    return $.getJSON("newsticker.json", (function(_this) {
-      return function(data) {
-        _this.news = data.news;
-        return _this.newsRotator(7500);
-      };
-    })(this));
+    return $("#newsticker").newsTicker({
+      row_height: 40,
+      max_rows: 1,
+      pauseOnHover: 1,
+      duration: 8000,
+      speed: 600,
+      prevButton: $(".up"),
+      nextButton: $(".down")
+    });
   };
 
   IndexPage.prototype.newsRotator = function(waitFor) {

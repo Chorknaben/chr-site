@@ -85,6 +85,7 @@
 <script type="text/javascript" src="code/moment.min.js"></script>
 <script type="text/javascript" src="code/underscore.js"></script>
 <script type="text/javascript" src="code/audio.min.js"></script>
+<script type="text/javascript" src="code/jquery.newsTicker.min.js"></script>
 <script>
 audiojs.events.ready(function(){
     var as = audiojs.createAll();
@@ -117,7 +118,7 @@ audiojs.events.ready(function(){
         <a href="#!/musik">Musik</a>
         <a href="#!/bilder">Bilder</a>
     </div>
-    <div class="header-nav-dropdown-icon">Down</div>
+    <div class="header-nav-dropdown-icon">&#x25BC;</div>
     <ul class="header-nav-dropdown">
         <li><a href="#!/shop">Shop</a></li>
         <li><a href="#!/kalender">Kalender</a></li>
@@ -198,12 +199,21 @@ audiojs.events.ready(function(){
         <a href="#!/unterstutzen" class="bottomtile left">
             <div class="placaca">
                 <div class="bottomcontentoffset">
-                    Wir k&ouml;nnten Ihre Unterst&uuml;tzung brauchen.
+                    Wir k&ouml;nnten Ihre <span id="unterstutzung">Unterst&uuml;tzung</span> brauchen.
                 </div>
             </div>
         </a>
         <div class="bottomtile right">
-            <p>+++ Erstes Konzert auf dem Mond gegl&uuml;ckt +++</p> 
+            <div id="controls">
+                <p class="up">&#x25B2;</p>
+                <p class="down">&#x25BC;</p>
+            </div>
+            <ul id="newsticker">
+                <li>Etiam imperdiet volutpat libero eu tristique.</li>
+                <li>Curabitur porttitor ante eget hendrerit adipiscing.</li>
+                <li>Praesent ornare nisl lorem, ut condimentum lectus gravida ut.</li>
+                <li>Nunc ultrices tortor eu massa placerat posuere.</li>
+            </ul>
         </div>
     </div>
     <!--</div>-->

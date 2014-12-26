@@ -661,35 +661,59 @@ a {
   right: 10px;
   top: 0;
   bottom: 0;
-  background: black;
-  opacity: 0.4;
+  background: #1a171a;
   line-height: 40px;
   color: white;
   letter-spacing: 5px;
   text-align: center;
+  font-size: 17px;
+}
+.bottomtile #unterstutzung {
+  color: deepskyblue;
+  text-decoration: underline;
 }
 .left {
   width: 60%;
 }
 .right {
   width: 40%;
-  background: #000;
-  opacity: 0.4;
-}
-.right p {
-  line-height: 40px;
+  background: #1a171a;
+  height: 40px;
   color: white;
+}
+.right ul li {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 40px;
+  max-height: 40px;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 15px;
+  padding: 0 0 0 45px;
+}
+.right #controls {
+  position: absolute;
+  border-right: 1px solid #333;
+}
+.right #controls p {
+  width: 35px;
   text-align: center;
+  cursor: pointer;
+  background: #1a171a;
   font-size: 17px;
-  transition: opacity 1s linear 0s;
-  opacity: 0;
-  letter-spacing: 2px;
+  color: #CCCCCC;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-.right p.out {
-  opacity: 0;
+.right #controls .up:hover {
+  background: #2a282a;
 }
-.right p.in {
-  opacity: 1;
+.right #controls .down:hover {
+  background: #2a282a;
 }
 #bigtile1 {
   /*display:inline-block;*/
