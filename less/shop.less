@@ -24,17 +24,67 @@
 	width: 910px;
 	height: 350px;	
 	.cdleft{
-		position: relative;
+		position: absolute;
 		width: 60%;
 		height: 100%;
 		float: left;
-		background-color: green;
+		.wrapping{
+			display:block;
+			width: 328px;
+			height: 209px;
+			position: absolute;
+			top: 0;
+			margin: auto;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background-image: url(/1920/903/5/tile);
+			img{
+				height: 100%;
+				width: auto;
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+				position: relative;
+				top: 0;
+			}
+			span{
+				width: 100%;
+				display: block;
+				text-align: center;
+				margin-top: 20px;
+				font-size: 1.5em;
+			}
+		}
+		.wrapping:hover{
+			opacity:0.5;
+		}
 	}
 	.cdright{
 		position: relative;
 		width: 40%;
 		height: 100%;
 		float: right;
-		background-color: blue;
+		ol{
+			list-style:decimal;
+			font-size:smaller;
+			#composer{
+				font-style:italic;	
+			}
+		}
+		h2{
+			font-size: larger;
+			padding-top: 10px;
+		}
+		h1{
+			font-size: medium;
+		}
+		p {
+			font-size: smaller;
+		}
+		#interessetext{
+			margin-top: 10px;
+			display: block;
+		}
 	}
 }

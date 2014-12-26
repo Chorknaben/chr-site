@@ -354,8 +354,6 @@ IndexPage = (function(_super) {
     return $("<img>", {
       src: this.bgSrc + "bg"
     }).load(function() {
-      console.log("asdasdasddsadsadsa");
-      console.log(this);
       $(this).appendTo("#bg");
       $("#bg").css({
         opacity: "1",
@@ -553,7 +551,7 @@ IndexPage = (function(_super) {
     _results = [];
     for (i = _i = 12; _i >= 0; i = --_i) {
       _results.push($("#" + i).css({
-        "background-image": "url(" + (this.bgSrc + i) + ")"
+        "background-image": "url(" + (this.bgSrc + i + "/tile") + ")"
       }));
     }
     return _results;
@@ -913,9 +911,11 @@ ContentViewer = (function() {
           return setTimeout(function() {
             $cnt.addClass("nodisplay");
             $cnt.children("div").removeClass("nodisplay");
-            return $(".content-viewer-padding").css({
+            $(".content-viewer-padding").css({
               opacity: 0
             });
+            window.location.hash = revertHash;
+            return _this.reset();
           }, 400);
         };
       })(this), 600);
@@ -933,6 +933,11 @@ ContentViewer = (function() {
     $(".content-viewer-padding h1").empty();
     $(".content-viewer-padding h2").empty();
     return $("#ccnt").empty();
+  };
+
+  ContentViewer.prototype.reset = function() {
+    this.clear();
+    return $(".content-viewer").attr("style", "");
   };
 
   ContentViewer.prototype.closeClickHandler = function() {

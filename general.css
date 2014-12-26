@@ -1365,20 +1365,20 @@ a {
   height: 100%;
   border-left-width: 10px;
   border-style: solid;
-  -webkit-border-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 0), #000000) 1 100%;
-  -moz-border-image: -moz-linear-gradient(right, rgba(0, 0, 0, 0), #000000) 1 100%;
-  -o-border-image: -o-linear-gradient(right, rgba(0, 0, 0, 0), #000000) 1 100%;
-  border-image: linear-gradient(to right, #000000, rgba(0, 0, 0, 0)) 1 100%;
+  -webkit-border-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 0), black) 1 100%;
+  -moz-border-image: -moz-linear-gradient(right, rgba(0, 0, 0, 0), black) 1 100%;
+  -o-border-image: -o-linear-gradient(right, rgba(0, 0, 0, 0), black) 1 100%;
+  border-image: linear-gradient(to right, black, rgba(0, 0, 0, 0)) 1 100%;
 }
 .shad {
   margin-left: -10px;
   padding-bottom: 10px;
   float: left;
   width: 100%;
-  background-image: linear-gradient(to bottom, #000000, rgba(0, 0, 0, 0), #000000);
-  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0), #000000);
-  background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0), #000000);
-  background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0), #000000);
+  background-image: linear-gradient(to bottom, #000000, rgba(0, 0, 0, 0), black);
+  background-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0), black);
+  background-image: -o-linear-gradient(bottom, rgba(0, 0, 0, 0), black);
+  background-image: -moz-linear-gradient(bottom, rgba(0, 0, 0, 0), black);
   position: absolute;
   margin-top: -7px;
 }
@@ -1421,6 +1421,12 @@ a {
 .ie8-fallback-tile .ie8-fallback-cnt .ie8-fallback-text p {
   height: 50px;
   font-size: 100px;
+}
+.ie8-fallback-tile .ie8-reise .ie8-fallback-text {
+  left: -100px;
+}
+.ie8-fallback-tile .ie8-reise .ie8-fallback-text p {
+  font-size: 80px;
 }
 @media screen and (max-width: 1177px) {
   .reise-tile {
@@ -1670,10 +1676,32 @@ a {
   padding: 20px 40px 40px 40px;
 }
 .audiojs {
-  background-image: black;
+  background: #000000;
+  width: 371px;
 }
-.audiojs p {
-  height: 67%;
+.audiojs .play-pause p {
+  padding: 0;
+  margin: 0;
+  top: 5px;
+  height: 36px;
+}
+.audiojs .scrubber {
+  width: 205px;
+}
+.playlist {
+  overflow-y: scroll;
+  height: 187px;
+  width: 371px;
+}
+.playlist li {
+  padding: 6px 0 6px 15px;
+}
+.playlist li:hover {
+  cursor: pointer;
+  background: #000000;
+}
+.playlist li.playing {
+  background: #000000;
 }
 .width-shop {
   width: 1050px;
@@ -1698,18 +1726,68 @@ a {
   height: 350px;
 }
 #cdcontent .cdleft {
-  position: relative;
+  position: absolute;
   width: 60%;
   height: 100%;
   float: left;
-  background-color: green;
+}
+#cdcontent .cdleft .wrapping {
+  display: block;
+  width: 328px;
+  height: 209px;
+  position: absolute;
+  top: 0;
+  margin: auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url(/1920/903/5/tile);
+}
+#cdcontent .cdleft .wrapping img {
+  height: 100%;
+  width: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 0;
+}
+#cdcontent .cdleft .wrapping span {
+  width: 100%;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.5em;
+}
+#cdcontent .cdleft .wrapping:hover {
+  opacity: 0.5;
 }
 #cdcontent .cdright {
   position: relative;
   width: 40%;
   height: 100%;
   float: right;
-  background-color: blue;
+}
+#cdcontent .cdright ol {
+  list-style: decimal;
+  font-size: smaller;
+}
+#cdcontent .cdright ol #composer {
+  font-style: italic;
+}
+#cdcontent .cdright h2 {
+  font-size: larger;
+  padding-top: 10px;
+}
+#cdcontent .cdright h1 {
+  font-size: medium;
+}
+#cdcontent .cdright p {
+  font-size: smaller;
+}
+#cdcontent .cdright #interessetext {
+  margin-top: 10px;
+  display: block;
 }
 .stiftung-sidebar {
   width: 350px;

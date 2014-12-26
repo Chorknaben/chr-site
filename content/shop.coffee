@@ -7,10 +7,18 @@ class Shop extends ChildPage
 
         @mode = ""
 
+    onLoad : ->
+    	$(".button").click ->
+    		@contentViewer.close()
+    		@contentViewer.reset()
+
 
     notifyHashChange: (newHash) ->
     	if newHash is "/cd" or newHash is "/dvd"
-    		console.log "ohai"
+    		@contentViewer.reset()
+
+    		btnMehrInfo = $("."+newHash.substring(1))
+
 	    	@mode = newHash
 	    	bothtiles = $(".unterstutzen-tile")
 	    	@contentViewer.open
@@ -21,8 +29,26 @@ class Shop extends ChildPage
 	            title: "Unsere " + @mode.substring(1).toUpperCase()
 	            caption: "Mehr Informationen"
 	            revertHash: "#!/shop"
-	            content: $("#contentviewwrapper").html()
-	            animate: false
+	            content: (->
+	            		if newHash is "/cd"
+	            			$("#contentviewwrapper #cd").html()
+	            		else if newHash is "/dvd"
+	            			$("#contentviewwrapper #dvd").html()
+	            	)()
+	            animate: true
+	            startingPos:
+	            	left: btnMehrInfo.offset().left
+	            	top:  btnMehrInfo.offset().top
+	            	height: btnMehrInfo.height()
+	            	width: btnMehrInfo.width()
+
+    	$("a.wrapping").click (e) =>
+    		e.preventDefault()
+    		e.stopPropagation()
+    		@contentViewer.close()
+    		location.href = "#!/musik"
+
+
 
 
 window.core.insertChildPage(new Shop())

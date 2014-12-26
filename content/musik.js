@@ -18,49 +18,58 @@ Musik = (function(_super) {
   }
 
   Musik.prototype.onLoad = function() {
-    var attr, audi, audio;
+    var attr;
     if (window.ie) {
       attr = $(".cd img").attr("src");
-      $(".cd img").attr("src", attr + ".png");
+      return $(".cd img").attr("src", attr + ".png");
     }
-    audio = document.getElementsByTagName('audio');
-    console.log(audio);
-    return audi = audiojs.create(audio[0]);
   };
 
-  Musik.prototype.notifyHashChange = function(newHash) {
-    var elem, offs;
-    console.log(newHash);
-    if (newHash === "/programm") {
-      elem = $(".main-area");
-      offs = elem.offset();
-      return this.contentViewer.open({
-        left: function() {
-          return elem.left;
-        },
-        top: function() {
-          return $(".main-area").offset().top - 100;
-        },
-        height: function() {
-          return $(".offsetwrapper").height() + 250;
-        },
-        width: function() {
-          return 1000;
-        },
-        chapter: false,
-        title: "Was singen die Chorknaben?",
-        caption: "Eine grobe &Uuml;bersicht unseres Repertoires.",
-        revertHash: "#!/musik",
-        content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p><ul class=\"musik-werke\"><li>Dieses Werk</li><li>Dieses Werk</li><li>Dieses Werk</li><li>Dieses Werk</li><li>Dieses Werk</li></ul>",
-        animate: true,
-        startingPos: {
-          left: offs.left,
-          top: offs.top,
-          width: elem.width(),
-          height: elem.height()
-        }
-      });
+  Musik.prototype.onDOMVisible = function() {
+    var audi, audio;
+    audio = document.getElementsByTagName('audio');
+    if (audio[0] === null) {
+      setTimeout(this.onDOMVisible, 200);
+      return;
     }
+    audi = audiojs.create(audio[0]);
+    return $.ajax({
+      url: "/data/json/musik.json"
+    }).done((function(_this) {
+      return function(json) {
+        var file, _i, _len, _ref;
+        _ref = json.musik;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          file = _ref[_i];
+          _this.addMusicFile(file.displayname, file.pathname);
+        }
+        _this.clickEvents(audi);
+        return _this.selectFirst(audi);
+      };
+    })(this));
+  };
+
+  Musik.prototype.addMusicFile = function(display, path) {
+    var parent;
+    parent = $(".playlist");
+    return parent.append($("<li>").attr("data-src", path).append(display));
+  };
+
+  Musik.prototype.selectFirst = function(audiojs) {
+    var first;
+    first = $(".playlist li").first();
+    first.addClass("playing");
+    console.log(first);
+    return audiojs.load("/data/musik/" + first.attr("data-src"));
+  };
+
+  Musik.prototype.clickEvents = function(audiojs) {
+    return $(".playlist li").click(function(e) {
+      e.preventDefault();
+      $(this).addClass('playing').siblings().removeClass('playing');
+      audiojs.load("/data/musik/" + $(this).attr("data-src"));
+      return audiojs.play();
+    });
   };
 
   return Musik;

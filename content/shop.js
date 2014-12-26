@@ -16,13 +16,21 @@ Shop = (function(_super) {
     this.mode = "";
   }
 
+  Shop.prototype.onLoad = function() {
+    return $(".button").click(function() {
+      this.contentViewer.close();
+      return this.contentViewer.reset();
+    });
+  };
+
   Shop.prototype.notifyHashChange = function(newHash) {
-    var bothtiles;
+    var bothtiles, btnMehrInfo;
     if (newHash === "/cd" || newHash === "/dvd") {
-      console.log("ohai");
+      this.contentViewer.reset();
+      btnMehrInfo = $("." + newHash.substring(1));
       this.mode = newHash;
       bothtiles = $(".unterstutzen-tile");
-      return this.contentViewer.open({
+      this.contentViewer.open({
         left: function() {
           return $(bothtiles[0]).offset().left;
         },
@@ -38,10 +46,30 @@ Shop = (function(_super) {
         title: "Unsere " + this.mode.substring(1).toUpperCase(),
         caption: "Mehr Informationen",
         revertHash: "#!/shop",
-        content: $("#contentviewwrapper").html(),
-        animate: false
+        content: (function() {
+          if (newHash === "/cd") {
+            return $("#contentviewwrapper #cd").html();
+          } else if (newHash === "/dvd") {
+            return $("#contentviewwrapper #dvd").html();
+          }
+        })(),
+        animate: true,
+        startingPos: {
+          left: btnMehrInfo.offset().left,
+          top: btnMehrInfo.offset().top,
+          height: btnMehrInfo.height(),
+          width: btnMehrInfo.width()
+        }
       });
     }
+    return $("a.wrapping").click((function(_this) {
+      return function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        _this.contentViewer.close();
+        return location.href = "#!/musik";
+      };
+    })(this));
   };
 
   return Shop;

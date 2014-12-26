@@ -92,16 +92,22 @@ class UberunsReise extends ChildPage
             enableZoom: false,
             showTooltip: true,
             colors:
-                de: "#34ef34"
+                de: "#004477"
                 es: "#9b4f37"
-                gb: "#34ef34"
-                at: "#34ef34"
-                dk: "#34ef34"
-                cz: "#34ef34"
-                fr: "#34ef34"
-                it: "#34ef34"
-                se: "#34ef34"
-                no: "#34ef34"
+                gb: "#004477"
+                at: "#004477"
+                dk: "#004477"
+                cz: "#004477"
+                fr: "#004477"
+                it: "#004477"
+                se: "#004477"
+                no: "#004477"
+                nl: "#004477"
+                ch: "#004477"
+                hu: "#004477"
+                si: "#004477"
+                hr: "#004477"
+                ro: "#004477"
 
         $("#map-world").vectorMap
             map: 'world_en',
@@ -110,6 +116,24 @@ class UberunsReise extends ChildPage
             hoverColor: '#999999',
             enableZoom: false,
             showTooltip: true,
+            colors:
+                de: "#004477"
+                es: "#9b4f37"
+                gb: "#004477"
+                at: "#004477"
+                dk: "#004477"
+                cz: "#004477"
+                fr: "#004477"
+                it: "#004477"
+                se: "#004477"
+                no: "#004477"
+                nl: "#004477"
+                ch: "#004477"
+                hu: "#004477"
+                si: "#004477"
+                hr: "#004477"
+                ro: "#004477"
+                us: "#004477"
 
     reisehack: =>
         # TODO minor hack, solve using css

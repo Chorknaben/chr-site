@@ -10,34 +10,44 @@ class Musik extends ChildPage
         if window.ie
             attr = $(".cd img").attr("src")
             $(".cd img").attr("src", attr + ".png")
+
+    onDOMVisible: ->
         audio = document.getElementsByTagName('audio')
-        console.log audio
+        if audio[0] is null
+            #neces?
+            setTimeout(@onDOMVisible, 200)
+            return
+
         audi = audiojs.create(audio[0])
 
+        $.ajax({
+            url: "/data/json/musik.json"
+        }).done (json) =>
+            for file in json.musik
+                @addMusicFile(file.displayname, file.pathname)
+            @clickEvents(audi)
+            @selectFirst(audi)
 
-    notifyHashChange: (newHash) ->
-        console.log newHash
-        if newHash is "/programm"
 
-            elem = $(".main-area")
-            offs = elem.offset()
-            @contentViewer.open
-                left:   -> elem.left
-                top:    -> $(".main-area").offset().top - 100
-                height: -> $(".offsetwrapper").height() + 250
-                width:  -> 1000
-                chapter: false
-                title: "Was singen die Chorknaben?"
-                caption: "Eine grobe &Uuml;bersicht unseres Repertoires."
-                revertHash: "#!/musik"
-                content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p><ul class=\"musik-werke\"><li>Dieses Werk</li><li>Dieses Werk</li><li>Dieses Werk</li><li>Dieses Werk</li><li>Dieses Werk</li></ul>"
-                animate: true
-                startingPos:
-                    left: offs.left
-                    top: offs.top
-                    width: elem.width()
-                    height: elem.height()
+    addMusicFile: (display, path) ->
+        parent = $(".playlist")
+        parent.append(
+            $("<li>").attr("data-src", path).append(display))
 
+    selectFirst: (audiojs) ->
+        first = $(".playlist li").first()
+        first.addClass("playing")
+        console.log first
+
+        audiojs.load("/data/musik/" + first.attr("data-src"))
+
+    clickEvents: (audiojs) ->
+        $(".playlist li").click (e) ->
+            e.preventDefault()
+            $(@).addClass('playing').siblings().removeClass('playing')
+
+            audiojs.load("/data/musik/" + $(@).attr("data-src"))
+            audiojs.play()
 
 
 window.core.insertChildPage(new Musik())

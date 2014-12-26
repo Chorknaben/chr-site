@@ -314,8 +314,6 @@ class IndexPage extends ChildPage
         console.log "injectBackground"
         $ "<img>", src: @bgSrc + "bg"
             .load ->
-                console.log "asdasdasddsadsadsa"
-                console.log @
                 $(@).appendTo("#bg")
                 $("#bg").css
                     opacity: "1"
@@ -447,7 +445,7 @@ class IndexPage extends ChildPage
         # inject Tile Backgrounds as background attributes to the corresponding DOM
         # Elements.
         for i in [12..0]
-            $("#" + i).css "background-image" : "url(#{@bgSrc + i})"
+            $("#" + i).css "background-image" : "url(#{@bgSrc + i + "/tile"})"
 
     initNavDropDown: ->
         nav = $(".header-nav-dropdown")
@@ -705,6 +703,8 @@ class ContentViewer
                     $cnt.addClass("nodisplay")
                     $cnt.children("div").removeClass("nodisplay")
                     $(".content-viewer-padding").css opacity:0
+                    window.location.hash = revertHash
+                    @reset()
                 , 400)
             , 600)
                 
@@ -721,6 +721,10 @@ class ContentViewer
         $(".content-viewer-padding h1").empty()
         $(".content-viewer-padding h2").empty()
         $("#ccnt").empty()
+
+    reset: ->
+        @clear()
+        $(".content-viewer").attr("style", "")
 
     closeClickHandler: =>
         @close(@contentObj.revertHash)

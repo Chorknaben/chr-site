@@ -12,24 +12,21 @@ Uberuns = (function(_super) {
   }
 
   Uberuns.prototype.onDOMVisible = function() {
-    if (window.ie) {
-      $(".reise-imgcontainer").css({
-        display: "none"
-      });
-      return $(".reise-sidebarcontainer").css({
-        display: "none"
-      });
-    }
+    $(".reise-imgcontainer").css({
+      display: "none"
+    });
+    $(".reise-sidebarcontainer").css({
+      display: "none"
+    });
+    return $(".ie8-fallback-tile").css({
+      display: "initial"
+    });
   };
 
   Uberuns.prototype.notifyHashChange = function(newHash) {};
 
   Uberuns.prototype.onLoad = function() {
-    $(".hiddentext").hover(function() {
-      return $(".hiddentext").addClass("visible");
-    }, function() {
-      return $(".hiddentext").removeClass("visible");
-    });
+    $(".hiddentext").addClass("visible");
     $(".icon-container").click(function(event) {
       $("#uberuns").css({
         "margin-left": -($(window).width() * 0.06 + $(".deadcenter").width() - 50)

@@ -4,19 +4,16 @@ class Uberuns extends ChildPage
         @core.state["uberuns-doesnothing"] = true
 
     onDOMVisible: ->
-        if window.ie
+        #if window.ie
             $(".reise-imgcontainer").css display:"none"
             $(".reise-sidebarcontainer").css display:"none"
+            $(".ie8-fallback-tile").css display:"initial"
 
     notifyHashChange: (newHash) ->
 
     onLoad: ->
         # User accesses information text mainly by hovering over the image
-        $(".hiddentext").hover(->
-            $(".hiddentext").addClass("visible")
-        ,->
-            $(".hiddentext").removeClass("visible")
-        )
+        $(".hiddentext").addClass("visible")
 
         # We're going to to a little animation with these buttons,
         # so attach onclick events to them
