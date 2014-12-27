@@ -290,11 +290,17 @@ class IndexPage extends ChildPage
         @imgObj = null
         @imgRotatorEnabled = true
         @navDropDown = false
+        @ev = []
 
         @contentViewer = @c.requestFunction "ContentViewer.requestInstance", 
             (cView) => @contentViewer = cView()
 
-    onInsertion: ->
+        $.getJSON "/data/json/events.json", (events) =>
+            window.ev = events.events
+            if @clndr
+                @clndr.setEvents(events.events)
+
+    onInsertion: =>
         @injectBackground()
         @injectTileBackgrounds()
 
@@ -307,6 +313,7 @@ class IndexPage extends ChildPage
         @imgRotator(10000)
 
         @c.exportFunction("ImgRotator.pauseImgRotator", @pauseImgRotator)
+
 
     injectBackground: ->
         # Determine the resolution of the client and send it to the server.
@@ -398,15 +405,21 @@ class IndexPage extends ChildPage
             , waitFor)
 
     initNewsRotator: ->
-        $("#newsticker").newsTicker({
-                row_height:40,
-                max_rows: 1,
-                pauseOnHover: 1,
-                duration:8000;
-                speed:600;
-                prevButton: $(".up")
-                nextButton: $(".down")
-            })
+        $.getJSON "/data/json/newsticker.json", (data) =>
+            for d in data.news
+                if window.ie then @news = data.news
+                $("#newsticker").append($("<li>").html(d))
+
+        unless window.ie
+            $("#newsticker").newsTicker({
+                    row_height:40,
+                    max_rows: 1,
+                    pauseOnHover: 1,
+                    duration:8000;
+                    speed:600;
+                    prevButton: $(".up")
+                    nextButton: $(".down")
+                })
         # $.getJSON "newsticker.json", (data) =>
         #     @news = data.news
         #     @newsRotator(7500)
@@ -478,7 +491,7 @@ class IndexPage extends ChildPage
         @navDropDown = false
         $(document).off("click.nav")
 
-    notifyHashChange: (newHash) ->
+    notifyHashChange: (newHash) =>
         console.log newHash
         if newHash is "#!/kalender"
             pos = $("#6").offset()
@@ -514,13 +527,35 @@ class IndexPage extends ChildPage
                     width: $("#6").width()
                     height: $("#6").height()
 
+            eves= [
+                {
+                    "date": "2014-08-20",
+                    "time": "20:00 (Einlass 19:00)",
+                    "title": "Jahreskonzert",
+                    "url": "http://0.0.0.0/#!/jahreskonzert",
+                    "location": "In der Stadtpfarrkirche Biberach"
+                },
+                {
+                    "date": "2014-12-29",
+                    "time": "20:00 (Einlass 19:00)",
+                    "title": "Jahasdreskonzert",
+                    "url": "http://0.0.0.0/#!/jahreskonzert",
+                    "location": "In der Stadtpfarrkirche Biberach"
+                },
+                {
+                    "date": "2014-12-30",
+                    "time": "20:00 (Einlass 19:00)",
+                    "title": "Jahreskodsanzert",
+                    "url": "http://0.0.0.0/#!/jahreskonzert",
+                    "location": "In der Stadtpfarrkirche Biberach"
+                }
+            ]
             @contentViewerOpen = true
-            $("#calendar-full").clndr({
+            console.log "asddsa"
+            console.log window.ev
+            @clndr = $("#calendar-full").clndr({
                 daysOfTheWeek: ['So','Mo','Di',"Mi","Do","Fr","Sa"]
-                events: [
-                    {date: '2014-08-20', time: '20:00 (Einlass 19:00)', title: 'Jahreskonzert', url: 'http://0.0.0.0/#!/jahreskonzert', location: 'In der Stadtpfarrkirche Biberach'}
-                    {date: '2014-08-25', time: '19:15' ,title: 'Abendlied', location: 'In der Stadtpfarrkirche Biberach'}
-                ]
+                events: window.ev
                 render: (data) =>
                     @template(data)
                 doneRendering: ->
@@ -535,6 +570,7 @@ class IndexPage extends ChildPage
 
 
             })
+
 
     closeCalendar: ->
         if @contentViewerOpen
@@ -856,8 +892,9 @@ $ ->
     window.nav = new Navigation(".header-nav")
     moment.lang("de")
 
-    isMobile = window.matchMedia("only screen and (max-width: 760px)")
-    if isMobile.matches then window.mobile = true
+    unless window.ie
+        isMobile = window.matchMedia("only screen and (max-width: 760px)")
+        if isMobile.matches then window.mobile = true
 
     if window.ie
         svgs = document.getElementsByTagName("img")

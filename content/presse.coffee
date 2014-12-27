@@ -9,13 +9,11 @@ class Presse extends ChildPage
         return true
 
     notifyHashChange: (hash) ->
-        console.log("notifyHashChange")
         if hash.lastIndexOf("/artikel/",0) is 0
             id = parseInt(hash.substr(9, hash.length))
-            console.log("notifyHashChange2")
             if window.ie 
                 @imageViewer.open
-                    imagesource: "/img/presse#{id-1}.jpg"
+                    imagesource: "/data/presse/real/#{id-1}"
                     handleImageLoading: true
                     navigation: true
                     minImage: 1
@@ -51,7 +49,7 @@ class Presse extends ChildPage
                             lockScrolling: true
                             revertHash: "#!/presse"
                             enableDragging: true
-                    ).attr("src","/img/presse#{id-1}.jpg")
+                    ).attr("src","/data/presse/real/#{id-1}")
 
     onDOMVisible: ->
         @adjustPos()
@@ -65,7 +63,7 @@ class Presse extends ChildPage
 
     onLoad: ->
         $.ajax({
-            url: "presse.json"
+            url: "/data/json/presse.json"
         }).done (tree) =>
             console.log tree
             for article in tree.presse

@@ -312,8 +312,10 @@ IndexPage = (function(_super) {
   __extends(IndexPage, _super);
 
   function IndexPage() {
+    this.notifyHashChange = __bind(this.notifyHashChange, this);
     this.leaveNavDropDown = __bind(this.leaveNavDropDown, this);
     this.pauseImgRotator = __bind(this.pauseImgRotator, this);
+    this.onInsertion = __bind(this.onInsertion, this);
     var w;
     IndexPage.__super__.constructor.call(this);
     w = $(window).width();
@@ -328,9 +330,18 @@ IndexPage = (function(_super) {
     this.imgObj = null;
     this.imgRotatorEnabled = true;
     this.navDropDown = false;
+    this.ev = [];
     this.contentViewer = this.c.requestFunction("ContentViewer.requestInstance", (function(_this) {
       return function(cView) {
         return _this.contentViewer = cView();
+      };
+    })(this));
+    $.getJSON("/data/json/events.json", (function(_this) {
+      return function(events) {
+        window.ev = events.events;
+        if (_this.clndr) {
+          return _this.clndr.setEvents(events.events);
+        }
       };
     })(this));
   }
@@ -477,15 +488,32 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.initNewsRotator = function() {
-    return $("#newsticker").newsTicker({
-      row_height: 40,
-      max_rows: 1,
-      pauseOnHover: 1,
-      duration: 8000,
-      speed: 600,
-      prevButton: $(".up"),
-      nextButton: $(".down")
-    });
+    $.getJSON("/data/json/newsticker.json", (function(_this) {
+      return function(data) {
+        var d, _i, _len, _ref, _results;
+        _ref = data.news;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          d = _ref[_i];
+          if (window.ie) {
+            _this.news = data.news;
+          }
+          _results.push($("#newsticker").append($("<li>").html(d)));
+        }
+        return _results;
+      };
+    })(this));
+    if (!window.ie) {
+      return $("#newsticker").newsTicker({
+        row_height: 40,
+        max_rows: 1,
+        pauseOnHover: 1,
+        duration: 8000,
+        speed: 600,
+        prevButton: $(".up"),
+        nextButton: $(".down")
+      });
+    }
   };
 
   IndexPage.prototype.newsRotator = function(waitFor) {
@@ -595,7 +623,7 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.notifyHashChange = function(newHash) {
-    var minHgt, pos;
+    var eves, minHgt, pos;
     console.log(newHash);
     if (newHash === "#!/kalender") {
       pos = $("#6").offset();
@@ -657,23 +685,33 @@ IndexPage = (function(_super) {
           height: $("#6").height()
         }
       });
+      eves = [
+        {
+          "date": "2014-08-20",
+          "time": "20:00 (Einlass 19:00)",
+          "title": "Jahreskonzert",
+          "url": "http://0.0.0.0/#!/jahreskonzert",
+          "location": "In der Stadtpfarrkirche Biberach"
+        }, {
+          "date": "2014-12-29",
+          "time": "20:00 (Einlass 19:00)",
+          "title": "Jahasdreskonzert",
+          "url": "http://0.0.0.0/#!/jahreskonzert",
+          "location": "In der Stadtpfarrkirche Biberach"
+        }, {
+          "date": "2014-12-30",
+          "time": "20:00 (Einlass 19:00)",
+          "title": "Jahreskodsanzert",
+          "url": "http://0.0.0.0/#!/jahreskonzert",
+          "location": "In der Stadtpfarrkirche Biberach"
+        }
+      ];
       this.contentViewerOpen = true;
-      return $("#calendar-full").clndr({
+      console.log("asddsa");
+      console.log(window.ev);
+      return this.clndr = $("#calendar-full").clndr({
         daysOfTheWeek: ['So', 'Mo', 'Di', "Mi", "Do", "Fr", "Sa"],
-        events: [
-          {
-            date: '2014-08-20',
-            time: '20:00 (Einlass 19:00)',
-            title: 'Jahreskonzert',
-            url: 'http://0.0.0.0/#!/jahreskonzert',
-            location: 'In der Stadtpfarrkirche Biberach'
-          }, {
-            date: '2014-08-25',
-            time: '19:15',
-            title: 'Abendlied',
-            location: 'In der Stadtpfarrkirche Biberach'
-          }
-        ],
+        events: window.ev,
         render: (function(_this) {
           return function(data) {
             return _this.template(data);
@@ -1085,9 +1123,11 @@ $(function() {
   var attr, c, isMobile, svg, svgs, _i, _len;
   window.nav = new Navigation(".header-nav");
   moment.lang("de");
-  isMobile = window.matchMedia("only screen and (max-width: 760px)");
-  if (isMobile.matches) {
-    window.mobile = true;
+  if (!window.ie) {
+    isMobile = window.matchMedia("only screen and (max-width: 760px)");
+    if (isMobile.matches) {
+      window.mobile = true;
+    }
   }
   if (window.ie) {
     svgs = document.getElementsByTagName("img");

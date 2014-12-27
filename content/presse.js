@@ -24,13 +24,11 @@ Presse = (function(_super) {
 
   Presse.prototype.notifyHashChange = function(hash) {
     var id, img;
-    console.log("notifyHashChange");
     if (hash.lastIndexOf("/artikel/", 0) === 0) {
       id = parseInt(hash.substr(9, hash.length));
-      console.log("notifyHashChange2");
       if (window.ie) {
         return this.imageViewer.open({
-          imagesource: "/img/presse" + (id - 1) + ".jpg",
+          imagesource: "/data/presse/real/" + (id - 1),
           handleImageLoading: true,
           navigation: true,
           minImage: 1,
@@ -78,7 +76,7 @@ Presse = (function(_super) {
               enableDragging: true
             });
           };
-        })(this)).attr("src", "/img/presse" + (id - 1) + ".jpg");
+        })(this)).attr("src", "/data/presse/real/" + (id - 1));
       }
     }
   };
@@ -95,7 +93,7 @@ Presse = (function(_super) {
 
   Presse.prototype.onLoad = function() {
     return $.ajax({
-      url: "presse.json"
+      url: "/data/json/presse.json"
     }).done((function(_this) {
       return function(tree) {
         var article, _i, _len, _ref;

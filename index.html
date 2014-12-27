@@ -209,10 +209,6 @@ audiojs.events.ready(function(){
                 <p class="down">&#x25BC;</p>
             </div>
             <ul id="newsticker">
-                <li>Etiam imperdiet volutpat libero eu tristique.</li>
-                <li>Curabitur porttitor ante eget hendrerit adipiscing.</li>
-                <li>Praesent ornare nisl lorem, ut condimentum lectus gravida ut.</li>
-                <li>Nunc ultrices tortor eu massa placerat posuere.</li>
             </ul>
         </div>
     </div>
@@ -266,7 +262,7 @@ audiojs.events.ready(function(){
             <p>
             Diese Seite wurde von Chorknaben erstellt. Komplett. Das Design, die Programmierung, das Interface, eben alles. Wir freuen uns daher sehr über Feedback. Einfach den Namen, die Art des Feedbacks und einen Text unten einfügen und abschicken. So können wir diese Seite stets weiterentwickeln und den Chor immer besser präsentieren. Wir freuen uns über ihren Beitrag. Grüße vom Entwicklerteam. 
 <br/>
-<a class="bluelink" href="mailto:papierkorb@chorknaben-biberach.de">papierkorb@chorknaben-biberach.de</a>
+<a class="bluelink" href="mailto:feedback@chorknaben-biberach.de">feedback@chorknaben-biberach.de</a>
             </p>
             <!--<img src="/img/lorem-ipsum.jpg"/>-->
             <form class="feedbackform">
@@ -335,7 +331,7 @@ audiojs.events.ready(function(){
       <div class="event-listing-title">AUFTRITTE DIESEN MONAT:</div>
       <% _.each(eventsThisMonth, function(event) { %>
           <div class="event-item <%= moment(event.date, 'YYYY-MM-DD').format('DD') %>">
-            <div class="event-item-name"><%= event.title %>, <%= moment(event.date, "YYYY-MM-DD").format("DD.MM.YYYY") %></div>
+            <div class="event-item-name"><%= event.title %>, <%= event.date %></div>
             <div class="event-item-location"><%= event.location %>, <%= event.time %></div>
           </div>
         <% }); %>
