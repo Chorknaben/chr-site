@@ -1011,11 +1011,15 @@ ImageViewer = (function() {
     $(".bar").removeClass("fade");
     if (this.conf.navigation) {
       this.currentEl = this.conf.getCurrentElement();
-      if (!(this.currentEl - 1 < this.minImage)) {
+      if (this.currentEl !== this.conf.minImage) {
         $(".arrleft").attr("href", this.conf.toLeftHash(this.currentEl));
+      } else {
+        $(".arrleft").attr("href", this.conf.toLeftHash(this.currentEl + 1));
       }
-      if (!(this.currentEl + 1 > this.maxImage)) {
+      if (this.currentEl !== this.conf.maxImage) {
         $(".arrright").attr("href", this.conf.toRightHash(this.currentEl));
+      } else {
+        $(".arrright").attr("href", this.conf.toRightHash(this.currentEl - 1));
       }
     }
     if (this.conf.arrowKeys && this.conf.navigation) {
@@ -1028,6 +1032,16 @@ ImageViewer = (function() {
       });
     }
     viewer = $(".image-viewer");
+    if (this.conf.title) {
+      $("#image-title").html(this.conf.title);
+    }
+    if (this.conf.positionInChapter && this.conf.chapterTotalLength) {
+      $("#chapter-progress").html("(Bild " + this.conf.positionInChapter + " von " + this.conf.chapterTotalLength + ")");
+    }
+    if (this.conf.chapterName) {
+      $("#chapter-name-main").html(this.conf.chapterName[0]);
+      $("#chapter-name-caption").html(this.conf.chapterName[1]);
+    }
     viewer.children("img").remove();
     if (this.conf.handleImageLoading) {
       img = new Image();

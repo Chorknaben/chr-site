@@ -795,10 +795,19 @@ class ImageViewer
 
         if @conf.navigation
             @currentEl = @conf.getCurrentElement()
-            unless @currentEl - 1 < @minImage
+            unless (@currentEl) == @conf.minImage
                 $(".arrleft").attr "href", @conf.toLeftHash(@currentEl)
-            unless @currentEl + 1 > @maxImage
+            else
+                # Stay at 0 if clicking left at 0
+                # An Indicator that there arent any more Pics available can be added HERE!!!
+                $(".arrleft").attr "href", @conf.toLeftHash(@currentEl+1)
+
+            unless (@currentEl) == @conf.maxImage
                 $(".arrright").attr "href", @conf.toRightHash(@currentEl)
+            else
+                # Stay at maxImage if clicking right at 0
+                # An Indicator that there arent any more Pics available can be added HERE!!!
+                $(".arrright").attr "href", @conf.toRightHash(@currentEl-1)
         
         if @conf.arrowKeys and @conf.navigation
             # set up left and right arrow keys
@@ -809,8 +818,19 @@ class ImageViewer
             @currentScrollPos = $(window).scrollTop()
             $(".scrolled").css overflow:"hidden"
 
-
         viewer = $(".image-viewer")
+
+        if @conf.title
+            $("#image-title").html(@conf.title)
+
+        # (x of y - Anzeige)
+        if @conf.positionInChapter and @conf.chapterTotalLength
+            $("#chapter-progress").html("(Bild #{@conf.positionInChapter} von #{@conf.chapterTotalLength})")
+
+        if @conf.chapterName
+            $("#chapter-name-main").html(@conf.chapterName[0]) 
+            $("#chapter-name-caption").html(@conf.chapterName[1])
+
 
         # the imageViewer might not have been closed properly;
         # remove leftover image if not already
@@ -872,7 +892,7 @@ class ImageViewer
         if keyCode is 37 and @currentEl > @conf.minImage
             location.hash = @conf.toLeftHash(@currentEl)
         # right arrow press
-        if keyCode is 39 and @currentEl < @conf.maxImage
+        if keyCode is 39 and @currentEl < @conf.maxImage 
             location.hash = @conf.toRightHash(@currentEl)
 
 

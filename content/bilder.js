@@ -26,8 +26,8 @@ Bilder = (function(_super) {
       };
     })(this));
     this.timeout = null;
-    this.minImage = 1;
-    this.maxImage = 0;
+    this.minImage = 0;
+    this.maxImage = -1;
   }
 
   Bilder.prototype.notifyHashChange = function(newHash) {
@@ -73,6 +73,10 @@ Bilder = (function(_super) {
             el.removeClass("loading");
             return _this.imageViewer.open({
               image: image,
+              title: _this.id2title(id),
+              positionInChapter: _this.posInChapter(id).toString(),
+              chapterTotalLength: _this.chapterTotalLength(id).toString(),
+              chapterName: _this.chapterInfo(id),
               navigation: true,
               minImage: _this.minImage,
               maxImage: _this.maxImage,
@@ -125,9 +129,72 @@ Bilder = (function(_super) {
     }
   };
 
+  Bilder.prototype.id2title = function(id) {
+    var category, imgpair, _i, _j, _len, _len1, _ref, _ref1;
+    _ref = this.tree;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      category = _ref[_i];
+      _ref1 = category.category.childs;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        imgpair = _ref1[_j];
+        if (imgpair[0] === id) {
+          console.log(imgpair[1]);
+          return imgpair[1];
+        }
+      }
+    }
+  };
+
+  Bilder.prototype.posInChapter = function(id) {
+    var category, counter, imgpair, _i, _j, _len, _len1, _ref, _ref1;
+    _ref = this.tree;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      category = _ref[_i];
+      counter = 0;
+      _ref1 = category.category.childs;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        imgpair = _ref1[_j];
+        if (imgpair[0] === id) {
+          return counter + 1;
+        }
+        counter++;
+      }
+    }
+  };
+
+  Bilder.prototype.chapterTotalLength = function(id) {
+    var category, imgpair, _i, _j, _len, _len1, _ref, _ref1;
+    _ref = this.tree;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      category = _ref[_i];
+      _ref1 = category.category.childs;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        imgpair = _ref1[_j];
+        if (imgpair[0] === id) {
+          return category.category.childs.length;
+        }
+      }
+    }
+  };
+
+  Bilder.prototype.chapterInfo = function(id) {
+    var category, imgpair, _i, _j, _len, _len1, _ref, _ref1;
+    _ref = this.tree;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      category = _ref[_i];
+      _ref1 = category.category.childs;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        imgpair = _ref1[_j];
+        if (imgpair[0] === id) {
+          return [category.category.title, category.category.caption];
+        }
+      }
+    }
+  };
+
   Bilder.prototype.onLoad = function() {
     return $.ajax({
-      url: "test.json"
+      url: "/data/json/bilder.json"
     }).done((function(_this) {
       return function(tree) {
         var c, imgptr, _i, _j, _len, _len1, _ref;

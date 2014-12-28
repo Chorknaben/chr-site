@@ -15,8 +15,8 @@ class Bilder extends ChildPage
             
         @timeout = null
 
-        @minImage = 1
-        @maxImage = 0
+        @minImage = 0
+        @maxImage = -1
 
     notifyHashChange: (newHash) ->
         if newHash.indexOf("/element/") == 0
@@ -52,6 +52,10 @@ class Bilder extends ChildPage
                         el.removeClass("loading")
                         @imageViewer.open
                             image: image
+                            title: @id2title(id)
+                            positionInChapter: @posInChapter(id).toString()
+                            chapterTotalLength: @chapterTotalLength(id).toString()
+                            chapterName: @chapterInfo(id)
                             navigation: true
                             minImage: @minImage
                             maxImage: @maxImage
@@ -86,10 +90,37 @@ class Bilder extends ChildPage
                 content: @tree[chapterID].category.content
                 animate: false
 
+    id2title: (id) ->
+        for category in @tree
+            for imgpair in category.category.childs
+                if imgpair[0] == id
+                    console.log imgpair[1]
+                    return imgpair[1]
+
+    posInChapter: (id) ->
+        for category in @tree
+            counter = 0
+            for imgpair in category.category.childs
+                if imgpair[0] == id
+                    return counter + 1
+                counter++
+
+    chapterTotalLength: (id) ->
+        for category in @tree
+            for imgpair in category.category.childs
+                if imgpair[0] == id
+                    return category.category.childs.length
+
+    chapterInfo: (id) ->
+        for category in @tree
+            for imgpair in category.category.childs
+                if imgpair[0] == id
+                    return [category.category.title, category.category.caption]
+
     onLoad: =>
         # Generate content
         $.ajax({
-            url: "test.json"
+            url: "/data/json/bilder.json"
         }).done (tree) =>
             @tree = tree
             for c in tree
