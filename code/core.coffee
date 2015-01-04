@@ -207,8 +207,6 @@ class Core
         if func
             success(func)
         else
-            console.log failure
-            console.log $.noop
             failure()
 
     revokeFunction: (name) ->
@@ -296,6 +294,8 @@ class IndexPage extends ChildPage
             (cView) => @contentViewer = cView()
 
         $.getJSON "/data/json/events.json", (events) =>
+            for ev in events.events
+                ev.date = moment(ev.date, "DD.MM.YYYY").format("MM-DD-YYYY")
             window.ev = events.events
             if @clndr
                 @clndr.setEvents(events.events)
@@ -788,7 +788,10 @@ class ImageViewer
         # is imageViewer already open?
         if not $(".image-viewer").hasClass("nodisplay")
             # if so, load the new image
-            $(".image-viewer img").remove()
+            $(".image-viewer img").first().remove()
+
+        # Remove leftovers from inline chapter
+        $(".image-viewer .chapter-info-inline").remove()
 
         # fade info bar in if it isnt already
         $(".bar").removeClass("fade")
@@ -797,6 +800,9 @@ class ImageViewer
             @currentEl = @conf.getCurrentElement()
             unless (@currentEl) == @conf.minImage
                 $(".arrleft").attr "href", @conf.toLeftHash(@currentEl)
+                if @conf.nextChapterScreen
+                    if @conf.positionInChapter == "1" 
+                        $(".arrleft").attr "href", "#!/bilder/inlinecat/#{@conf.chapterID}"
             else
                 # Stay at 0 if clicking left at 0
                 # An Indicator that there arent any more Pics available can be added HERE!!!
@@ -804,6 +810,9 @@ class ImageViewer
 
             unless (@currentEl) == @conf.maxImage
                 $(".arrright").attr "href", @conf.toRightHash(@currentEl)
+                if @conf.nextChapterScreen
+                    if @conf.positionInChapter == @conf.chapterTotalLength
+                        $(".arrright").attr "href", "#!/bilder/inlinecat/#{@conf.chapterID+1}"
             else
                 # Stay at maxImage if clicking right at 0
                 # An Indicator that there arent any more Pics available can be added HERE!!!
@@ -834,7 +843,7 @@ class ImageViewer
 
         # the imageViewer might not have been closed properly;
         # remove leftover image if not already
-        viewer.children("img").remove()
+        $('.image-viewer img').first().remove()
         if @conf.handleImageLoading
             img = new Image()
             $(img).prependTo($(".image-viewer"))
@@ -848,14 +857,14 @@ class ImageViewer
         if @conf.enableDragging
             #$(".image-viewer img").drags()
             console.log "imageViewer.enableDragging: stub"
-        $(".image-viewer img").click =>
+        $(".image-viewer img").first().click =>
             @close()
 
         viewer.removeClass("nodisplay")
         $(".cross").removeClass("nodisplay")
-        if $(".image-viewer img").height() > $(window).height() - 300
+        if $(".image-viewer img").first().height() > $(window).height() - 300
             @fadeOutInfo()
-            $(".image-viewer img").on("mousemove", @fadeOutInfo)
+            $(".image-viewer img").first().on("mousemove", @fadeOutInfo)
 
     close: (forceNoHash=false) =>
         #revert Scrolling
@@ -872,11 +881,11 @@ class ImageViewer
             $(window).off("keydown", @imageViewerKeyPress)
 
         #close viewer
-        $(".image-viewer img").off("mousemove", @fadeOutInfo)
+        $(".image-viewer img").first().off("mousemove", @fadeOutInfo)
         clearTimeout(@timeout)
         $(".bar").removeClass("fade")
         $(".image-viewer").addClass("nodisplay")
-        $(".image-viewer").children("img").remove()
+        $(".image-viewer img").first().remove()
 
     fadeOutInfo: =>
         clearTimeout(@timeout)
@@ -890,10 +899,18 @@ class ImageViewer
         keyCode = ev.keyCode
         # left arrow press
         if keyCode is 37 and @currentEl > @conf.minImage
-            location.hash = @conf.toLeftHash(@currentEl)
+            if @conf.nextChapterScreen
+                if @conf.positionInChapter == "1"
+                    location.hash = "#!/bilder/inlinecat/#{@conf.chapterID}"
+            else
+                location.hash = @conf.toLeftHash(@currentEl)
         # right arrow press
         if keyCode is 39 and @currentEl < @conf.maxImage 
-            location.hash = @conf.toRightHash(@currentEl)
+            if @conf.nextChapterScreen
+                if @conf.positionInChapter == @conf.chapterTotalLength
+                    location.hash = "#!/bilder/inlinecat/#{@conf.chapterID+1}"
+            else
+                location.hash = @conf.toRightHash(@currentEl)
 
 
 # Global Objects, associated to all other

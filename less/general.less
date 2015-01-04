@@ -54,7 +54,7 @@ a {
         width:65%;
         float:left;
         .days-of-the-week{
-            background:gray;
+            background:#40c07e;
             color:white;
            height:40px; 
            width:100%;
@@ -66,7 +66,7 @@ a {
                 font-weight:bold;
                 line-height:40px;
                 float:left;
-                width:14.18%;
+                width:14.28%;
             } 
             .header-day:last-child{
                 margin-right:0;
@@ -129,19 +129,19 @@ a {
                 font-weight: bold;
                 background: #1a171a;
                 color: white;
-                border-bottom: 2px solid gray; 
+                border-bottom: 2px solid #333;
                 transition: background-color 0.1s;
             }
             .next-month{
                 color:gray;
             }
             .today{
-                background:#2b282b;
+                background:#4B77BE;
             }
             .event{
                 cursor:pointer;
                 .day-number{
-                    border-bottom:2px solid green;
+                    border-bottom:2px solid #40c07e;
                 }
             }
             .event:hover{
@@ -397,12 +397,14 @@ a {
         }
 
     .header-nav-dropdown-icon{
-        cursor:pointer;
+        cursor: pointer;
         position: absolute;
-        top: 0;
-        right: 30px;
-        line-height: 50px;
+        top: 25px;
+        right: 75px;
         font-size: 10px;
+        img{
+            width:40px;
+        }
     }
 
     #loading-img{

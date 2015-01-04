@@ -234,8 +234,6 @@ Core = (function() {
     if (func) {
       return success(func);
     } else {
-      console.log(failure);
-      console.log($.noop);
       return failure();
     }
   };
@@ -338,6 +336,12 @@ IndexPage = (function(_super) {
     })(this));
     $.getJSON("/data/json/events.json", (function(_this) {
       return function(events) {
+        var ev, _i, _len, _ref;
+        _ref = events.events;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          ev = _ref[_i];
+          ev.date = moment(ev.date, "DD.MM.YYYY").format("MM-DD-YYYY");
+        }
         window.ev = events.events;
         if (_this.clndr) {
           return _this.clndr.setEvents(events.events);
@@ -1006,18 +1010,29 @@ ImageViewer = (function() {
     var image, img, viewer;
     this.conf = conf;
     if (!$(".image-viewer").hasClass("nodisplay")) {
-      $(".image-viewer img").remove();
+      $(".image-viewer img").first().remove();
     }
+    $(".image-viewer .chapter-info-inline").remove();
     $(".bar").removeClass("fade");
     if (this.conf.navigation) {
       this.currentEl = this.conf.getCurrentElement();
       if (this.currentEl !== this.conf.minImage) {
         $(".arrleft").attr("href", this.conf.toLeftHash(this.currentEl));
+        if (this.conf.nextChapterScreen) {
+          if (this.conf.positionInChapter === "1") {
+            $(".arrleft").attr("href", "#!/bilder/inlinecat/" + this.conf.chapterID);
+          }
+        }
       } else {
         $(".arrleft").attr("href", this.conf.toLeftHash(this.currentEl + 1));
       }
       if (this.currentEl !== this.conf.maxImage) {
         $(".arrright").attr("href", this.conf.toRightHash(this.currentEl));
+        if (this.conf.nextChapterScreen) {
+          if (this.conf.positionInChapter === this.conf.chapterTotalLength) {
+            $(".arrright").attr("href", "#!/bilder/inlinecat/" + (this.conf.chapterID + 1));
+          }
+        }
       } else {
         $(".arrright").attr("href", this.conf.toRightHash(this.currentEl - 1));
       }
@@ -1042,7 +1057,7 @@ ImageViewer = (function() {
       $("#chapter-name-main").html(this.conf.chapterName[0]);
       $("#chapter-name-caption").html(this.conf.chapterName[1]);
     }
-    viewer.children("img").remove();
+    $('.image-viewer img').first().remove();
     if (this.conf.handleImageLoading) {
       img = new Image();
       $(img).prependTo($(".image-viewer"));
@@ -1056,16 +1071,16 @@ ImageViewer = (function() {
     if (this.conf.enableDragging) {
       console.log("imageViewer.enableDragging: stub");
     }
-    $(".image-viewer img").click((function(_this) {
+    $(".image-viewer img").first().click((function(_this) {
       return function() {
         return _this.close();
       };
     })(this));
     viewer.removeClass("nodisplay");
     $(".cross").removeClass("nodisplay");
-    if ($(".image-viewer img").height() > $(window).height() - 300) {
+    if ($(".image-viewer img").first().height() > $(window).height() - 300) {
       this.fadeOutInfo();
-      return $(".image-viewer img").on("mousemove", this.fadeOutInfo);
+      return $(".image-viewer img").first().on("mousemove", this.fadeOutInfo);
     }
   };
 
@@ -1086,11 +1101,11 @@ ImageViewer = (function() {
     if (this.conf.arrowKeys) {
       $(window).off("keydown", this.imageViewerKeyPress);
     }
-    $(".image-viewer img").off("mousemove", this.fadeOutInfo);
+    $(".image-viewer img").first().off("mousemove", this.fadeOutInfo);
     clearTimeout(this.timeout);
     $(".bar").removeClass("fade");
     $(".image-viewer").addClass("nodisplay");
-    return $(".image-viewer").children("img").remove();
+    return $(".image-viewer img").first().remove();
   };
 
   ImageViewer.prototype.fadeOutInfo = function() {
@@ -1108,10 +1123,22 @@ ImageViewer = (function() {
     var keyCode;
     keyCode = ev.keyCode;
     if (keyCode === 37 && this.currentEl > this.conf.minImage) {
-      location.hash = this.conf.toLeftHash(this.currentEl);
+      if (this.conf.nextChapterScreen) {
+        if (this.conf.positionInChapter === "1") {
+          location.hash = "#!/bilder/inlinecat/" + this.conf.chapterID;
+        }
+      } else {
+        location.hash = this.conf.toLeftHash(this.currentEl);
+      }
     }
     if (keyCode === 39 && this.currentEl < this.conf.maxImage) {
-      return location.hash = this.conf.toRightHash(this.currentEl);
+      if (this.conf.nextChapterScreen) {
+        if (this.conf.positionInChapter === this.conf.chapterTotalLength) {
+          return location.hash = "#!/bilder/inlinecat/" + (this.conf.chapterID + 1);
+        }
+      } else {
+        return location.hash = this.conf.toRightHash(this.currentEl);
+      }
     }
   };
 

@@ -43,7 +43,7 @@ a {
   float: left;
 }
 .clndr .clndr-grid .days-of-the-week {
-  background: gray;
+  background: #40c07e;
   color: white;
   height: 40px;
   width: 100%;
@@ -53,7 +53,7 @@ a {
   font-weight: bold;
   line-height: 40px;
   float: left;
-  width: 14.18%;
+  width: 14.28%;
 }
 .clndr .clndr-grid .days-of-the-week .header-day:last-child {
   margin-right: 0;
@@ -114,20 +114,20 @@ a {
   font-weight: bold;
   background: #1a171a;
   color: white;
-  border-bottom: 2px solid gray;
+  border-bottom: 2px solid #333;
   transition: background-color 0.1s;
 }
 .clndr .clndr-grid .days .next-month {
   color: gray;
 }
 .clndr .clndr-grid .days .today {
-  background: #2b282b;
+  background: #4B77BE;
 }
 .clndr .clndr-grid .days .event {
   cursor: pointer;
 }
 .clndr .clndr-grid .days .event .day-number {
-  border-bottom: 2px solid green;
+  border-bottom: 2px solid #40c07e;
 }
 .clndr .clndr-grid .days .event:hover {
   background-color: #0D0C0D;
@@ -360,10 +360,12 @@ a {
 .header .header-nav-dropdown-icon {
   cursor: pointer;
   position: absolute;
-  top: 0;
-  right: 30px;
-  line-height: 50px;
+  top: 25px;
+  right: 75px;
   font-size: 10px;
+}
+.header .header-nav-dropdown-icon img {
+  width: 40px;
 }
 .header #loading-img {
   visibility: hidden;
@@ -666,7 +668,7 @@ a {
   color: white;
   letter-spacing: 5px;
   text-align: center;
-  font-size: 17px;
+  font-size: 15px;
 }
 .bottomtile #unterstutzung {
   color: deepskyblue;
@@ -704,7 +706,7 @@ a {
   text-align: center;
   cursor: pointer;
   background: #1a171a;
-  font-size: 17px;
+  font-size: 16px;
   color: #CCCCCC;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -882,6 +884,17 @@ a {
     background: #1a171a;
   }
 }
+.btn-forderverein {
+  background: #262d3f;
+  -webkit-transition: background 500ms ease;
+  -moz-transition: background 500ms ease;
+  -ms-transition: background 500ms ease;
+  -o-transition: background 500ms ease;
+  transition: background 500ms ease;
+}
+.btn-forderverein:hover {
+  background: #4B77BE;
+}
 .image-container {
   margin-left: 6%;
   margin-right: 6%;
@@ -1051,7 +1064,8 @@ a {
   opacity: 0;
   bottom: -75px;
 }
-.image-viewer a {
+.image-viewer .arrleft,
+.image-viewer .arrright {
   display: block;
   position: absolute;
   top: 0;
@@ -1059,13 +1073,16 @@ a {
   margin: auto;
   color: white;
   z-index: 2;
-  height: 20px;
+  height: 60px;
+  width: 60px;
 }
 .image-viewer .arrleft {
-  left: 6%;
+  left: 3%;
+  background: url(/img/arr_left.png) center center;
 }
 .image-viewer .arrright {
-  right: 6%;
+  right: 3%;
+  background: url(/img/arr_right.png) center center;
 }
 .cross {
   position: absolute;
@@ -1079,6 +1096,44 @@ a {
 }
 .nodisplay {
   display: none;
+}
+.chapter-info-inline {
+  width: 50%;
+  height: 80%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 2;
+  background: #1a171a;
+  color: white;
+}
+.chapter-info-inline h1 {
+  padding: 50px;
+  font-size: 2em;
+}
+.chapter-info-inline p {
+  padding: 150px 50px 50px 50px;
+}
+.chapter-info-inline .chapter-info-inline-box {
+  width: 338px;
+  height: 210px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+}
+.chapter-info-inline .chapter-info-inline-box .chapter-info-inline-title {
+  font-size: 26px;
+  line-height: 26px;
+  display: block;
+}
+.chapter-info-inline .chapter-info-inline-box .chapter-info-inline-sub {
+  font-size: 16px;
+  font-style: italic;
 }
 #uberuns-cnt {
   display: table-row;
@@ -1119,6 +1174,12 @@ a {
   margin-bottom: 10px;
   background-color: #1a171a;
   overflow: hidden;
+}
+.side-area .side-margin .icon-container img.icon-back {
+  height: 150px;
+  position: relative;
+  right: -3px;
+  top: 50px;
 }
 .wide {
   width: 25%;
@@ -1286,7 +1347,7 @@ a {
   height: 100%;
   width: 100%;
 }
-.timeline h1 {
+.timeline a {
   overflow: hidden;
   color: white;
   position: absolute;
@@ -1296,16 +1357,24 @@ a {
   padding-top: 10px;
   bottom: 0;
   height: 60px;
-  opacity: 0.85;
   background: #1a171a;
+  opacity: 0.97;
   transition: background .2s, opacity .2s;
   line-height: 60px;
 }
-.timeline h1 span.reise-name {
-  font-size: 40px;
+.timeline a .reise-name {
+  font-size: 30px;
 }
-.timeline h1 span.current-reise {
-  color: coral;
+.timeline a .reise-year {
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 25px;
+  background-color: #199250;
+  width: 60px;
+}
+.timeline a .current-reise {
+  font-weight: bold;
 }
 .timeline h1.fade {
   opacity: 1;
@@ -1447,28 +1516,15 @@ a {
 }
 .ie8-fallback-tile .ie8-fallback-cnt {
   position: relative;
-  width: 100%;
-  height: 100%;
+  height: 55px;
+  top: 40%;
+  margin-right: 15px;
 }
 .ie8-fallback-tile .ie8-fallback-cnt .ie8-fallback-text {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 250px;
-  height: 100px;
+  text-align: center;
 }
 .ie8-fallback-tile .ie8-fallback-cnt .ie8-fallback-text p {
-  height: 50px;
-  font-size: 100px;
-}
-.ie8-fallback-tile .ie8-reise .ie8-fallback-text {
-  left: -100px;
-}
-.ie8-fallback-tile .ie8-reise .ie8-fallback-text p {
-  font-size: 80px;
+  font-size: 50px;
 }
 @media screen and (max-width: 1177px) {
   .reise-tile {
@@ -1644,13 +1700,12 @@ a {
   position: absolute;
   left: 0;
   right: 0;
-  top: 0;
   bottom: 0;
   margin: auto;
   margin-top: 0;
-  width: 80%;
+  width: 100%;
   height: auto;
-  max-height: 80%;
+  max-height: 100%;
 }
 #musik-cnt .side-area {
   height: 100%;
@@ -1688,7 +1743,7 @@ a {
   width: 100%;
   height: 50%;
   margin-bottom: 10px;
-  background: #1a171a;
+  background: white;
   position: relative;
 }
 .outer .program p {
@@ -1718,7 +1773,7 @@ a {
   padding: 20px 40px 40px 40px;
 }
 .audiojs {
-  background: #000000;
+  background: #1a171a;
   width: 371px;
 }
 .audiojs .play-pause p {
@@ -1731,19 +1786,22 @@ a {
   width: 205px;
 }
 .playlist {
-  overflow-y: scroll;
-  height: 187px;
+  height: 184px;
   width: 371px;
+  color: #1a171a;
 }
 .playlist li {
   padding: 6px 0 6px 15px;
 }
 .playlist li:hover {
   cursor: pointer;
-  background: #000000;
+  background: #CCC;
 }
 .playlist li.playing {
-  background: #000000;
+  background: #CCC;
+}
+.scrubber .loaded {
+  background: white;
 }
 .width-shop {
   width: 1050px;
@@ -1867,6 +1925,28 @@ a {
   font-size: 47px;
   width: 273px;
   height: 44px;
+}
+div .btnblue {
+  background: #262d3f;
+  -webkit-transition: background 500ms ease;
+  -moz-transition: background 500ms ease;
+  -ms-transition: background 500ms ease;
+  -o-transition: background 500ms ease;
+  transition: background 500ms ease;
+}
+div .btnblue:hover {
+  background: #4B77BE;
+}
+div .btngreen {
+  background: #21322a;
+  -webkit-transition: background 500ms ease;
+  -moz-transition: background 500ms ease;
+  -ms-transition: background 500ms ease;
+  -o-transition: background 500ms ease;
+  transition: background 500ms ease;
+}
+div .btngreen:hover {
+  background: #40c07e;
 }
 .stiftung-cnt {
   max-height: 650px;

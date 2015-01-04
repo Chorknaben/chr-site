@@ -55,6 +55,8 @@ class Bilder extends ChildPage
                             title: @id2title(id)
                             positionInChapter: @posInChapter(id).toString()
                             chapterTotalLength: @chapterTotalLength(id).toString()
+                            nextChapterScreen: false
+                            chapterID: @id2chapID(id)
                             chapterName: @chapterInfo(id)
                             navigation: true
                             minImage: @minImage
@@ -72,12 +74,13 @@ class Bilder extends ChildPage
                             revertHash: "#!/bilder"
 
         if newHash.indexOf("/kategorie/") == 0
+            # User CLICKED on a Category.
+            # See below for what happens when the user unknowingly stumbles upon a new category.
             rightElem = @findRightMost()
             rightPt = rightElem.offset().left + rightElem.width()
             firstChapt = $(".image-container").children().eq(0).offset()
             chapterID = newHash.substr(11,newHash.length)
             chapter = $(".img-chapter").eq(chapterID)
-
             @contentViewer.open
                 left:  -> firstChapt.left
                 top:   -> firstChapt.top
@@ -90,12 +93,53 @@ class Bilder extends ChildPage
                 content: @tree[chapterID].category.content
                 animate: false
 
+        if newHash.indexOf("/inlinecat/") == 0
+            # Like Kategorie, just while in the imgviewer.
+            # The imageviewer is assumed to be OPEN.
+            $(".image-viewer img").remove()
+            $(".image-viewer .chapter-info-inline").remove()
+
+            # The arrow links need to be fixed
+            id = parseInt(newHash.substr(newHash.lastIndexOf('/') + 1))
+
+            idLCat = @tree[id-1].category.childs
+            $(".arrleft").attr "href", "#!/bilder/element/" + idLCat[idLCat.length - 1][0]
+            $(window).on "keydown", (ev) =>
+                kC = ev.keyCode
+                if kC is 37
+                    # MOMENT: remove stuff first
+                    location.hash = "#!/bilder/element/" + idLCat[idLCat.length - 1][0]
+                if kC is 39
+                    # WARTE: remove stuff first
+                    location.hash = "#!/bilder/element/" + idRCat[0][0]
+
+            idRCat = @tree[id].category.childs
+            $(".arrright").attr "href", "#!/bilder/element/" + idRCat[0][0]
+
+            # Build HTML Structure
+            $($("#img-viewer-special").html()).prependTo(".image-viewer")
+
+            # Populate HTML Structure
+            info = @tree[id].category
+            console.log info.caption
+            $(".image-viewer .chapter-info-inline-title").html(info.title)
+            $(".image-viewer .chapter-info-inline-sub").html(info.caption)
+            $(".image-viewer .chapter-info-inline p").html(info.content)
+
     id2title: (id) ->
         for category in @tree
             for imgpair in category.category.childs
                 if imgpair[0] == id
                     console.log imgpair[1]
                     return imgpair[1]
+
+    id2chapID: (id) ->
+        counter = 0
+        for category in @tree
+            for imgpair in category.category.childs
+                if imgpair[0] == id
+                    return counter
+            counter++
 
     posInChapter: (id) ->
         for category in @tree
@@ -115,7 +159,7 @@ class Bilder extends ChildPage
         for category in @tree
             for imgpair in category.category.childs
                 if imgpair[0] == id
-                    return [category.category.title, category.category.caption]
+                    return [category.category.title, category.category.caption, category.category.content]
 
     onLoad: =>
         # Generate content

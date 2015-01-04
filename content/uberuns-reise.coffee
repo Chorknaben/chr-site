@@ -87,53 +87,56 @@ class UberunsReise extends ChildPage
         $('#map').vectorMap
             map: 'europe_en',
             backgroundColor: "#1a171a",
+            borderColor: '#1a171a',
+            borderWidth: 0,
             color: '#ffffff',
             hoverColor: '#999999',
             enableZoom: false,
             showTooltip: true,
             colors:
-                de: "#004477"
-                es: "#9b4f37"
-                gb: "#004477"
-                at: "#004477"
-                dk: "#004477"
-                cz: "#004477"
-                fr: "#004477"
-                it: "#004477"
-                se: "#004477"
-                no: "#004477"
-                nl: "#004477"
-                ch: "#004477"
-                hu: "#004477"
-                si: "#004477"
-                hr: "#004477"
-                ro: "#004477"
+                de: "#199250"
+                es: "#305596"
+                gb: "#199250"
+                at: "#199250"
+                dk: "#199250"
+                cz: "#199250"
+                fr: "#199250"
+                it: "#199250"
+                se: "#199250"
+                no: "#199250"
+                nl: "#199250"
+                ch: "#199250"
+                hu: "#199250"
+                si: "#199250"
+                hr: "#199250"
+                ro: "#199250"
 
         $("#map-world").vectorMap
             map: 'world_en',
             backgroundColor: "#1a171a",
+            borderColor: '#1a171a',
             color: '#ffffff',
             hoverColor: '#999999',
             enableZoom: false,
             showTooltip: true,
             colors:
-                de: "#004477"
-                es: "#9b4f37"
-                gb: "#004477"
-                at: "#004477"
-                dk: "#004477"
-                cz: "#004477"
-                fr: "#004477"
-                it: "#004477"
-                se: "#004477"
-                no: "#004477"
-                nl: "#004477"
-                ch: "#004477"
-                hu: "#004477"
-                si: "#004477"
-                hr: "#004477"
-                ro: "#004477"
-                us: "#004477"
+                de: "#199250"
+                es: "#305596"
+                gb: "#199250"
+                at: "#199250"
+                dk: "#199250"
+                cz: "#199250"
+                fr: "#199250"
+                it: "#199250"
+                se: "#199250"
+                no: "#199250"
+                nl: "#199250"
+                ch: "#199250"
+                hu: "#199250"
+                si: "#199250"
+                hr: "#199250"
+                ro: "#199250"
+                us: "#199250"
 
     reisehack: =>
         # TODO minor hack, solve using css

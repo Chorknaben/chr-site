@@ -31,7 +31,7 @@ Bilder = (function(_super) {
   }
 
   Bilder.prototype.notifyHashChange = function(newHash) {
-    var chapter, chapterID, el, elem, elems, firstChapt, id, image, rightElem, rightPt, _i, _len;
+    var chapter, chapterID, el, elem, elems, firstChapt, id, idLCat, idRCat, image, info, rightElem, rightPt, _i, _len;
     if (newHash.indexOf("/element/") === 0) {
       id = parseInt(newHash.substr(9, newHash.length));
       elems = $("a");
@@ -76,6 +76,8 @@ Bilder = (function(_super) {
               title: _this.id2title(id),
               positionInChapter: _this.posInChapter(id).toString(),
               chapterTotalLength: _this.chapterTotalLength(id).toString(),
+              nextChapterScreen: false,
+              chapterID: _this.id2chapID(id),
               chapterName: _this.chapterInfo(id),
               navigation: true,
               minImage: _this.minImage,
@@ -106,7 +108,7 @@ Bilder = (function(_super) {
       firstChapt = $(".image-container").children().eq(0).offset();
       chapterID = newHash.substr(11, newHash.length);
       chapter = $(".img-chapter").eq(chapterID);
-      return this.contentViewer.open({
+      this.contentViewer.open({
         left: function() {
           return firstChapt.left;
         },
@@ -127,6 +129,33 @@ Bilder = (function(_super) {
         animate: false
       });
     }
+    if (newHash.indexOf("/inlinecat/") === 0) {
+      $(".image-viewer img").remove();
+      $(".image-viewer .chapter-info-inline").remove();
+      id = parseInt(newHash.substr(newHash.lastIndexOf('/') + 1));
+      idLCat = this.tree[id - 1].category.childs;
+      $(".arrleft").attr("href", "#!/bilder/element/" + idLCat[idLCat.length - 1][0]);
+      $(window).on("keydown", (function(_this) {
+        return function(ev) {
+          var kC;
+          kC = ev.keyCode;
+          if (kC === 37) {
+            location.hash = "#!/bilder/element/" + idLCat[idLCat.length - 1][0];
+          }
+          if (kC === 39) {
+            return location.hash = "#!/bilder/element/" + idRCat[0][0];
+          }
+        };
+      })(this));
+      idRCat = this.tree[id].category.childs;
+      $(".arrright").attr("href", "#!/bilder/element/" + idRCat[0][0]);
+      $($("#img-viewer-special").html()).prependTo(".image-viewer");
+      info = this.tree[id].category;
+      console.log(info.caption);
+      $(".image-viewer .chapter-info-inline-title").html(info.title);
+      $(".image-viewer .chapter-info-inline-sub").html(info.caption);
+      return $(".image-viewer .chapter-info-inline p").html(info.content);
+    }
   };
 
   Bilder.prototype.id2title = function(id) {
@@ -142,6 +171,23 @@ Bilder = (function(_super) {
           return imgpair[1];
         }
       }
+    }
+  };
+
+  Bilder.prototype.id2chapID = function(id) {
+    var category, counter, imgpair, _i, _j, _len, _len1, _ref, _ref1;
+    counter = 0;
+    _ref = this.tree;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      category = _ref[_i];
+      _ref1 = category.category.childs;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        imgpair = _ref1[_j];
+        if (imgpair[0] === id) {
+          return counter;
+        }
+      }
+      counter++;
     }
   };
 
@@ -186,7 +232,7 @@ Bilder = (function(_super) {
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         imgpair = _ref1[_j];
         if (imgpair[0] === id) {
-          return [category.category.title, category.category.caption];
+          return [category.category.title, category.category.caption, category.category.content];
         }
       }
     }
