@@ -1177,9 +1177,10 @@ a {
 }
 .side-area .side-margin .icon-container img.icon-back {
   height: 150px;
-  position: relative;
-  right: -3px;
-  top: 50px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
 .wide {
   width: 25%;
