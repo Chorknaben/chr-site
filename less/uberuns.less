@@ -264,14 +264,6 @@
        .reise-name{
            font-size:30px;
        }
-       .reise-year{
-            position: absolute;
-            left: 0;
-            top: 0;
-            line-height: 25px;
-            background-color: #199250;
-            width: 60px;
-       }
        .current-reise{
             font-weight:bold;
        }
@@ -279,6 +271,16 @@
     h1.fade{
         opacity:1;
     }
+   .reise-year{
+        position: absolute;
+        left: 0;
+        top: 0;
+        line-height: 25px;
+        background-color: #199250;
+        width: 50px;
+        color:white;
+        text-align:center;
+   }
 }
 
 .nomargin{
@@ -437,14 +439,18 @@
     background-color: #1a171a;
     display:none;
     .ie8-fallback-cnt{
-        position:relative;
         height:55px;
-        top:40%;
         margin-right:15px;
+        position:absolute;
+        top:0;
+        bottom:0;
+        margin:auto;
+        width:100%;
         .ie8-fallback-text{
             text-align:center;
+            width:100%;
             p{
-                font-size:50px;
+                font-size:40px;
             }
         }
     }
@@ -475,4 +481,44 @@
 
    }
 
+}
+
+.reise-separe{
+    position:relative;
+    width:50%;
+    height:448px;
+    float:left;
+}
+.reise-left{
+    .reise-left-tile{
+        width: 340px;
+        display: block;
+        height: 270px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        margin: auto;
+        img{
+            display:block;
+            width:350px;
+        }
+        span{
+            width: 340px;
+            display: block;
+            text-align: center;
+            padding-top: 20px;
+            font-size:1.5em;
+        }
+    }
+    .reise-left-tile:hover{
+        opacity:0.7;
+    }
+}
+
+.reise-right .reise-right-titel{
+    font-size: 2em;
+    font-style:italic;
+    margin-bottom:45px;
 }

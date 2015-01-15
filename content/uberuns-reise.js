@@ -10,7 +10,6 @@ UberunsReise = (function(_super) {
   function UberunsReise() {
     this.reisehack = __bind(this.reisehack, this);
     this.setupMap = __bind(this.setupMap, this);
-    this.resizeMap = __bind(this.resizeMap, this);
     this.onDOMVisible = __bind(this.onDOMVisible, this);
     this.core = window.core;
     this.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
@@ -18,6 +17,27 @@ UberunsReise = (function(_super) {
         return _this.contentViewer = cView();
       };
     })(this));
+    this.metadata = {
+      r1: {
+        title: "&Ouml;sterreich &amp; Ungarn",
+        caption: "Konzertreise 2012",
+        textID: "#osterreich",
+        linkBilder: "#!/bilder/category/2",
+        thumbnail: "/img/ungarn.jpg"
+      },
+      r2: {
+        title: "Deutschland &amp; Holland",
+        caption: "Konzertreise 2013",
+        textID: "#deutschland",
+        linkBilder: "#!/bilder/category/3"
+      },
+      r3: {
+        title: "Spanien",
+        caption: "Konzertreise 2014",
+        textID: "#spanien",
+        linkBilder: "#!/bilder/category/4"
+      }
+    };
   }
 
   UberunsReise.prototype.onLoad = function() {
@@ -42,49 +62,51 @@ UberunsReise = (function(_super) {
     if (!window.ie) {
       this.reisehack();
       $(window).on("resize", this.reisehack);
-      this.overflowText();
-      $(window).on("resize", this.overflowText);
     }
-    this.setupMap();
-    return $(window).on("resize", this.resizeMap);
-  };
-
-  UberunsReise.prototype.overflowText = function() {
-    console.log("i exec");
-    return $($(".reise-tile")[4]).overflowTo($(".reise-tile")[5]);
+    return this.setupMap();
   };
 
   UberunsReise.prototype.onUnloadChild = function() {
-    $(window).off("resize", this.reisehack);
-    return $(window).off("resize", this.resizeMap);
+    return $(window).off("resize", this.reisehack);
   };
 
   UberunsReise.prototype.notifyHashChange = function(newHash) {
-    var elem, h, number, offs, w;
+    var elem, h, metaobj, number, offs, w;
     if (newHash.lastIndexOf("/info/", 0) === 0) {
       number = parseInt(newHash.substr(6, newHash.length));
+      metaobj = void 0;
+      switch (number) {
+        case 1:
+          metaobj = this.metadata.r1;
+          break;
+        case 2:
+          metaobj = this.metadata.r2;
+          break;
+        case 3:
+          metaobj = this.metadata.r3;
+      }
       w = $(window).width();
       h = $(window).height();
       elem = $("#rt" + number);
       offs = elem.offset();
-      return this.contentViewer.open({
+      this.contentViewer.open({
         left: function() {
-          return $("#uberuns-cnt").offset().left + 10;
+          return (w / 2) - (1000 / 2);
         },
         top: function() {
-          return $(".reise-tile").offset().top;
+          return (h / 2) - (600 / 2);
         },
         right: function() {
-          return w - $("#uberuns-cnt").width() - (w * 0.04) - 2;
+          return (w / 2) - (1000 / 2);
         },
         height: function() {
-          return $("#uberuns-cnt").height() + 10;
+          return 600;
         },
         chapter: false,
-        title: "MOSKAU &amp; STALINGRAD",
-        caption: "1945",
+        title: metaobj.title,
+        caption: metaobj.caption,
         revertHash: "#!/uberuns/reise",
-        content: "<p>Prosciutto sirloin filet mignon pancetta. Rump frankfurter tail, fatback cow tenderloin ham hock. Strip steak meatball beef shank doner jowl turducken bacon t-bone biltong salami. Prosciutto meatball pancetta filet mignon brisket ham jowl sirloin. Biltong ground round brisket, sirloin tail corned beef pig pork chop ball tip shoulder beef ribs frankfurter beef pork salami.</p>",
+        content: $("#content-reise").html(),
         animate: true,
         startingPos: {
           left: offs.left,
@@ -93,18 +115,19 @@ UberunsReise = (function(_super) {
           height: elem.height()
         }
       });
+      return this.populate(metaobj.textID, metaobj.linkBilder, metaobj.thumbnail);
     }
+  };
+
+  UberunsReise.prototype.populate = function(textPtr, bilderLink, thumbnail) {
+    $(".reise-left-tile").attr("href", bilderLink);
+    $(".reise-left-tile img").attr("src", thumbnail);
+    $(".reise-right-titel").html($(textPtr).children("h1").html());
+    return $(".reise-right-content").html($(textPtr).children("p").html());
   };
 
   UberunsReise.prototype.acquireLoadingLock = function() {
     return true;
-  };
-
-  UberunsReise.prototype.resizeMap = function() {
-    $("#map").remove();
-    $(".jqvmap-label").remove();
-    $(".reise-tile").eq(3).append($("<div>").attr("id", "map"));
-    return this.setupMap();
   };
 
   UberunsReise.prototype.setupMap = function() {

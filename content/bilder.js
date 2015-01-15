@@ -12,9 +12,9 @@ Bilder = (function(_super) {
     this.onLoad = __bind(this.onLoad, this);
     Bilder.__super__.constructor.call(this);
     this.catCount = 0;
-    this.currentScrollPos = -1;
     this.core = window.core;
-    this.contentViewer = null;
+    this.minImage = 0;
+    this.maxImage = -1;
     this.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
       return function(cView) {
         return _this.contentViewer = cView();
@@ -25,19 +25,18 @@ Bilder = (function(_super) {
         return _this.imageViewer = imgView();
       };
     })(this));
-    this.timeout = null;
-    this.minImage = 0;
-    this.maxImage = -1;
   }
 
+  Bilder.prototype.isCategory = function(newHash) {};
+
   Bilder.prototype.notifyHashChange = function(newHash) {
-    var chapter, chapterID, el, elem, elems, firstChapt, id, idLCat, idRCat, image, info, rightElem, rightPt, _i, _len;
+    var cTitle, category, chapter, chapterID, counter, el, elem, firstChapt, id, image, inTitle, nextAttr, previousAttr, rightElem, rightPt, _i, _j, _len, _len1, _ref, _ref1;
     if (newHash.indexOf("/element/") === 0) {
       id = parseInt(newHash.substr(9, newHash.length));
-      elems = $("a");
-      el = void 0;
-      for (_i = 0, _len = elems.length; _i < _len; _i++) {
-        elem = elems[_i];
+      console.log("executing");
+      _ref = $("a");
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        elem = _ref[_i];
         if (elem.getAttribute("href") === ("/#!/bilder" + newHash)) {
           el = $(elem);
           break;
@@ -76,7 +75,7 @@ Bilder = (function(_super) {
               title: _this.id2title(id),
               positionInChapter: _this.posInChapter(id).toString(),
               chapterTotalLength: _this.chapterTotalLength(id).toString(),
-              nextChapterScreen: false,
+              nextChapterScreen: true,
               chapterID: _this.id2chapID(id),
               chapterName: _this.chapterInfo(id),
               navigation: true,
@@ -101,13 +100,50 @@ Bilder = (function(_super) {
           };
         })(this));
       }
+      $("#arrow-container").removeClass("nodisplay");
+      return;
     }
     if (newHash.indexOf("/kategorie/") === 0) {
+      if (this.imageViewer.state === this.imageViewer.OPEN) {
+        this.imageViewer.close();
+      }
+      this.adjustPos();
       rightElem = this.findRightMost();
       rightPt = rightElem.offset().left + rightElem.width();
       firstChapt = $(".image-container").children().eq(0).offset();
       chapterID = newHash.substr(11, newHash.length);
+      if (chapterID.indexOf("by-title/") === 0) {
+        counter = 0;
+        _ref1 = this.tree;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          category = _ref1[_j];
+          cTitle = category.category.title.toLowerCase().replace(" ", "-");
+          inTitle = chapterID.substr(9, chapterID.length).toLowerCase().replace(" ", "-");
+          console.log(cTitle);
+          console.log(inTitle);
+          if (cTitle === inTitle) {
+            break;
+          }
+          counter++;
+        }
+        chapterID = counter;
+        console.log(chapterID);
+      }
       chapter = $(".img-chapter").eq(chapterID);
+      if (chapterID !== 0) {
+        $(".arrleft").removeClass("arrow-inactive");
+        previousAttr = chapter.prev().attr("href");
+        $(".arrleft").attr("href", previousAttr);
+      } else {
+        $(".arrleft").addClass("arrow-inactive");
+      }
+      if (chapterID !== this.catCount) {
+        $(".arrleft").removeClass("arrow-inactive");
+        nextAttr = chapter.next().attr("href");
+        $(".arrright").attr("href", nextAttr);
+      } else {
+        $("arrleft").addClass("arrow-inactive");
+      }
       this.contentViewer.open({
         left: function() {
           return firstChapt.left;
@@ -128,33 +164,7 @@ Bilder = (function(_super) {
         content: this.tree[chapterID].category.content,
         animate: false
       });
-    }
-    if (newHash.indexOf("/inlinecat/") === 0) {
-      $(".image-viewer img").remove();
-      $(".image-viewer .chapter-info-inline").remove();
-      id = parseInt(newHash.substr(newHash.lastIndexOf('/') + 1));
-      idLCat = this.tree[id - 1].category.childs;
-      $(".arrleft").attr("href", "#!/bilder/element/" + idLCat[idLCat.length - 1][0]);
-      $(window).on("keydown", (function(_this) {
-        return function(ev) {
-          var kC;
-          kC = ev.keyCode;
-          if (kC === 37) {
-            location.hash = "#!/bilder/element/" + idLCat[idLCat.length - 1][0];
-          }
-          if (kC === 39) {
-            return location.hash = "#!/bilder/element/" + idRCat[0][0];
-          }
-        };
-      })(this));
-      idRCat = this.tree[id].category.childs;
-      $(".arrright").attr("href", "#!/bilder/element/" + idRCat[0][0]);
-      $($("#img-viewer-special").html()).prependTo(".image-viewer");
-      info = this.tree[id].category;
-      console.log(info.caption);
-      $(".image-viewer .chapter-info-inline-title").html(info.title);
-      $(".image-viewer .chapter-info-inline-sub").html(info.caption);
-      return $(".image-viewer .chapter-info-inline p").html(info.content);
+      return $("#arrow-container").removeClass("nodisplay");
     }
   };
 
@@ -238,6 +248,10 @@ Bilder = (function(_super) {
     }
   };
 
+  Bilder.prototype.acquireLoadingLock = function() {
+    return true;
+  };
+
   Bilder.prototype.onLoad = function() {
     return $.ajax({
       url: "/data/json/bilder.json"
@@ -258,10 +272,6 @@ Bilder = (function(_super) {
         return _this.c.release();
       };
     })(this));
-  };
-
-  Bilder.prototype.acquireLoadingLock = function() {
-    return true;
   };
 
   Bilder.prototype.onDOMVisible = function() {

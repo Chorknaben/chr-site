@@ -169,25 +169,6 @@
         opacity: 0;
         bottom: -75px;
     }
-    .arrleft, .arrright{
-        display:block;
-        position:absolute;
-        top:0;
-        bottom:0;
-        margin:auto;
-        color:white;
-        z-index:2;
-        height: 60px;
-        width: 60px;
-    }
-    .arrleft{
-        left:3%;
-        background: url(/img/arr_left.png) center center;
-    }
-    .arrright{
-        right:3%;
-        background: url(/img/arr_right.png) center center;
-    }
 }
 .cross{
     position:absolute;
@@ -202,6 +183,31 @@
 
 .nodisplay{
     display:none;
+}
+
+.arrleft, .arrright{
+    display:block;
+    position:fixed;
+    top:0;
+    bottom:0;
+    margin:auto;
+    color:white;
+    z-index:2;
+    height: 100px;
+    width: 60px;
+}
+.arrleft{
+    left:3%;
+    background: url(/img/arr_left.png) center center;
+}
+.arrright{
+    right:3%;
+    background: url(/img/arr_right.png) center center;
+}
+
+.arrow-inactive{
+    opacity:0.3;
+    pointer-events:none;
 }
 
 .chapter-info-inline{

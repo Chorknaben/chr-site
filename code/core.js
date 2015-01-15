@@ -998,11 +998,16 @@ ContentViewer = (function() {
 })();
 
 ImageViewer = (function() {
+  ImageViewer.prototype.CLOSED = 0x00;
+
+  ImageViewer.prototype.OPEN = 0x01;
+
   function ImageViewer() {
     this.imageViewerKeyPress = __bind(this.imageViewerKeyPress, this);
     this.fadeOutInfo = __bind(this.fadeOutInfo, this);
     this.close = __bind(this.close, this);
     this.open = __bind(this.open, this);
+    this.state = this.CLOSED;
     window.core.exportFunction("ImageViewer.forceClose", this.close);
   }
 
@@ -1020,7 +1025,7 @@ ImageViewer = (function() {
         $(".arrleft").attr("href", this.conf.toLeftHash(this.currentEl));
         if (this.conf.nextChapterScreen) {
           if (this.conf.positionInChapter === "1") {
-            $(".arrleft").attr("href", "#!/bilder/inlinecat/" + this.conf.chapterID);
+            $(".arrleft").attr("href", "#!/bilder/kategorie/" + this.conf.chapterID);
           }
         }
       } else {
@@ -1030,7 +1035,7 @@ ImageViewer = (function() {
         $(".arrright").attr("href", this.conf.toRightHash(this.currentEl));
         if (this.conf.nextChapterScreen) {
           if (this.conf.positionInChapter === this.conf.chapterTotalLength) {
-            $(".arrright").attr("href", "#!/bilder/inlinecat/" + (this.conf.chapterID + 1));
+            $(".arrright").attr("href", "#!/bilder/kategorie/" + (this.conf.chapterID + 1));
           }
         }
       } else {
@@ -1080,8 +1085,9 @@ ImageViewer = (function() {
     $(".cross").removeClass("nodisplay");
     if ($(".image-viewer img").first().height() > $(window).height() - 300) {
       this.fadeOutInfo();
-      return $(".image-viewer img").first().on("mousemove", this.fadeOutInfo);
+      $(".image-viewer img").first().on("mousemove", this.fadeOutInfo);
     }
+    return this.state = this.OPEN;
   };
 
   ImageViewer.prototype.close = function(forceNoHash) {
@@ -1105,7 +1111,12 @@ ImageViewer = (function() {
     clearTimeout(this.timeout);
     $(".bar").removeClass("fade");
     $(".image-viewer").addClass("nodisplay");
-    return $(".image-viewer img").first().remove();
+    $(".image-viewer img").first().remove();
+    return this.state = this.CLOSED;
+  };
+
+  ImageViewer.prototype.getState = function() {
+    return this.state;
   };
 
   ImageViewer.prototype.fadeOutInfo = function() {
@@ -1125,7 +1136,7 @@ ImageViewer = (function() {
     if (keyCode === 37 && this.currentEl > this.conf.minImage) {
       if (this.conf.nextChapterScreen) {
         if (this.conf.positionInChapter === "1") {
-          location.hash = "#!/bilder/inlinecat/" + this.conf.chapterID;
+          location.hash = "#!/bilder/kategorie/" + this.conf.chapterID;
         }
       } else {
         location.hash = this.conf.toLeftHash(this.currentEl);
@@ -1134,7 +1145,7 @@ ImageViewer = (function() {
     if (keyCode === 39 && this.currentEl < this.conf.maxImage) {
       if (this.conf.nextChapterScreen) {
         if (this.conf.positionInChapter === this.conf.chapterTotalLength) {
-          return location.hash = "#!/bilder/inlinecat/" + (this.conf.chapterID + 1);
+          return location.hash = "#!/bilder/kategorie/" + (this.conf.chapterID + 1);
         }
       } else {
         return location.hash = this.conf.toRightHash(this.currentEl);

@@ -1,34 +1,40 @@
 class Bilder extends ChildPage
     constructor: ->
         super()
-
         @catCount = 0
-        @currentScrollPos = -1
-
         @core = window.core
-        @contentViewer = null
+        @minImage = 0
+        @maxImage = -1
+
         @core.requestFunction "ContentViewer.requestInstance",
             (cView) => @contentViewer = cView()
 
         @core.requestFunction "ImageViewer.requestInstance",
             (imgView) => @imageViewer = imgView()
-            
-        @timeout = null
 
-        @minImage = 0
-        @maxImage = -1
+    isCategory: (newHash) ->
 
     notifyHashChange: (newHash) ->
+        # Bilder hat 2 Funktionen: /element/ und /category/.
+        # Beide können in externen Links oder als onclick-events
+        # referenziert werden.
+
         if newHash.indexOf("/element/") == 0
-            id = parseInt(newHash.substr(9,newHash.length))
-            elems = $("a")
-            el = undefined
-            for elem in elems
+            id = parseInt(
+                    newHash.substr(
+                            9, newHash.length
+                        )
+                )
+            console.log "executing"
+            for elem in $("a")
                 if elem.getAttribute("href") is "/#!/bilder#{newHash}"
                     el = $(elem)
                     break
             el.addClass("loading")
             if window.ie
+                # Internet Explorer 8 benötigt ein paar Ausnahmen in punkto
+                # Bildlademechanismen... siehe Handling des imagesource Attributs
+                # in der ImageViewer Klasse.
                 @imageViewer.open
                     imagesource: "/images/real/#{id}"
                     handleImageLoading: true
@@ -47,6 +53,8 @@ class Bilder extends ChildPage
                     lockScrolling: true
                     revertHash: "#!/bilder"
             else
+                # Die beste Möglichkeit, ein Bild im ImageViewer ordnungsgemäß zu
+                # öffnen. In dieser Variante sind Ladeanimation on prefetch dabei.
                 image = $("<img>").attr("src", "/images/real/#{id}")
                     .load =>
                         el.removeClass("loading")
@@ -55,7 +63,7 @@ class Bilder extends ChildPage
                             title: @id2title(id)
                             positionInChapter: @posInChapter(id).toString()
                             chapterTotalLength: @chapterTotalLength(id).toString()
-                            nextChapterScreen: false
+                            nextChapterScreen: true
                             chapterID: @id2chapID(id)
                             chapterName: @chapterInfo(id)
                             navigation: true
@@ -73,14 +81,62 @@ class Bilder extends ChildPage
                             lockScrolling: true
                             revertHash: "#!/bilder"
 
+            $("#arrow-container").removeClass("nodisplay")
+            return
+
         if newHash.indexOf("/kategorie/") == 0
-            # User CLICKED on a Category.
-            # See below for what happens when the user unknowingly stumbles upon a new category.
+            # Eine Kategorie wurde geklickt oder referenziert.
+            # Es gibt 2 Möglichkeiten des Kontexts:
+            #    1) Wir befinden uns IM Imageviewer, sind beim ersten oder letzten Bild einer
+            #       Kategorie und wechseln mit einem klick nach rechts oder links die Kategorie
+            #    2) Wir wurden von einer externen Seite auf diese Kategorie weitergeleitet
+            #       oder klicken auf die Kategorie
+            if @imageViewer.state is @imageViewer.OPEN
+                @imageViewer.close()
+
+            # Für den Fall, die Kategorie wird extern aufgerufen
+            @adjustPos()
+
+            # Positionierungsvariablen
             rightElem = @findRightMost()
             rightPt = rightElem.offset().left + rightElem.width()
             firstChapt = $(".image-container").children().eq(0).offset()
+
+            # chapterID is either a number or a name
             chapterID = newHash.substr(11,newHash.length)
+            if chapterID.indexOf("by-title/") == 0
+                counter = 0
+                for category in @tree
+                    cTitle = category.category.title.toLowerCase().replace(" ", "-")
+                    inTitle = chapterID.substr(9, chapterID.length).toLowerCase().replace(" ", "-")
+                    console.log cTitle
+                    console.log inTitle
+                    if cTitle == inTitle
+                        break
+                    counter++
+                chapterID = counter
+                console.log chapterID
+
+
+            # Das Chapter Element
             chapter = $(".img-chapter").eq(chapterID)
+
+            unless chapterID is 0
+                $(".arrleft").removeClass("arrow-inactive")
+
+                previousAttr = chapter.prev().attr("href")
+                $(".arrleft").attr("href", previousAttr)
+            else
+                $(".arrleft").addClass("arrow-inactive")
+
+            unless chapterID is @catCount
+                $(".arrleft").removeClass("arrow-inactive")
+
+                nextAttr = chapter.next().attr("href")
+                $(".arrright").attr("href", nextAttr)
+            else
+                $("arrleft").addClass("arrow-inactive")
+
             @contentViewer.open
                 left:  -> firstChapt.left
                 top:   -> firstChapt.top
@@ -93,38 +149,7 @@ class Bilder extends ChildPage
                 content: @tree[chapterID].category.content
                 animate: false
 
-        if newHash.indexOf("/inlinecat/") == 0
-            # Like Kategorie, just while in the imgviewer.
-            # The imageviewer is assumed to be OPEN.
-            $(".image-viewer img").remove()
-            $(".image-viewer .chapter-info-inline").remove()
-
-            # The arrow links need to be fixed
-            id = parseInt(newHash.substr(newHash.lastIndexOf('/') + 1))
-
-            idLCat = @tree[id-1].category.childs
-            $(".arrleft").attr "href", "#!/bilder/element/" + idLCat[idLCat.length - 1][0]
-            $(window).on "keydown", (ev) =>
-                kC = ev.keyCode
-                if kC is 37
-                    # MOMENT: remove stuff first
-                    location.hash = "#!/bilder/element/" + idLCat[idLCat.length - 1][0]
-                if kC is 39
-                    # WARTE: remove stuff first
-                    location.hash = "#!/bilder/element/" + idRCat[0][0]
-
-            idRCat = @tree[id].category.childs
-            $(".arrright").attr "href", "#!/bilder/element/" + idRCat[0][0]
-
-            # Build HTML Structure
-            $($("#img-viewer-special").html()).prependTo(".image-viewer")
-
-            # Populate HTML Structure
-            info = @tree[id].category
-            console.log info.caption
-            $(".image-viewer .chapter-info-inline-title").html(info.title)
-            $(".image-viewer .chapter-info-inline-sub").html(info.caption)
-            $(".image-viewer .chapter-info-inline p").html(info.content)
+            $("#arrow-container").removeClass("nodisplay")
 
     id2title: (id) ->
         for category in @tree
@@ -161,8 +186,12 @@ class Bilder extends ChildPage
                 if imgpair[0] == id
                     return [category.category.title, category.category.caption, category.category.content]
 
+    acquireLoadingLock: ->
+        # Wir müssen erst mal die Bilderstruktur generieren.
+        return true
+
     onLoad: =>
-        # Generate content
+        # Inhalte Generieren.
         $.ajax({
             url: "/data/json/bilder.json"
         }).done (tree) =>
@@ -174,8 +203,6 @@ class Bilder extends ChildPage
                     @maxImage++
             @c.release()
             
-    acquireLoadingLock: ->
-        return true
 
     onDOMVisible: ->
         @adjustPos()
@@ -187,7 +214,8 @@ class Bilder extends ChildPage
 
 
     adjustPos: =>
-        #Adjust the positioning of the image grid to be centered exactly.
+        # Diese Funktion sorgt dafür, dass die Kacheln immer zentriert sind.
+        # TODO: Pure CSS Lösung, wenigstens auf Browsern die es unterstützen.
         width = $(window).width()
         rightElem = @findRightMost()
         rightPoint = rightElem.offset().left + rightElem.width()
@@ -196,6 +224,7 @@ class Bilder extends ChildPage
         $(".image-container").css "margin-left" : (width * 0.06) + delta
 
     findRightMost: ->
+        # Hilfsfunktion adjustPos
         try
             firstOffset = $(".img-image").first().offset().top
             leftIndex   = -1

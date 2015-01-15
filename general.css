@@ -359,13 +359,14 @@ a {
 }
 .header .header-nav-dropdown-icon {
   cursor: pointer;
-  position: absolute;
-  top: 25px;
-  right: 75px;
-  font-size: 10px;
 }
 .header .header-nav-dropdown-icon img {
   width: 40px;
+  position: fixed;
+  right: 1.5%;
+  top: 6px;
+  margin: initial;
+  left: initial;
 }
 .header #loading-img {
   visibility: hidden;
@@ -666,7 +667,6 @@ a {
   background: #1a171a;
   line-height: 40px;
   color: white;
-  letter-spacing: 5px;
   text-align: center;
   font-size: 15px;
 }
@@ -1064,26 +1064,6 @@ a {
   opacity: 0;
   bottom: -75px;
 }
-.image-viewer .arrleft,
-.image-viewer .arrright {
-  display: block;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  color: white;
-  z-index: 2;
-  height: 60px;
-  width: 60px;
-}
-.image-viewer .arrleft {
-  left: 3%;
-  background: url(/img/arr_left.png) center center;
-}
-.image-viewer .arrright {
-  right: 3%;
-  background: url(/img/arr_right.png) center center;
-}
 .cross {
   position: absolute;
   display: block;
@@ -1096,6 +1076,30 @@ a {
 }
 .nodisplay {
   display: none;
+}
+.arrleft,
+.arrright {
+  display: block;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  color: white;
+  z-index: 2;
+  height: 100px;
+  width: 60px;
+}
+.arrleft {
+  left: 3%;
+  background: url(/img/arr_left.png) center center;
+}
+.arrright {
+  right: 3%;
+  background: url(/img/arr_right.png) center center;
+}
+.arrow-inactive {
+  opacity: 0.3;
+  pointer-events: none;
 }
 .chapter-info-inline {
   width: 50%;
@@ -1366,19 +1370,21 @@ a {
 .timeline a .reise-name {
   font-size: 30px;
 }
-.timeline a .reise-year {
-  position: absolute;
-  left: 0;
-  top: 0;
-  line-height: 25px;
-  background-color: #199250;
-  width: 60px;
-}
 .timeline a .current-reise {
   font-weight: bold;
 }
 .timeline h1.fade {
   opacity: 1;
+}
+.timeline .reise-year {
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 25px;
+  background-color: #199250;
+  width: 50px;
+  color: white;
+  text-align: center;
 }
 .nomargin {
   margin-left: 0;
@@ -1516,16 +1522,20 @@ a {
   display: none;
 }
 .ie8-fallback-tile .ie8-fallback-cnt {
-  position: relative;
   height: 55px;
-  top: 40%;
   margin-right: 15px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100%;
 }
 .ie8-fallback-tile .ie8-fallback-cnt .ie8-fallback-text {
   text-align: center;
+  width: 100%;
 }
 .ie8-fallback-tile .ie8-fallback-cnt .ie8-fallback-text p {
-  font-size: 50px;
+  font-size: 40px;
 }
 @media screen and (max-width: 1177px) {
   .reise-tile {
@@ -1551,10 +1561,45 @@ a {
     height: 80%;
   }
 }
+.reise-separe {
+  position: relative;
+  width: 50%;
+  height: 448px;
+  float: left;
+}
+.reise-left .reise-left-tile {
+  width: 340px;
+  display: block;
+  height: 270px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+}
+.reise-left .reise-left-tile img {
+  display: block;
+  width: 350px;
+}
+.reise-left .reise-left-tile span {
+  width: 340px;
+  display: block;
+  text-align: center;
+  padding-top: 20px;
+  font-size: 1.5em;
+}
+.reise-left .reise-left-tile:hover {
+  opacity: 0.7;
+}
+.reise-right .reise-right-titel {
+  font-size: 2em;
+  font-style: italic;
+  margin-bottom: 45px;
+}
 .presse-container {
   margin-left: 6%;
   margin-right: 6%;
-  width: 88%;
 }
 .presse-container a.img-presse {
   margin-right: 10px;
@@ -1744,7 +1789,7 @@ a {
   width: 100%;
   height: 50%;
   margin-bottom: 10px;
-  background: white;
+  background: #1a171a;
   position: relative;
 }
 .outer .program p {
@@ -1775,7 +1820,7 @@ a {
 }
 .audiojs {
   background: #1a171a;
-  width: 371px;
+  width: 370px;
 }
 .audiojs .play-pause p {
   padding: 0;
@@ -1786,20 +1831,27 @@ a {
 .audiojs .scrubber {
   width: 205px;
 }
+.audiojs .time {
+  float: none;
+  border-left: none;
+}
+.audiojs .time em {
+  padding: 0px 2px 0px 4px;
+}
 .playlist {
   height: 184px;
-  width: 371px;
-  color: #1a171a;
+  width: 370px;
+  color: white;
 }
 .playlist li {
   padding: 6px 0 6px 15px;
 }
 .playlist li:hover {
   cursor: pointer;
-  background: #CCC;
+  background: #111111;
 }
 .playlist li.playing {
-  background: #CCC;
+  background: #000;
 }
 .scrubber .loaded {
   background: white;

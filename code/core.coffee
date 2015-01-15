@@ -778,7 +778,10 @@ class ContentViewer
         event.stopPropagation()
 
 class ImageViewer
+    CLOSED: 0x00
+    OPEN:   0x01
     constructor: ->
+        @state = @CLOSED
         window.core.exportFunction "ImageViewer.forceClose",
             @close
 
@@ -802,7 +805,7 @@ class ImageViewer
                 $(".arrleft").attr "href", @conf.toLeftHash(@currentEl)
                 if @conf.nextChapterScreen
                     if @conf.positionInChapter == "1" 
-                        $(".arrleft").attr "href", "#!/bilder/inlinecat/#{@conf.chapterID}"
+                        $(".arrleft").attr "href", "#!/bilder/kategorie/#{@conf.chapterID}"
             else
                 # Stay at 0 if clicking left at 0
                 # An Indicator that there arent any more Pics available can be added HERE!!!
@@ -812,7 +815,7 @@ class ImageViewer
                 $(".arrright").attr "href", @conf.toRightHash(@currentEl)
                 if @conf.nextChapterScreen
                     if @conf.positionInChapter == @conf.chapterTotalLength
-                        $(".arrright").attr "href", "#!/bilder/inlinecat/#{@conf.chapterID+1}"
+                        $(".arrright").attr "href", "#!/bilder/kategorie/#{@conf.chapterID+1}"
             else
                 # Stay at maxImage if clicking right at 0
                 # An Indicator that there arent any more Pics available can be added HERE!!!
@@ -866,6 +869,8 @@ class ImageViewer
             @fadeOutInfo()
             $(".image-viewer img").first().on("mousemove", @fadeOutInfo)
 
+        @state = @OPEN
+
     close: (forceNoHash=false) =>
         #revert Scrolling
         if @conf.lockScrolling
@@ -887,6 +892,11 @@ class ImageViewer
         $(".image-viewer").addClass("nodisplay")
         $(".image-viewer img").first().remove()
 
+        @state = @CLOSED
+
+    getState: ->
+        return @state
+
     fadeOutInfo: =>
         clearTimeout(@timeout)
         $(".bar").removeClass("fade")
@@ -901,14 +911,14 @@ class ImageViewer
         if keyCode is 37 and @currentEl > @conf.minImage
             if @conf.nextChapterScreen
                 if @conf.positionInChapter == "1"
-                    location.hash = "#!/bilder/inlinecat/#{@conf.chapterID}"
+                    location.hash = "#!/bilder/kategorie/#{@conf.chapterID}"
             else
                 location.hash = @conf.toLeftHash(@currentEl)
         # right arrow press
         if keyCode is 39 and @currentEl < @conf.maxImage 
             if @conf.nextChapterScreen
                 if @conf.positionInChapter == @conf.chapterTotalLength
-                    location.hash = "#!/bilder/inlinecat/#{@conf.chapterID+1}"
+                    location.hash = "#!/bilder/kategorie/#{@conf.chapterID+1}"
             else
                 location.hash = @conf.toRightHash(@currentEl)
 
