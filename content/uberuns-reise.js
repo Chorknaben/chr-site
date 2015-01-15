@@ -22,20 +22,22 @@ UberunsReise = (function(_super) {
         title: "&Ouml;sterreich &amp; Ungarn",
         caption: "Konzertreise 2012",
         textID: "#osterreich",
-        linkBilder: "#!/bilder/category/2",
+        linkBilder: -1,
         thumbnail: "/img/ungarn.jpg"
       },
       r2: {
         title: "Deutschland &amp; Holland",
         caption: "Konzertreise 2013",
         textID: "#deutschland",
-        linkBilder: "#!/bilder/category/3"
+        thumbnail: "/img/deutschland.jpg",
+        linkBilder: -1
       },
       r3: {
         title: "Spanien",
         caption: "Konzertreise 2014",
         textID: "#spanien",
-        linkBilder: "#!/bilder/category/4"
+        thumbnail: "/img/spanien.jpg",
+        linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2014"
       }
     };
   }
@@ -120,7 +122,12 @@ UberunsReise = (function(_super) {
   };
 
   UberunsReise.prototype.populate = function(textPtr, bilderLink, thumbnail) {
-    $(".reise-left-tile").attr("href", bilderLink);
+    $(".reise-left-tile").removeClass("reise-left-tile-inactive");
+    if (bilderLink === -1) {
+      $(".reise-left-tile").addClass("reise-left-tile-inactive");
+    } else {
+      $(".reise-left-tile").attr("href", bilderLink);
+    }
     $(".reise-left-tile img").attr("src", thumbnail);
     $(".reise-right-titel").html($(textPtr).children("h1").html());
     return $(".reise-right-content").html($(textPtr).children("p").html());

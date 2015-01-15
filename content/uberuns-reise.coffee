@@ -9,20 +9,23 @@ class UberunsReise extends ChildPage
                     title: "&Ouml;sterreich &amp; Ungarn"
                     caption: "Konzertreise 2012"
                     textID: "#osterreich"
-                    linkBilder: "#!/bilder/category/2" 
+                    linkBilder: -1
                     thumbnail: "/img/ungarn.jpg"
                 },
             r2: {
                     title: "Deutschland &amp; Holland"
                     caption: "Konzertreise 2013"
                     textID: "#deutschland"
-                    linkBilder: "#!/bilder/category/3" 
+                    thumbnail: "/img/deutschland.jpg"
+                    linkBilder: -1
+                    #linkBilder: "#!/bilder/category/by-title/konzertreise-2013" 
                 },
             r3: {
                     title: "Spanien"
                     caption: "Konzertreise 2014"
                     textID: "#spanien"
-                    linkBilder: "#!/bilder/category/4" 
+                    thumbnail: "/img/spanien.jpg"
+                    linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2014" 
             }
         }
 
@@ -94,7 +97,11 @@ class UberunsReise extends ChildPage
         # Diese sind bis jetzt provisorisch im Metaobj, später im JSON oder MySQL Abteil
 
         # Linker Abteil
-        $(".reise-left-tile").attr("href", bilderLink)
+        $(".reise-left-tile").removeClass("reise-left-tile-inactive")
+        if bilderLink is -1
+            $(".reise-left-tile").addClass("reise-left-tile-inactive")
+        else    
+            $(".reise-left-tile").attr("href", bilderLink)
         $(".reise-left-tile img").attr("src", thumbnail)
 
         # Rechter Abteil

@@ -25,28 +25,13 @@ class Constants
 
 
 class Core
-    scrollHandlers: {}
     state: 
         scrolledDown : false
         currentURL   : "null"
         currentPage  : "null"
-    
 
     debug = (msg) -> console.log "Core: " + msg
         
-    construct: ->
-    
-    withAPICall: (url, callback) ->
-        # Execute a Callback on an API call made to the server.
-        # The Server always returns a valid JSON object, even when
-        # a error occurs.
-        $.ajax({
-            url:url,
-        })
-          .done (data) ->
-            callback(JSON.parse(data))
-
-
     initializeHashNavigation: ->
         # Initialize the hash
         if window.location.hash is ""
@@ -648,10 +633,11 @@ class ContentViewer
 
     open: (contentObj) =>
         $cnt = $(".content-viewer")
-        #todo click another while open? think about that bitch..
         console.log "contentViewer: open"
-        
+
         @contentObj = contentObj
+
+        @ensureNoDuplicates()
 
         if not @contentObj.height
             @contentObj.height = -> "initial"
@@ -722,14 +708,17 @@ class ContentViewer
         $cnt = $(".content-viewer")
         console.log "contentViewer: close"
 
-        $(document).unbind("click.content", @closeClickHandler)
-        $(".content-viewer").unbind("click.content", @clickOnViewerHandler)
+        # Note: Removing all click events here.... Possible Bug source
+        $(document).unbind("click")
+        $(".content-viewer").unbind("click")
 
         $("html").css cursor: "default"
         $cnt.css cursor: "default"
 
-        @core.registerTaker("dontHandle", true)
-        window.location.hash = revertHash
+        unless revertHash is -1
+            @core.registerTaker("dontHandle", true)
+            window.location.hash = revertHash
+
         if @contentObj.animate
             # revert contentViewer to original position
             $cnt.css
@@ -770,6 +759,14 @@ class ContentViewer
     reset: ->
         @clear()
         $(".content-viewer").attr("style", "")
+
+    ensureNoDuplicates: ->
+        # Is another Contentviewer open?
+        # If so, we must take several precautions and reset the Contentviewers DOM
+        if not $(".content-viewer").hasClass("nodisplay")
+            console.log "Contentviewer: Duplicate Instance detected. Closing."
+            @contentObj.animate = false
+            @close(-1)
 
     closeClickHandler: =>
         @close(@contentObj.revertHash)
@@ -959,7 +956,5 @@ $ ->
 
     c.handleHash()
 
-
-    $(window).scroll c.getScrollHandler
 
     window.onhashchange = c.handleHash

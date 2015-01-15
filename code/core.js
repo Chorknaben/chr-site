@@ -31,8 +31,6 @@ Core = (function() {
     this.handleHash = __bind(this.handleHash, this);
   }
 
-  Core.prototype.scrollHandlers = {};
-
   Core.prototype.state = {
     scrolledDown: false,
     currentURL: "null",
@@ -41,16 +39,6 @@ Core = (function() {
 
   debug = function(msg) {
     return console.log("Core: " + msg);
-  };
-
-  Core.prototype.construct = function() {};
-
-  Core.prototype.withAPICall = function(url, callback) {
-    return $.ajax({
-      url: url
-    }).done(function(data) {
-      return callback(JSON.parse(data));
-    });
   };
 
   Core.prototype.initializeHashNavigation = function() {
@@ -859,6 +847,7 @@ ContentViewer = (function() {
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
     this.contentObj = contentObj;
+    this.ensureNoDuplicates();
     if (!this.contentObj.height) {
       this.contentObj.height = function() {
         return "initial";
@@ -930,16 +919,18 @@ ContentViewer = (function() {
     var $cnt;
     $cnt = $(".content-viewer");
     console.log("contentViewer: close");
-    $(document).unbind("click.content", this.closeClickHandler);
-    $(".content-viewer").unbind("click.content", this.clickOnViewerHandler);
+    $(document).unbind("click");
+    $(".content-viewer").unbind("click");
     $("html").css({
       cursor: "default"
     });
     $cnt.css({
       cursor: "default"
     });
-    this.core.registerTaker("dontHandle", true);
-    window.location.hash = revertHash;
+    if (revertHash !== -1) {
+      this.core.registerTaker("dontHandle", true);
+      window.location.hash = revertHash;
+    }
     if (this.contentObj.animate) {
       $cnt.css({
         left: this.contentObj.startingPos.left,
@@ -983,6 +974,14 @@ ContentViewer = (function() {
   ContentViewer.prototype.reset = function() {
     this.clear();
     return $(".content-viewer").attr("style", "");
+  };
+
+  ContentViewer.prototype.ensureNoDuplicates = function() {
+    if (!$(".content-viewer").hasClass("nodisplay")) {
+      console.log("Contentviewer: Duplicate Instance detected. Closing.");
+      this.contentObj.animate = false;
+      return this.close(-1);
+    }
   };
 
   ContentViewer.prototype.closeClickHandler = function() {
@@ -1195,6 +1194,5 @@ $(function() {
   c.initializeHashNavigation();
   c.insertChildPage(new IndexPage());
   c.handleHash();
-  $(window).scroll(c.getScrollHandler);
   return window.onhashchange = c.handleHash;
 });

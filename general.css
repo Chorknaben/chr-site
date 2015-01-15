@@ -1597,6 +1597,11 @@ a {
   font-style: italic;
   margin-bottom: 45px;
 }
+.reise-left-tile-inactive {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.1;
+}
 .presse-container {
   margin-left: 6%;
   margin-right: 6%;
