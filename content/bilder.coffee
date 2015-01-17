@@ -6,6 +6,11 @@ class Bilder extends ChildPage
         @minImage = 0
         @maxImage = -1
 
+        @currentLoadingIndex = 1
+        @loadNumImageInBatch = 30
+        @renderingAtCategory = {}
+        @renderingAtCategoryOffset = 0
+
         @core.requestFunction "ContentViewer.requestInstance",
             (cView) => @contentViewer = cView()
 
@@ -25,7 +30,6 @@ class Bilder extends ChildPage
                             9, newHash.length
                         )
                 )
-            console.log "executing"
             for elem in $("a")
                 if elem.getAttribute("href") is "/#!/bilder#{newHash}"
                     el = $(elem)
@@ -191,6 +195,21 @@ class Bilder extends ChildPage
         return true
 
     onLoad: =>
+        $(window).on "scroll", =>
+            try
+                curMaxHeight = $(".img-image").eq(@currentLoadingIndex * @loadNumImageInBatch).offset().top
+            catch error
+                $(window).off("scroll")
+                return
+            curScrPos    = $(window).scrollTop() + $(window).height() - 200
+
+            if curScrPos / curMaxHeight >= 0.7
+                @currentLoadingIndex++
+                for i in [((@currentLoadingIndex-1) * @loadNumImageInBatch)..(@currentLoadingIndex*@loadNumImageInBatch)]
+                    console.log i
+                    $(".img-image").eq(i).children("img").attr("src","/images/thumbs/#{i}")
+                console.log "triggered"
+
         # Inhalte Generieren.
         $.ajax({
             url: "/data/json/bilder.json"
@@ -199,8 +218,10 @@ class Bilder extends ChildPage
             for c in tree
                 @genCat(c.category.title, c.category.caption, c.category.content)
                 for imgptr in c.category.childs
-                    @genImg(imgptr[0], imgptr[1])
+                    @genImg(not (@renderingAtCategoryOffset >= @loadNumImageInBatch),imgptr[0], imgptr[1])
                     @maxImage++
+                    @renderingAtCategoryOffset++
+                @renderingAtCategory++
             @c.release()
             
 
@@ -249,11 +270,19 @@ class Bilder extends ChildPage
         )
         @catCount++
 
-    genImg: (filePtr, caption) ->
-        $(".image-container").append(
-            $("<a>").addClass("img-image").attr("href","/#!/bilder/element/#{filePtr}")
-                .append($("<img>").attr("src","/images/thumbs/#{filePtr}"))
-                .append($("<span>#{caption}</span>"))
+    genImg: (attachImg, filePtr, caption) ->
+        if attachImg
+            $(".image-container").append(
+                $("<a>").addClass("img-image").attr("href","/#!/bilder/element/#{filePtr}")
+                    .append($("<img>").attr("src","/images/thumbs/#{filePtr}"))
+                    .append($("<span>#{caption}</span>"))
         )
+        else 
+            $(".image-container").append(
+                $("<a>").addClass("img-image").attr("href","/#!/bilder/element/#{filePtr}")
+                    .append($("<img>"))
+                    .append($("<span>#{caption}</span>"))
+        )
+
 
 window.core.insertChildPage(new Bilder())

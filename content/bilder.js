@@ -15,6 +15,10 @@ Bilder = (function(_super) {
     this.core = window.core;
     this.minImage = 0;
     this.maxImage = -1;
+    this.currentLoadingIndex = 1;
+    this.loadNumImageInBatch = 30;
+    this.renderingAtCategory = {};
+    this.renderingAtCategoryOffset = 0;
     this.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
       return function(cView) {
         return _this.contentViewer = cView();
@@ -33,7 +37,6 @@ Bilder = (function(_super) {
     var cTitle, category, chapter, chapterID, counter, el, elem, firstChapt, id, image, inTitle, nextAttr, previousAttr, rightElem, rightPt, _i, _j, _len, _len1, _ref, _ref1;
     if (newHash.indexOf("/element/") === 0) {
       id = parseInt(newHash.substr(9, newHash.length));
-      console.log("executing");
       _ref = $("a");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         elem = _ref[_i];
@@ -253,6 +256,27 @@ Bilder = (function(_super) {
   };
 
   Bilder.prototype.onLoad = function() {
+    $(window).on("scroll", (function(_this) {
+      return function() {
+        var curMaxHeight, curScrPos, error, i, _i, _ref, _ref1;
+        try {
+          curMaxHeight = $(".img-image").eq(_this.currentLoadingIndex * _this.loadNumImageInBatch).offset().top;
+        } catch (_error) {
+          error = _error;
+          $(window).off("scroll");
+          return;
+        }
+        curScrPos = $(window).scrollTop() + $(window).height() - 200;
+        if (curScrPos / curMaxHeight >= 0.7) {
+          _this.currentLoadingIndex++;
+          for (i = _i = _ref = (_this.currentLoadingIndex - 1) * _this.loadNumImageInBatch, _ref1 = _this.currentLoadingIndex * _this.loadNumImageInBatch; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
+            console.log(i);
+            $(".img-image").eq(i).children("img").attr("src", "/images/thumbs/" + i);
+          }
+          return console.log("triggered");
+        }
+      };
+    })(this));
     return $.ajax({
       url: "/data/json/bilder.json"
     }).done((function(_this) {
@@ -265,9 +289,11 @@ Bilder = (function(_super) {
           _ref = c.category.childs;
           for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
             imgptr = _ref[_j];
-            _this.genImg(imgptr[0], imgptr[1]);
+            _this.genImg(!(_this.renderingAtCategoryOffset >= _this.loadNumImageInBatch), imgptr[0], imgptr[1]);
             _this.maxImage++;
+            _this.renderingAtCategoryOffset++;
           }
+          _this.renderingAtCategory++;
         }
         return _this.c.release();
       };
@@ -325,8 +351,12 @@ Bilder = (function(_super) {
     return this.catCount++;
   };
 
-  Bilder.prototype.genImg = function(filePtr, caption) {
-    return $(".image-container").append($("<a>").addClass("img-image").attr("href", "/#!/bilder/element/" + filePtr).append($("<img>").attr("src", "/images/thumbs/" + filePtr)).append($("<span>" + caption + "</span>")));
+  Bilder.prototype.genImg = function(attachImg, filePtr, caption) {
+    if (attachImg) {
+      return $(".image-container").append($("<a>").addClass("img-image").attr("href", "/#!/bilder/element/" + filePtr).append($("<img>").attr("src", "/images/thumbs/" + filePtr)).append($("<span>" + caption + "</span>")));
+    } else {
+      return $(".image-container").append($("<a>").addClass("img-image").attr("href", "/#!/bilder/element/" + filePtr).append($("<img>")).append($("<span>" + caption + "</span>")));
+    }
   };
 
   return Bilder;
