@@ -75,25 +75,9 @@
 </script>
 <![endif]-->
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="code/jqcol.js" async defer></script>
-<script type="text/javascript" src="code/jquery.morecustoms.js" async defer></script>
-<script type="text/javascript" src="code/jquery.scrollTo.min.js" async defer></script>
-<script type="text/javascript" src="code/overflow.js" async defer></script>
-
-<script type="text/javascript" src="code/clndr.js"></script>
-<script type="text/javascript" src="code/moment.min.js"></script>
-<script type="text/javascript" src="code/underscore.js"></script>
-<script type="text/javascript" src="code/audio.min.js"></script>
-<script type="text/javascript" src="code/jquery.newsTicker.min.js"></script>
-
-<script type="text/javascript" src="code/tilec.js"></script>
+<script type="text/javascript" src="code/libs.js"></script>
 <script type="text/javascript" src="code/core.js"></script>
-<script>
-audiojs.events.ready(function(){
-    var as = audiojs.createAll();
-});
-</script>
+<script type="text/javascript" src="code/audio.min.js"></script>
 </head>
 
 <body>
@@ -351,8 +335,8 @@ audiojs.events.ready(function(){
     <div class="event-listing">
       <div class="event-listing-title">AUFTRITTE DIESEN MONAT:</div>
       <% _.each(eventsThisMonth, function(event) { %>
-          <div class="event-item <%= moment(event.date, 'MM-DD-YYYY').format('DD') %>">
-            <div class="event-item-name"><%= event.title %>, <%= moment(event.date, "MM-DD-YYYY").format("DD.MM.YYYY") %></div>
+          <div class="event-item <%= moment(event.date, 'YYYY-MM-DD').format('DD') %>">
+            <div class="event-item-name"><%= event.title %>, <%= moment(event.date, "YYYY-MM-DD").format("DD.MM.YYYY") %></div>
             <div class="event-item-location"><%= event.location %>, <%= event.time.replace('.',':') %></div>
           </div>
         <% }); %>

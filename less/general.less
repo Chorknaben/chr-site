@@ -192,7 +192,6 @@ a {
 
 .content-viewer{
     position: fixed;
-    display: block;
     left: 80px;
     top: 170px;
     z-index: 5;
@@ -609,6 +608,52 @@ a {
     #linearform{
         width:260px;
     }
+}
+
+.tile{
+    background-color:#1a171a;
+    height:100%;
+    margin-right:10px;
+    float:left;
+    position:relative;
+    opacity:0.95;
+    h1{
+        color: white;
+        font-size: larger;
+        text-align: center;
+        padding-top: 20px;
+        font-weight: 900;
+    }
+    img{
+        height: 200px;
+        padding-top: 20px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    p{
+        color: white;
+        position: absolute;
+        top: 280px;
+        padding: 5px 20px 20px 20px;
+    }
+}
+
+.rel-cnt{
+position: relative;
+height: 100%;
+width: 100%;
+}
+
+.abs-cnt{
+position: absolute;
+height: 550px;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+margin: auto;
 }
 
 @media screen and (max-height:980px){

@@ -280,7 +280,7 @@ class IndexPage extends ChildPage
 
         $.getJSON "/data/json/events.json", (events) =>
             for ev in events.events
-                ev.date = moment(ev.date, "DD.MM.YYYY").format("MM-DD-YYYY")
+                ev.date = moment(ev.date, "DD.MM.YYYY").format("YYYY-MM-DD")
             window.ev = events.events
             if @clndr
                 @clndr.setEvents(events.events)
@@ -294,7 +294,6 @@ class IndexPage extends ChildPage
         @footerLeftClick()
         @initNavDropDown()
         @initNewsRotator()
-        @initKalender()
         @imgRotator(10000)
 
         @c.exportFunction("ImgRotator.pauseImgRotator", @pauseImgRotator)
@@ -512,29 +511,6 @@ class IndexPage extends ChildPage
                     width: $("#6").width()
                     height: $("#6").height()
 
-            eves= [
-                {
-                    "date": "2014-08-20",
-                    "time": "20:00 (Einlass 19:00)",
-                    "title": "Jahreskonzert",
-                    "url": "http://0.0.0.0/#!/jahreskonzert",
-                    "location": "In der Stadtpfarrkirche Biberach"
-                },
-                {
-                    "date": "2014-12-29",
-                    "time": "20:00 (Einlass 19:00)",
-                    "title": "Jahasdreskonzert",
-                    "url": "http://0.0.0.0/#!/jahreskonzert",
-                    "location": "In der Stadtpfarrkirche Biberach"
-                },
-                {
-                    "date": "2014-12-30",
-                    "time": "20:00 (Einlass 19:00)",
-                    "title": "Jahreskodsanzert",
-                    "url": "http://0.0.0.0/#!/jahreskonzert",
-                    "location": "In der Stadtpfarrkirche Biberach"
-                }
-            ]
             @contentViewerOpen = true
             console.log "asddsa"
             console.log window.ev
@@ -555,20 +531,12 @@ class IndexPage extends ChildPage
 
 
             })
+            @clndr.setEvents(window.ev)
 
 
     closeCalendar: ->
         if @contentViewerOpen
             @contentViewer.close("#!/")
-
-
-    initKalender: ->
-        #pos = $("#6").offset()
-        #$("#6").click (event) =>
-        #            
-        #        
-        #    event.stopPropagation()
-        #    event.preventDefault()
 
 class Navigation
     @preState = null
@@ -919,6 +887,101 @@ class ImageViewer
             else
                 location.hash = @conf.toRightHash(@currentEl)
 
+class Tile
+    constructor: (@const) ->
+        @core = window.core
+        @interval = null
+        @scaleCount = 0
+        @headerImg = $("#header-img")
+
+        @core.exportFunction("Tile.finalizeLoading", @finalizeLoading)
+        @core.exportFunction("Tile.load", @load)
+        #@core.exportFunction("Tile.navDown", @navigationDown)
+
+    load: (urlWhat, animate=false, callback, originalSite=undefined, urlOverride=undefined, bare=false) =>
+        # Animations happening on Click
+        # --------
+        unless bare
+                window.nav.by(@const.METHODS.NAME_USER, urlWhat)
+
+        # Load content
+        # --------
+        @core.state["globalHashResponseDisabled"] = true
+        $("#result").load "content/#{ urlWhat }.html", =>
+            if animate
+                @setLoadingScreen(true)
+
+            # Insert background Image
+            unless window.mobile
+                $(@core.state["blurredbg"]).appendTo("#blurbg")
+
+            if not originalSite
+                $(".scrolled").attr("id", urlWhat)
+            else
+                $(".scrolled").attr("id", originalSite)
+
+            #@core.state["currentPage"] = prettyWhat
+            if not urlOverride
+                @core.state["currentURL" ] = urlWhat
+            else
+                @core.state["currentURL"] = urlOverride
+            @core.state["tileid"] = @tileid
+            @core.registerTaker("pageChanged", true)
+
+            $.when(
+                $.getScript "content/#{ urlWhat }.js",
+                $.Deferred (deferred) ->
+                    $(deferred.resolve)
+            ).done =>
+                # Execute onLoad of inserted Child Page
+                @core.state["childPage"].onLoad()
+                if @core.state["childPage"].acquireLoadingLock()
+                    console.log "here"
+                    console.log @core.state["childPage"]
+                    # Continue showing loading screen until Child Page
+                    # releases the lock
+                    @core.registerTaker("pendingCallback", callback)
+                    return
+                @finalizeLoading(callback, animate)
+
+    finalizeLoading: (callback=undefined, animate=true) =>
+        moreHash = @core.requestTaker("backupHash")
+        if typeof moreHash isnt "undefined"
+            #maybe re-get-the-loading-lock!
+            window.location.hash = moreHash
+        if animate
+            @setLoadingScreen(false)
+        else
+            $(".tilecontainer").css display: "none"
+            @core.state["childPage"].onDOMVisible()
+
+        $("#result").css display: "block"
+        @core.state["globalHashResponseDisabled"] = false
+
+        if callback then callback()
+
+    setLoadingScreen: (toggle) ->
+        if toggle
+            #$("#loading-screen").css 
+            #    opacity:0.5
+            #    display:"block"
+            $("#bg").css
+                opacity:0
+            $(".tilecontainer").css
+                display:"none"
+            setTimeout(=>
+                @animationEnded = true
+            , 400)
+        else
+            if not @animationEnded
+                setTimeout(=> 
+                    @setLoadingScreen(false)
+                , 50)
+                return
+            $(".rootnode").css opacity: 1
+            $("#loading-screen").css opacity:0
+            @core.state["childPage"].onDOMVisible()
+            setTimeout(-> $("#loading-screen").css display:"none", 200)
 
 # Global Objects, associated to all other
 # objects created due to the modular infrastructure
@@ -946,6 +1009,9 @@ $ ->
             attr= svg.getAttribute("src");
             if attr.indexOf(".svg", attr.length - 4) != -1
                 svg.setAttribute("src",attr+".png");
+
+    audiojs.events.ready ->
+        audiojs.createAll()
 
     # Important initialization code
     c = window.core

@@ -29,7 +29,7 @@ Shop = (function(_super) {
       this.contentViewer.reset();
       btnMehrInfo = $("." + newHash.substring(1));
       this.mode = newHash;
-      bothtiles = $(".unterstutzen-tile");
+      bothtiles = $(".tile-shop");
       this.contentViewer.open({
         left: function() {
           return $(bothtiles[0]).offset().left;

@@ -20,7 +20,7 @@ class Shop extends ChildPage
     		btnMehrInfo = $("."+newHash.substring(1))
 
 	    	@mode = newHash
-	    	bothtiles = $(".unterstutzen-tile")
+	    	bothtiles = $(".tile-shop")
 	    	@contentViewer.open
 	            left:  -> $(bothtiles[0]).offset().left
 	            top:   -> $(bothtiles[0]).offset().top
