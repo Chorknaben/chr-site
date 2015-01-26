@@ -8,7 +8,7 @@ UberunsTeam = (function(_super) {
 
   function UberunsTeam() {
     UberunsTeam.__super__.constructor.call(this);
-    this.linkIDMapper = [["johannes", 0], ["lechner", 1], ["noah", 2], ["samuel", 3], ["dschingis", 4]];
+    this.linkIDMapper = [["johannes", 0], ["lechner", 1], ["noah", 2], ["orga", 3], ["clt", 4]];
   }
 
   UberunsTeam.clickedPreviously = null;

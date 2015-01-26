@@ -10,8 +10,8 @@ class UberunsTeam extends ChildPage
             ["johannes", 0]
           , ["lechner", 1]
           , ["noah", 2]
-          , ["samuel", 3]
-          , ["dschingis", 4]]
+          , ["orga", 3]
+          , ["clt", 4]]
 
         @clickedPreviously = null
 
@@ -61,9 +61,9 @@ class UberunsTeam extends ChildPage
                 .removeClass("invisible")
 
             #setTimeout( => 
-                $(".reise-tile").eq(@clickedPreviously)
-                    .children(".after-transition")
-                    .css display: "none"
+            $(".reise-tile").eq(@clickedPreviously)
+                .children(".after-transition")
+                .css display: "none"
             #, 200)
 
 window.core.insertChildPage(new UberunsTeam())

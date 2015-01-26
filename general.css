@@ -135,6 +135,7 @@
   left: 0;
   z-index: 2;
   display: block;
+  max-width: 80%;
   max-height: 100%;
   margin: auto;
 }
@@ -819,6 +820,10 @@ a {
   font-weight: bold;
 }
 
+#feedback .kleingedrucktes {
+  font-size: 13px;
+}
+
 #feedback .feedback {
   position: relative;
   top: -40px;
@@ -920,7 +925,19 @@ a {
 }
 
 .feedbackform #linearform {
-  width: 260px;
+  width: 360px;
+}
+
+.feedbackform .formelm {
+  padding: 20px;
+  color: white;
+  background-color: #1a171a;
+  border: 10px solid #000;
+}
+
+.feedbackform .submit:hover {
+  background-color: #204580;
+  background-image: initial;
 }
 
 .tile {
@@ -1548,6 +1565,7 @@ td {
   height: 100px;
   padding-left: 20px;
   background-color: #1a171a;
+  opacity: 0.9;
   -webkit-transition: background-color 0.2s linear 0s;
           transition: background-color 0.2s linear 0s;
 }
@@ -1563,13 +1581,12 @@ td {
 
 .presse-date {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 0;
-  z-index: 5;
+  z-index: 1;
   padding: 5px 8px 5px 20px;
   background: #204580;
-  opacity: 0.8;
-  box-shadow: 1px 4px 6px #000;
+  opacity: 0.9;
 }
 
 .tile-shop {
@@ -2030,7 +2047,6 @@ div .btngreen:hover {
   height: 50%;
   margin-top: 10px;
   margin-left: 10px;
-  overflow: auto;
   background: #1a171a;
 }
 
@@ -2163,7 +2179,8 @@ div .btngreen:hover {
   line-height: 25px;
   color: white;
   text-align: center;
-  background-color: #199250;
+  background-color: #096434;
+  opacity: 0.8;
 }
 
 .nomargin {
@@ -2175,9 +2192,53 @@ div .btngreen:hover {
   display: block;
   width: 100%;
   height: 100%;
-  background: url("/img/person.jpg") center center;
+  overflow: hidden;
+  background-size: cover;
   -webkit-transition: opacity 0.2s linear 0s;
           transition: opacity 0.2s linear 0s;
+}
+
+.reise-tile .striegel img {
+  width: 100%;
+}
+
+.team-noimage {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 55px;
+  margin: auto;
+}
+
+.team-noimage h1 {
+  font-size: 2em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.team-noimage h2 {
+  position: absolute;
+  right: 0;
+  left: 0;
+  display: block;
+  max-width: 60%;
+  margin: auto;
+  font-style: italic;
+  text-align: center;
+}
+
+.text-tile {
+  overflow: auto;
+}
+
+.img-striegel {
+  background: url(/img/striegel.jpg) center center;
+}
+
+.img-noah {
+  background: url(/img/noah.jpg) center center;
 }
 
 .reise-tile .after-transition {
@@ -2201,8 +2262,9 @@ div .btngreen:hover {
 
 .reise-tile .close {
   position: absolute;
-  right: 20px;
-  bottom: 20px;
+  top: 34px;
+  right: 50px;
+  color: #4B77BE;
 }
 
 .reise-tile .invisible {
