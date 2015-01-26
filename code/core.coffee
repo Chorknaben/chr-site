@@ -184,6 +184,13 @@ class Core
             func(false))
         pageObj.onInsertion()
 
+        if window.currentLanguage is "de"
+            console.log "Applying language tpl: GERMAN"
+            @setLanguage(window.translationObj.de)
+        else if window.currentLanguage is "en"
+            console.log "Applying language tpl: ENGLISH"
+            @setLanguage(window.translationObj.en)
+
     exportFunction: (name, func) ->
         @state[name] = func
 
@@ -203,6 +210,24 @@ class Core
 
         callback = @requestTaker("pendingCallback")
         if callback then callback()
+
+    setLanguage: (translationSubObj) ->
+        console.log "fired"
+        for translationCandidate in translationSubObj
+            do (translationCandidate) ->
+                trc = $(translationCandidate.el)
+                if trc.length
+                    trc.html(translationCandidate.content)
+
+    initializeTranslationEngine: ->
+        $.getJSON "/data/json/translation_deploy.json", (data) =>
+            window.translationObj = data        
+            $("#de").click => 
+                window.currentLanguage = "de"
+                @setLanguage(window.translationObj.de)
+            $("#en").click => 
+                window.currentLanguage = "en"
+                @setLanguage(window.translationObj.en)
 
 # Abstract Skeleton Class that any Child Page ought to implement
 class ChildPage
@@ -322,7 +347,7 @@ class IndexPage extends ChildPage
         @c.state["blurredbg"] = img
 
     footerLeftClick: ->
-        $(".footer-left").click (event) =>
+        $(".footer-left a").click (event) =>
             event.preventDefault()
             event.stopPropagation()
             @toggleInfo()
@@ -1019,6 +1044,8 @@ $ ->
     # Initial Page is the Index Page
     c.initializeHashNavigation()
     c.insertChildPage(new IndexPage())
+
+    c.initializeTranslationEngine()
 
     c.handleHash()
 

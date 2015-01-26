@@ -171,7 +171,8 @@ UberunsReise = (function(_super) {
         hu: "#199250",
         si: "#199250",
         hr: "#199250",
-        ro: "#199250"
+        ro: "#199250",
+        sl: "#199250"
       }
     });
     return $("#map-world").vectorMap({
@@ -199,7 +200,8 @@ UberunsReise = (function(_super) {
         si: "#199250",
         hr: "#199250",
         ro: "#199250",
-        us: "#199250"
+        us: "#199250",
+        sl: "#199250"
       }
     });
   };

@@ -143,6 +143,7 @@ class UberunsReise extends ChildPage
                 si: "#199250"
                 hr: "#199250"
                 ro: "#199250"
+                sl: "#199250"
 
         $("#map-world").vectorMap
             map: 'world_en',
@@ -170,6 +171,7 @@ class UberunsReise extends ChildPage
                 hr: "#199250"
                 ro: "#199250"
                 us: "#199250"
+                sl: "#199250"
 
     reisehack: =>
         # TODO minor hack, solve using css

@@ -111,7 +111,7 @@ Presse = (function(_super) {
   Presse.prototype.onScrollFinished = function() {};
 
   Presse.prototype.genArticle = function(article) {
-    $(".presse-container").append($("<a>").addClass("img-presse").attr("href", "/#!/presse/artikel/" + this.articleCount).append($("<img>").addClass("deadcenter").attr("src", article.url)).append($("<span><h1>" + article.name + "</h1>" + article.caption + "</span>")));
+    $(".presse-container").append($("<a>").addClass("img-presse").attr("href", "/#!/presse/artikel/" + this.articleCount).append($("<div>").addClass("presse-date").html(article.date)).append($("<img>").addClass("deadcenter").attr("src", "/data/presse/thumbs/" + (this.articleCount - 1))).append($("<span><h1>" + article.name + "</h1>" + article.caption + "</span>")));
     return this.articleCount++;
   };
 

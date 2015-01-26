@@ -206,7 +206,14 @@ Core = (function() {
     this.requestFunction("ImgRotator.pauseImgRotator", function(func) {
       return func(false);
     });
-    return pageObj.onInsertion();
+    pageObj.onInsertion();
+    if (window.currentLanguage === "de") {
+      console.log("Applying language tpl: GERMAN");
+      return this.setLanguage(window.translationObj.de);
+    } else if (window.currentLanguage === "en") {
+      console.log("Applying language tpl: ENGLISH");
+      return this.setLanguage(window.translationObj.en);
+    }
   };
 
   Core.prototype.exportFunction = function(name, func) {
@@ -239,6 +246,39 @@ Core = (function() {
     if (callback) {
       return callback();
     }
+  };
+
+  Core.prototype.setLanguage = function(translationSubObj) {
+    var translationCandidate, _i, _len, _results;
+    console.log("fired");
+    _results = [];
+    for (_i = 0, _len = translationSubObj.length; _i < _len; _i++) {
+      translationCandidate = translationSubObj[_i];
+      _results.push((function(translationCandidate) {
+        var trc;
+        trc = $(translationCandidate.el);
+        if (trc.length) {
+          return trc.html(translationCandidate.content);
+        }
+      })(translationCandidate));
+    }
+    return _results;
+  };
+
+  Core.prototype.initializeTranslationEngine = function() {
+    return $.getJSON("/data/json/translation_deploy.json", (function(_this) {
+      return function(data) {
+        window.translationObj = data;
+        $("#de").click(function() {
+          window.currentLanguage = "de";
+          return _this.setLanguage(window.translationObj.de);
+        });
+        return $("#en").click(function() {
+          window.currentLanguage = "en";
+          return _this.setLanguage(window.translationObj.en);
+        });
+      };
+    })(this));
   };
 
   return Core;
@@ -378,7 +418,7 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.footerLeftClick = function() {
-    $(".footer-left").click((function(_this) {
+    $(".footer-left a").click((function(_this) {
       return function(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -1309,6 +1349,7 @@ $(function() {
   c = window.core;
   c.initializeHashNavigation();
   c.insertChildPage(new IndexPage());
+  c.initializeTranslationEngine();
   c.handleHash();
   return window.onhashchange = c.handleHash;
 });

@@ -283,6 +283,12 @@ body {
   background: #1a171a;
 }
 
+#footer .translation-icon {
+  width: 20px;
+  height: auto;
+  cursor: pointer;
+}
+
 b {
   font-weight: bold;
 }
@@ -1037,6 +1043,14 @@ a {
           transition: opacity .2s;
 }
 
+table {
+  margin-top: 10px;
+}
+
+td {
+  padding-left: 20px;
+}
+
 .hoveroverlay {
   background-color: black;
   opacity: 0;
@@ -1547,6 +1561,17 @@ a {
   background-color: black;
 }
 
+.presse-date {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  padding: 5px 8px 5px 20px;
+  background: #204580;
+  opacity: 0.8;
+  box-shadow: 1px 4px 6px #000;
+}
+
 .tile-shop {
   width: 490px;
 }
@@ -1948,7 +1973,7 @@ div .btngreen:hover {
 }
 
 #prettymargin {
-  width: 50%;
+  width: 60%;
   margin: 100px 0 0 50px;
   text-align: justify;
 }

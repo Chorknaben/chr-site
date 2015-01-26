@@ -75,7 +75,8 @@ class Presse extends ChildPage
     genArticle: (article) ->
         $(".presse-container").append(
             $("<a>").addClass("img-presse").attr("href","/#!/presse/artikel/#{@articleCount}")
-                .append($("<img>").addClass("deadcenter").attr("src",article.url))
+                .append($("<div>").addClass("presse-date").html(article.date))
+                .append($("<img>").addClass("deadcenter").attr("src","/data/presse/thumbs/#{@articleCount-1}"))
                 .append($("<span><h1>#{article.name}</h1>#{article.caption}</span>"))
         )
         @articleCount++
