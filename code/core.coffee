@@ -229,6 +229,18 @@ class Core
                 window.currentLanguage = "en"
                 @setLanguage(window.translationObj.en)
 
+    attemptAutoSetLanguage: ->
+        $.getJSON "http://ipinfo.io", (response) ->
+            if response.country isnt "DE"
+                console.log "Country: #{response.country}"
+                @setLanguage(window.translationObj.en)
+
+    updateTranslations: ->
+        if window.currentLanguage == "de"
+            @setLanguage(window.translationObj.de)
+        else if window.currentLanguage == "en"
+            @setLanguage(window.translationObj.en)
+
 # Abstract Skeleton Class that any Child Page ought to implement
 class ChildPage
     constructor: ->
@@ -537,8 +549,6 @@ class IndexPage extends ChildPage
                     height: $("#6").height()
 
             @contentViewerOpen = true
-            console.log "asddsa"
-            console.log window.ev
             @clndr = $("#calendar-full").clndr({
                 daysOfTheWeek: ['So','Mo','Di',"Mi","Do","Fr","Sa"]
                 events: window.ev
@@ -549,9 +559,13 @@ class IndexPage extends ChildPage
                     # Light up the corresponding event when hovering over the event.
                     $(".event").hover ->
                         day = $(this).children(".day-number").html()
+                        if (day.length != 2) then day = "0" + day
+                        console.log day
                         $(".event-item." + day).css "background-color": "#0D0C0D"
                     , ->
                         day = $(this).children(".day-number").html()
+                        if (day.length != 2) then day = "0" + day
+                        console.log day
                         $(".event-item." + day).css "background-color": "#1a171a"
 
 
@@ -677,14 +691,22 @@ class ContentViewer
         @update()
         $content = $cnt.children("div")
 
-        $content.children("h1").html(@contentObj.title)
-        $content.children("h2").html(@contentObj.caption)
-        $content.children("#ccnt").html(@contentObj.content)
+        # Only needed for Contentviewers without translation
+        if @contentObj.title or @contentObj.caption or @contentObj.content
+            $content.children("h1").html(@contentObj.title)
+            $content.children("h2").html(@contentObj.caption)
+            $content.children("#ccnt").html(@contentObj.content)
+
+        window.core.updateTranslations()
+
+        $("#content-viewer-exit-button").removeClass("nodisplay")
+        $("#content-viewer-exit-button").on "click", => @close(@contentObj.revertHash)
 
         $(document).bind("click.content", @closeClickHandler)
         $(".content-viewer").bind("click.content", @clickOnViewerHandler)
 
         $(window).on("resize", @update)
+
 
     update: =>
         $(".content-viewer").css
@@ -701,9 +723,12 @@ class ContentViewer
         $cnt = $(".content-viewer")
         console.log "contentViewer: close"
 
+        $("#content-viewer-exit-button").addClass("nodisplay")
+
         # Note: Removing all click events here.... Possible Bug source
         $(document).unbind("click")
         $(".content-viewer").unbind("click")
+        $("#content-viewer-exit-button").off "click"
 
         $("html").css cursor: "default"
         $cnt.css cursor: "default"
@@ -778,16 +803,8 @@ class ImageViewer
     open: (conf) =>
         @conf = conf
 
-        # is imageViewer already open?
-        if not $(".image-viewer").hasClass("nodisplay")
-            # if so, load the new image
-            $(".image-viewer img").first().remove()
+        @resetViewer()
 
-        # Remove leftovers from inline chapter
-        $(".image-viewer .chapter-info-inline").remove()
-
-        # fade info bar in if it isnt already
-        $(".bar").removeClass("fade")
 
         if @conf.navigation
             @currentEl = @conf.getCurrentElement()
@@ -833,10 +850,14 @@ class ImageViewer
             $("#chapter-name-main").html(@conf.chapterName[0]) 
             $("#chapter-name-caption").html(@conf.chapterName[1])
 
+        if @conf.descriptionSetting
+            switch @conf.descriptionSetting
+                # disable bottom bar
+                when 1 
+                    $(".bar").addClass "nodisplay"
+
 
         # the imageViewer might not have been closed properly;
-        # remove leftover image if not already
-        $('.image-viewer img').first().remove()
         if @conf.handleImageLoading
             img = new Image()
             $(img).prependTo($(".image-viewer"))
@@ -850,8 +871,14 @@ class ImageViewer
         if @conf.enableDragging
             #$(".image-viewer img").drags()
             console.log "imageViewer.enableDragging: stub"
+
+        # Click on Image -> Close    
         $(".image-viewer img").first().click =>
             @close()
+
+        # Enable Exit button
+        $("#image-viewer-exit-button").removeClass("nodisplay")
+        $("#image-viewer-exit-button").on "click", => @close()
 
         viewer.removeClass("nodisplay")
         $(".cross").removeClass("nodisplay")
@@ -880,9 +907,29 @@ class ImageViewer
         clearTimeout(@timeout)
         $(".bar").removeClass("fade")
         $(".image-viewer").addClass("nodisplay")
+        $("#image-viewer-exit-button").addClass("nodisplay")
         $(".image-viewer img").first().remove()
 
         @state = @CLOSED
+
+    resetViewer: ->
+        # Prepare ImageViewer for next usage
+        # Is imageViewer already open?
+        if not $(".image-viewer").hasClass("nodisplay")
+            # if so, load the new image
+            $(".image-viewer img").first().remove()
+
+        # Remove leftovers from inline chapter
+        $(".image-viewer .chapter-info-inline").remove()
+
+        # fade info bar in if it isnt already
+        $(".bar").removeClass("fade")
+
+        # enable bar if it isnt already
+        $(".bar").removeClass("nodisplay")
+
+        # remove leftover image if not already
+        $('.image-viewer img').first().remove()
 
     getState: ->
         return @state
@@ -911,6 +958,7 @@ class ImageViewer
                     location.hash = "#!/bilder/kategorie/#{@conf.chapterID+1}"
             else
                 location.hash = @conf.toRightHash(@currentEl)
+
 
 class Tile
     constructor: (@const) ->
@@ -1025,7 +1073,7 @@ $ ->
     moment.lang("de")
 
     unless window.ie
-        isMobile = window.matchMedia("only screen and (max-width: 760px)")
+        isMobile = window.matchMedia("only screen and (max-width: 1000px)")
         if isMobile.matches then window.mobile = true
 
     if window.ie
@@ -1046,6 +1094,7 @@ $ ->
     c.insertChildPage(new IndexPage())
 
     c.initializeTranslationEngine()
+    c.attemptAutoSetLanguage()
 
     c.handleHash()
 

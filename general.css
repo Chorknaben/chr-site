@@ -118,6 +118,24 @@
   height: 100px;
 }
 
+#image-viewer-exit-button {
+  position: fixed;
+  top: 60px;
+  right: 1.5%;
+  z-index: 2;
+}
+
+#image-viewer-exit-button img {
+  display: block;
+  width: 40px;
+  height: auto;
+  cursor: pointer;
+}
+
+#image-viewer-exit-button img:hover {
+  opacity: 0.9;
+}
+
 .image-viewer {
   position: absolute;
   top: 50px;
@@ -184,6 +202,8 @@
 }
 
 .image-viewer .bar #chapter-name {
+  display: block;
+  margin-top: 5px;
   font-style: oblique;
 }
 
@@ -425,6 +445,10 @@ a {
   color: gray;
 }
 
+.clndr .clndr-grid .days .last-month {
+  color: gray;
+}
+
 .clndr .clndr-grid .days .today {
   background: #4B77BE;
 }
@@ -434,7 +458,7 @@ a {
 }
 
 .clndr .clndr-grid .days .event .day-number {
-  border-bottom: 2px solid #40c07e;
+  border-bottom: 3px solid #40c07e;
 }
 
 .clndr .clndr-grid .days .event:hover {
@@ -515,6 +539,21 @@ a {
   -webkit-transition: opacity 0.2s ease .75s;
      -moz-transition: opacity 0.2s ease .75s;
           transition: opacity 0.2s ease .75s;
+}
+
+#content-viewer-exit-button {
+  position: absolute;
+  top: 30px;
+  right: 50px;
+}
+
+#content-viewer-exit-button img {
+  width: 45px;
+  cursor: pointer;
+}
+
+#content-viewer-exit-button img:hover {
+  opacity: 0.9;
 }
 
 #subpage-header {
@@ -1296,10 +1335,12 @@ td {
   }
   #bigtile1 {
     position: absolute;
-    top: 353px;
+    top: 383px;
+    right: 10px;
+    left: 0;
     width: 815px;
+    margin: auto;
     margin-bottom: 100px;
-    margin-left: 20px;
   }
   .header .ctitle {
     width: 100%;
@@ -1310,13 +1351,27 @@ td {
     display: none;
   }
   .left {
-    width: 100%;
+    width: 815px;
   }
   .right {
-    display: none;
+    display: block;
+    width: 815px;
   }
   .tilecontainer {
     height: 60%;
+  }
+  .bottomtile {
+    margin-top: 0;
+    background: black;
+  }
+  .bottomtile .bottomcontentoffset {
+    background: black;
+  }
+  .right #controls {
+    border-right: none;
+  }
+  .right #controls p {
+    background: black;
   }
   #bg img {
     display: none;
@@ -1367,6 +1422,12 @@ td {
   }
   .tilecontainer {
     height: 70%;
+  }
+  #blurbg img {
+    display: none;
+  }
+  #blurbg {
+    display: none;
   }
   #bg img {
     display: none;
@@ -1593,6 +1654,15 @@ td {
   width: 490px;
 }
 
+.tile-shop p {
+  bottom: 50px;
+  padding: 0;
+  padding-right: 5px;
+  margin-right: 20px;
+  margin-left: 20px;
+  overflow-y: auto;
+}
+
 .abs-shop {
   width: 1000px;
 }
@@ -1628,7 +1698,7 @@ td {
   position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
+  bottom: 50px;
   left: 0;
   display: block;
   width: 328px;
@@ -1667,6 +1737,9 @@ td {
 }
 
 #cdcontent .cdright ol {
+  max-height: 170px;
+  padding-left: 30px;
+  overflow: auto;
   font-size: smaller;
   list-style: decimal;
 }
@@ -1711,11 +1784,10 @@ td {
 .stiftung-sidebar a h1 {
   position: absolute;
   top: 0;
-  right: 0;
   bottom: 0;
-  left: 0;
   margin: auto;
-  font-size: 67px;
+  font-size: 60px;
+  text-align: center;
 }
 
 .stiftung-sidebar .active {
@@ -1727,12 +1799,12 @@ td {
 }
 
 .stiftung-sidebar #btn-stiftung h1 {
-  width: 230px;
+  width: 100%;
   height: 77px;
 }
 
 .stiftung-sidebar #btn-forderverein h1 {
-  width: 273px;
+  width: 100%;
   height: 44px;
   font-size: 47px;
 }
@@ -1888,6 +1960,12 @@ div .btngreen:hover {
 .stiftungdimension {
   width: 56%;
   height: 88%;
+}
+
+@media screen and (max-width: 1360px) {
+  .rel-cnt .stiftung-cnt {
+    width: 1100px;
+  }
 }
 
 #uberuns-cnt {
@@ -2532,7 +2610,7 @@ div .btngreen:hover {
 
 @media screen and (max-height: 800px) {
   .abs-cnt {
-    height: 500px;
+    height: 470px;
     margin-top: 10px;
   }
 }

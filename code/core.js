@@ -281,6 +281,23 @@ Core = (function() {
     })(this));
   };
 
+  Core.prototype.attemptAutoSetLanguage = function() {
+    return $.getJSON("http://ipinfo.io", function(response) {
+      if (response.country !== "DE") {
+        console.log("Country: " + response.country);
+        return this.setLanguage(window.translationObj.en);
+      }
+    });
+  };
+
+  Core.prototype.updateTranslations = function() {
+    if (window.currentLanguage === "de") {
+      return this.setLanguage(window.translationObj.de);
+    } else if (window.currentLanguage === "en") {
+      return this.setLanguage(window.translationObj.en);
+    }
+  };
+
   return Core;
 
 })();
@@ -717,8 +734,6 @@ IndexPage = (function(_super) {
         }
       });
       this.contentViewerOpen = true;
-      console.log("asddsa");
-      console.log(window.ev);
       this.clndr = $("#calendar-full").clndr({
         daysOfTheWeek: ['So', 'Mo', 'Di', "Mi", "Do", "Fr", "Sa"],
         events: window.ev,
@@ -731,12 +746,20 @@ IndexPage = (function(_super) {
           return $(".event").hover(function() {
             var day;
             day = $(this).children(".day-number").html();
+            if (day.length !== 2) {
+              day = "0" + day;
+            }
+            console.log(day);
             return $(".event-item." + day).css({
               "background-color": "#0D0C0D"
             });
           }, function() {
             var day;
             day = $(this).children(".day-number").html();
+            if (day.length !== 2) {
+              day = "0" + day;
+            }
+            console.log(day);
             return $(".event-item." + day).css({
               "background-color": "#1a171a"
             });
@@ -915,9 +938,18 @@ ContentViewer = (function() {
     });
     this.update();
     $content = $cnt.children("div");
-    $content.children("h1").html(this.contentObj.title);
-    $content.children("h2").html(this.contentObj.caption);
-    $content.children("#ccnt").html(this.contentObj.content);
+    if (this.contentObj.title || this.contentObj.caption || this.contentObj.content) {
+      $content.children("h1").html(this.contentObj.title);
+      $content.children("h2").html(this.contentObj.caption);
+      $content.children("#ccnt").html(this.contentObj.content);
+    }
+    window.core.updateTranslations();
+    $("#content-viewer-exit-button").removeClass("nodisplay");
+    $("#content-viewer-exit-button").on("click", (function(_this) {
+      return function() {
+        return _this.close(_this.contentObj.revertHash);
+      };
+    })(this));
     $(document).bind("click.content", this.closeClickHandler);
     $(".content-viewer").bind("click.content", this.clickOnViewerHandler);
     return $(window).on("resize", this.update);
@@ -936,8 +968,10 @@ ContentViewer = (function() {
     var $cnt;
     $cnt = $(".content-viewer");
     console.log("contentViewer: close");
+    $("#content-viewer-exit-button").addClass("nodisplay");
     $(document).unbind("click");
     $(".content-viewer").unbind("click");
+    $("#content-viewer-exit-button").off("click");
     $("html").css({
       cursor: "default"
     });
@@ -1030,11 +1064,7 @@ ImageViewer = (function() {
   ImageViewer.prototype.open = function(conf) {
     var image, img, viewer;
     this.conf = conf;
-    if (!$(".image-viewer").hasClass("nodisplay")) {
-      $(".image-viewer img").first().remove();
-    }
-    $(".image-viewer .chapter-info-inline").remove();
-    $(".bar").removeClass("fade");
+    this.resetViewer();
     if (this.conf.navigation) {
       this.currentEl = this.conf.getCurrentElement();
       if (this.currentEl !== this.conf.minImage) {
@@ -1078,7 +1108,12 @@ ImageViewer = (function() {
       $("#chapter-name-main").html(this.conf.chapterName[0]);
       $("#chapter-name-caption").html(this.conf.chapterName[1]);
     }
-    $('.image-viewer img').first().remove();
+    if (this.conf.descriptionSetting) {
+      switch (this.conf.descriptionSetting) {
+        case 1:
+          $(".bar").addClass("nodisplay");
+      }
+    }
     if (this.conf.handleImageLoading) {
       img = new Image();
       $(img).prependTo($(".image-viewer"));
@@ -1093,6 +1128,12 @@ ImageViewer = (function() {
       console.log("imageViewer.enableDragging: stub");
     }
     $(".image-viewer img").first().click((function(_this) {
+      return function() {
+        return _this.close();
+      };
+    })(this));
+    $("#image-viewer-exit-button").removeClass("nodisplay");
+    $("#image-viewer-exit-button").on("click", (function(_this) {
       return function() {
         return _this.close();
       };
@@ -1127,8 +1168,19 @@ ImageViewer = (function() {
     clearTimeout(this.timeout);
     $(".bar").removeClass("fade");
     $(".image-viewer").addClass("nodisplay");
+    $("#image-viewer-exit-button").addClass("nodisplay");
     $(".image-viewer img").first().remove();
     return this.state = this.CLOSED;
+  };
+
+  ImageViewer.prototype.resetViewer = function() {
+    if (!$(".image-viewer").hasClass("nodisplay")) {
+      $(".image-viewer img").first().remove();
+    }
+    $(".image-viewer .chapter-info-inline").remove();
+    $(".bar").removeClass("fade");
+    $(".bar").removeClass("nodisplay");
+    return $('.image-viewer img').first().remove();
   };
 
   ImageViewer.prototype.getState = function() {
@@ -1328,7 +1380,7 @@ $(function() {
   window.nav = new Navigation(".header-nav");
   moment.lang("de");
   if (!window.ie) {
-    isMobile = window.matchMedia("only screen and (max-width: 760px)");
+    isMobile = window.matchMedia("only screen and (max-width: 1000px)");
     if (isMobile.matches) {
       window.mobile = true;
     }
@@ -1350,6 +1402,7 @@ $(function() {
   c.initializeHashNavigation();
   c.insertChildPage(new IndexPage());
   c.initializeTranslationEngine();
+  c.attemptAutoSetLanguage();
   c.handleHash();
   return window.onhashchange = c.handleHash;
 });

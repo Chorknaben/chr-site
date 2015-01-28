@@ -104,6 +104,22 @@
     width: 100%;
 }
 
+#image-viewer-exit-button{
+    position: fixed;
+    right: 1.5%;
+    top: 60px;
+    z-index: 2;
+    img{
+        width: 40px;
+        height: auto;
+        display: block;
+        cursor:pointer;
+    }
+    img:hover{
+        opacity:0.9;
+    }
+}
+
 .image-viewer{
     position: absolute;
     top: 50px;
@@ -160,6 +176,9 @@
         }
         #chapter-name{
             font-style:oblique;
+            display:block;
+            margin-top:5px;
+            margin-top:5px;
         }
         #chapter-progress{
 
@@ -393,13 +412,16 @@ a {
             .next-month{
                 color:gray;
             }
+            .last-month{
+                color:gray;
+            }
             .today{
                 background:#4B77BE;
             }
             .event{
                 cursor:pointer;
                 .day-number{
-                    border-bottom:2px solid #40c07e;
+                    border-bottom:3px solid #40c07e;
                 }
             }
             .event:hover{
@@ -480,6 +502,19 @@ a {
     -webkit-transition: opacity 0.2s ease .75s;
     -moz-transition: opacity 0.2s ease .75s;
     transition: opacity 0.2s ease .75s;
+}
+
+#content-viewer-exit-button{
+    position: absolute;
+    right: 50px;
+    top: 30px;
+    img {
+        width:45px;
+        cursor:pointer;
+    }
+    img:hover{
+        opacity:0.9;
+    }
 }
 
 #subpage-header{
@@ -879,7 +914,7 @@ a {
     }
     .submit:hover{
         background-color: #204580;
-        background-image: initial;
+    background-image: initial;
     }
 }
 
@@ -1230,10 +1265,12 @@ float:right;
     }
     #bigtile1{
         position: absolute;
-        top: 353px;
+        top: 383px;
         width: 815px;
-        margin-left: 20px;
         margin-bottom: 100px;
+        left:0;
+        right:10px;
+        margin:auto;
     }
     .header .ctitle{
         width:100%;
@@ -1245,13 +1282,29 @@ float:right;
     }
 
     .left{
-        width:100%;
+        width:815px;
     }
     .right{
-        display:none;
+        display:block;
+        width:815px;
+        width:815px;
     }
     .tilecontainer{
         height:60%;
+    }
+    .bottomtile{
+        margin-top:0;
+        background:black;
+        .bottomcontentoffset{
+            background:black;
+        }
+    }
+    .right #controls{
+        border-right:none;
+        p{
+            background:black;
+            background:black;
+        }
     }
     #bg img{display:none;}
     #bg{background:#1a171a;}
@@ -1299,6 +1352,8 @@ float:right;
     .tilecontainer{
         height:70%;
     }
+    #blurbg img{display:none;}
+    #blurbg{display:none;}
     #bg img{display:none;}
     #bg{background:#1a171a;}
 }
@@ -1502,6 +1557,14 @@ float:right;
 
 }.tile-shop{
     width:490px;
+    p{
+    	bottom:50px;
+    	margin-right:20px;
+    	overflow-y:auto;
+    	margin-left: 20px;
+    	padding: 0;
+    	padding-right:5px;
+    }
 }
 
 .abs-shop{
@@ -1537,7 +1600,7 @@ float:right;
 			position: absolute;
 			top: 0;
 			margin: auto;
-			bottom: 0;
+			bottom: 50px;
 			left: 0;
 			right: 0;
 			background-image: url(/1920/903/5/tile);
@@ -1570,6 +1633,9 @@ float:right;
 		ol{
 			list-style:decimal;
 			font-size:smaller;
+			max-height:170px;
+			overflow:auto;
+			padding-left:30px;
 			#composer{
 				font-style:italic;	
 			}
@@ -1602,12 +1668,11 @@ float:right;
         background:#1a171a;
         h1{
             position: absolute;
-            left: 0;
-            right: 0;
             bottom: 0;
             top: 0;
             margin: auto;
-            font-size: 67px;
+            font-size: 60px;
+            text-align:center;
         }
     }
     .active{
@@ -1618,14 +1683,14 @@ float:right;
     }
     #btn-stiftung{
         h1{
-            width:230px;
+            width:100%;
             height:77px;
         }
     }
     #btn-forderverein{
         h1 {
             font-size:47px;
-            width:273px;
+            width:100%;
             height:44px;
         }
     }
@@ -1770,6 +1835,15 @@ div .btngreen:hover{
 .stiftungdimension{
     height:88%;
     width:56%;
+    width:56%;
+    width:56%;
+}
+
+@media screen and (max-width:1360px){
+    .rel-cnt .stiftung-cnt{
+        width:1100px;
+        width:1100px;
+    }
 }#uberuns-cnt{
     display:table-row;
     height:100%;
@@ -2395,7 +2469,7 @@ line-height:25px;
 // todo like musik
 @media screen and (max-height:800px) {
     .abs-cnt{
-        height:500px;
+        height:470px;
         margin-top:10px;
     }
 

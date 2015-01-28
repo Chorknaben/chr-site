@@ -48,7 +48,8 @@ Presse = (function(_super) {
           escapeKey: true,
           lockScrolling: true,
           revertHash: "#!/presse",
-          enableDragging: true
+          enableDragging: true,
+          descriptionSetting: 1
         });
       } else {
         return img = $("<img>").bind("load", (function(_this) {
@@ -73,7 +74,8 @@ Presse = (function(_super) {
               escapeKey: true,
               lockScrolling: true,
               revertHash: "#!/presse",
-              enableDragging: true
+              enableDragging: true,
+              descriptionSetting: 1
             });
           };
         })(this)).attr("src", "/data/presse/real/" + (id - 1));

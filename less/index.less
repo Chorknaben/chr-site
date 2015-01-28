@@ -240,10 +240,12 @@ float:right;
     }
     #bigtile1{
         position: absolute;
-        top: 353px;
+        top: 383px;
         width: 815px;
-        margin-left: 20px;
         margin-bottom: 100px;
+        left:0;
+        right:10px;
+        margin:auto;
     }
     .header .ctitle{
         width:100%;
@@ -255,13 +257,29 @@ float:right;
     }
 
     .left{
-        width:100%;
+        width:815px;
     }
     .right{
-        display:none;
+        display:block;
+        width:815px;
+        width:815px;
     }
     .tilecontainer{
         height:60%;
+    }
+    .bottomtile{
+        margin-top:0;
+        background:black;
+        .bottomcontentoffset{
+            background:black;
+        }
+    }
+    .right #controls{
+        border-right:none;
+        p{
+            background:black;
+            background:black;
+        }
     }
     #bg img{display:none;}
     #bg{background:#1a171a;}
@@ -309,6 +327,8 @@ float:right;
     .tilecontainer{
         height:70%;
     }
+    #blurbg img{display:none;}
+    #blurbg{display:none;display:none;}
     #bg img{display:none;}
     #bg{background:#1a171a;}
 }

@@ -30,6 +30,7 @@ class Presse extends ChildPage
                     lockScrolling: true
                     revertHash: "#!/presse"
                     enableDragging: true
+                    descriptionSetting: 1
             else
                 img = $("<img>").bind("load", =>
                         @imageViewer.open
@@ -49,6 +50,7 @@ class Presse extends ChildPage
                             lockScrolling: true
                             revertHash: "#!/presse"
                             enableDragging: true
+                            descriptionSetting: 1
                     ).attr("src","/data/presse/real/#{id-1}")
 
     onDOMVisible: ->

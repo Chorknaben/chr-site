@@ -143,13 +143,16 @@ a {
             .next-month{
                 color:gray;
             }
+            .last-month{
+                color:gray;
+            }
             .today{
                 background:#4B77BE;
             }
             .event{
                 cursor:pointer;
                 .day-number{
-                    border-bottom:2px solid #40c07e;
+                    border-bottom:3px solid #40c07e;
                 }
             }
             .event:hover{
@@ -230,6 +233,19 @@ a {
     -webkit-transition: opacity 0.2s ease .75s;
     -moz-transition: opacity 0.2s ease .75s;
     transition: opacity 0.2s ease .75s;
+}
+
+#content-viewer-exit-button{
+    position: absolute;
+    right: 50px;
+    top: 30px;
+    img {
+        width:45px;
+        cursor:pointer;
+    }
+    img:hover{
+        opacity:0.9;
+    }
 }
 
 #subpage-header{
