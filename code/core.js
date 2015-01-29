@@ -418,6 +418,11 @@ IndexPage = (function(_super) {
         opacity: "1",
         background: "initial"
       });
+      if (window.mobile) {
+        $("#bg").css({
+          background: "#1a171a"
+        });
+      }
       if (window.ie) {
         return $("#bg")[0].style.filter = "alpha(opacity=100)";
       }

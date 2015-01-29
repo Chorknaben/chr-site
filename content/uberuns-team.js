@@ -8,24 +8,10 @@ UberunsTeam = (function(_super) {
 
   function UberunsTeam() {
     UberunsTeam.__super__.constructor.call(this);
-    this.linkIDMapper = [["johannes", 0], ["lechner", 1], ["noah", 2], ["orga", 3], ["clt", 4]];
+    this.linkIDMapper = [["johannes", 0], ["lechner", 1], ["noah", 2], ["orga", 3], ["clt", 4], ["choristen", 5]];
   }
 
   UberunsTeam.clickedPreviously = null;
-
-  UberunsTeam.prototype.onLoad = function() {
-    return $(".reise-tile").hover(function() {
-      return setTimeout((function(_this) {
-        return function() {
-          if ($(_this).mouseIsOver()) {
-            return window.location.hash = $(_this).children("a").attr("href");
-          }
-        };
-      })(this), 350);
-    });
-  };
-
-  UberunsTeam.prototype.onUnloadChild = function() {};
 
   UberunsTeam.prototype.notifyHashChange = function(newHash) {
     var el, _i, _len, _ref;

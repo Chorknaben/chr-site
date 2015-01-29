@@ -1249,7 +1249,7 @@ float:right;
     }
 }
 
-@media screen and (max-width: 1177px) and (min-width: 940px) {
+@media screen and (max-width: 1177px) {
     .stdtile{
         width:275px;
     }
@@ -1287,7 +1287,6 @@ float:right;
     .right{
         display:block;
         width:815px;
-        width:815px;
     }
     .tilecontainer{
         height:60%;
@@ -1302,7 +1301,6 @@ float:right;
     .right #controls{
         border-right:none;
         p{
-            background:black;
             background:black;
         }
     }
@@ -1353,7 +1351,7 @@ float:right;
         height:70%;
     }
     #blurbg img{display:none;}
-    #blurbg{display:none;}
+    #blurbg{display:none;display:none;}
     #bg img{display:none;}
     #bg{background:#1a171a;}
 }
@@ -1949,9 +1947,9 @@ div .btngreen:hover{
 
 // versteckte fragmente
 #prettymargin{
-    margin: 100px 0 0 50px;
-    text-align:justify;
-    width:60%;
+    margin: 100px 20px 0 50px;
+    text-align:left;
+    width:90%;
 }
 #bitches{
     font-size: 3em;
@@ -2183,6 +2181,10 @@ div .btngreen:hover{
     background:url(/img/noah.jpg) center center;
 }
 
+.img-clt{
+    background:url(/img/clt.jpg) center center;
+}
+
 .reise-tile .after-transition{
     position:absolute;
     color:white;
@@ -2202,9 +2204,11 @@ div .btngreen:hover{
 
 .reise-tile .close{
     position:absolute;
-    top:34px;
-    right:50px;
-    color:#4B77BE;
+    right:10px;
+    top:30px;
+    img{
+        width:25px;
+    }
 
 }
 
@@ -2357,11 +2361,17 @@ div .btngreen:hover{
         right:0;
         float:none;
    } 
+   .reise-tile:last-child{
+        margin-bottom:100px;
+   }
    .timeline{
         display:block;
    }
+   .text-tile{
+        display:block;
+        win-width:210px;
+   }
    .spanien{
-        margin-bottom:100px;
    }
    #uberuns-team .reise-tile{
         display:block;
@@ -2476,12 +2486,16 @@ line-height:25px;
 }
 
 @media screen and (max-width:1360px){
-    .abs-cnt{
-        width:540px;
-    }
     .unterstutzen-tile{
         width:100%;
         margin-bottom:10px;
+    }
+    #heading-takt{
+        font-size: 0.90em;
+        margin-top: 5px;
+    }
+    #cnt-boost{
+        font-size:0.95em;
     }
 }
 

@@ -11,22 +11,10 @@ class UberunsTeam extends ChildPage
           , ["lechner", 1]
           , ["noah", 2]
           , ["orga", 3]
-          , ["clt", 4]]
+          , ["clt", 4]
+          , ["choristen", 5]]
 
         @clickedPreviously = null
-
-    onLoad: ->
-        # However, we still attach hover events to every element in order
-        # to retain consistency with the rest of uberuns.
-        $(".reise-tile").hover( ->
-            setTimeout(=>
-                if $(this).mouseIsOver()
-                    window.location.hash = $(this).children("a").attr("href")
-            , 350)
-        )
-        
-
-    onUnloadChild: ->
 
     notifyHashChange: (newHash) ->
         for el in @linkIDMapper

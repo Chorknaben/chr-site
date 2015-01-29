@@ -1319,7 +1319,7 @@ td {
           filter: opacity(0);
 }
 
-@media screen and (max-width: 1177px) and (min-width: 940px) {
+@media screen and (max-width: 1177px) {
   .stdtile {
     width: 275px;
   }
@@ -2068,9 +2068,9 @@ div .btngreen:hover {
 }
 
 #prettymargin {
-  width: 60%;
-  margin: 100px 0 0 50px;
-  text-align: justify;
+  width: 90%;
+  margin: 100px 20px 0 50px;
+  text-align: left;
 }
 
 #bitches {
@@ -2319,6 +2319,10 @@ div .btngreen:hover {
   background: url(/img/noah.jpg) center center;
 }
 
+.img-clt {
+  background: url(/img/clt.jpg) center center;
+}
+
 .reise-tile .after-transition {
   position: absolute;
   top: 0;
@@ -2340,9 +2344,12 @@ div .btngreen:hover {
 
 .reise-tile .close {
   position: absolute;
-  top: 34px;
-  right: 50px;
-  color: #4B77BE;
+  top: 30px;
+  right: 10px;
+}
+
+.reise-tile .close img {
+  width: 25px;
 }
 
 .reise-tile .invisible {
@@ -2495,11 +2502,15 @@ div .btngreen:hover {
     margin-top: 10px;
     overflow: auto;
   }
+  .reise-tile:last-child {
+    margin-bottom: 100px;
+  }
   .timeline {
     display: block;
   }
-  .spanien {
-    margin-bottom: 100px;
+  .text-tile {
+    display: block;
+    win-width: 210px;
   }
   #uberuns-team .reise-tile {
     display: block;
@@ -2616,11 +2627,15 @@ div .btngreen:hover {
 }
 
 @media screen and (max-width: 1360px) {
-  .abs-cnt {
-    width: 540px;
-  }
   .unterstutzen-tile {
     width: 100%;
     margin-bottom: 10px;
+  }
+  #heading-takt {
+    margin-top: 5px;
+    font-size: 0.90em;
+  }
+  #cnt-boost {
+    font-size: 0.95em;
   }
 }

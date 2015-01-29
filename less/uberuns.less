@@ -103,9 +103,10 @@
 
 // versteckte fragmente
 #prettymargin{
-    margin: 100px 0 0 50px;
-    text-align:justify;
-    width:60%;
+    margin: 100px 20px 0 50px;
+    text-align:left;
+    text-align:left;
+    width:90%;
 }
 #bitches{
     font-size: 3em;
@@ -337,6 +338,10 @@
     background:url(/img/noah.jpg) center center;
 }
 
+.img-clt{
+    background:url(/img/clt.jpg) center center;
+}
+
 .reise-tile .after-transition{
     position:absolute;
     color:white;
@@ -356,9 +361,11 @@
 
 .reise-tile .close{
     position:absolute;
-    top:34px;
-    right:50px;
-    color:#4B77BE;
+    right:10px;
+    top:30px;
+    img{
+        width:25px;
+    }
 
 }
 
@@ -511,11 +518,17 @@
         right:0;
         float:none;
    } 
+   .reise-tile:last-child{
+        margin-bottom:100px;
+   }
    .timeline{
         display:block;
    }
+   .text-tile{
+        display:block;
+        win-width:210px;
+   }
    .spanien{
-        margin-bottom:100px;
    }
    #uberuns-team .reise-tile{
         display:block;
