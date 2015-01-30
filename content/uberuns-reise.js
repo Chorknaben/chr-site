@@ -22,7 +22,7 @@ UberunsReise = (function(_super) {
         title: "&Ouml;sterreich &amp; Ungarn",
         caption: "Konzertreise 2012",
         textID: "#osterreich",
-        linkBilder: -1,
+        linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2012",
         thumbnail: "/img/ungarn.jpg"
       },
       r2: {
@@ -30,7 +30,7 @@ UberunsReise = (function(_super) {
         caption: "Konzertreise 2013",
         textID: "#deutschland",
         thumbnail: "/img/deutschland.jpg",
-        linkBilder: -1
+        linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2013"
       },
       r3: {
         title: "Spanien",

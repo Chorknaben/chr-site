@@ -2,7 +2,8 @@
 var ChildPage, Constants, ContentViewer, Core, ImageViewer, IndexPage, Navigation, Tile,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __slice = [].slice;
 
 Constants = (function() {
   function Constants() {}
@@ -62,6 +63,13 @@ Core = (function() {
       this.raiseIndexPage();
       this.delegateChildPage("", "#!/kalender");
       return;
+    }
+    if (!$(".content-viewer").hasClass("nodisplay")) {
+      this.requestFunction("ContentViewer.close", (function(_this) {
+        return function(funcPtr) {
+          return funcPtr(-1, true);
+        };
+      })(this));
     }
     matching = this.resolveLocator(hash);
     switch (matching.msg) {
@@ -405,6 +413,7 @@ IndexPage = (function(_super) {
     this.initNavDropDown();
     this.initNewsRotator();
     this.imgRotator(10000);
+    this.initFeedback();
     return this.c.exportFunction("ImgRotator.pauseImgRotator", this.pauseImgRotator);
   };
 
@@ -781,6 +790,71 @@ IndexPage = (function(_super) {
     }
   };
 
+  IndexPage.prototype.needBeComplete = function() {
+    var i, text, _i, _len;
+    text = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    for (_i = 0, _len = text.length; _i < _len; _i++) {
+      i = text[_i];
+      if (i === "") {
+        $(".submit").css({
+          "background-color": "red"
+        });
+        $(".submit").val("Alle Felder ausfüllen.");
+        return false;
+      }
+    }
+    return true;
+  };
+
+  IndexPage.prototype.validateEmail = function(email) {
+    var re;
+    re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(email)) {
+      $(".submit").css({
+        "background-color": "red"
+      });
+      $(".submit").val("Korrekte E-Mail angeben.");
+      return false;
+    }
+    return true;
+  };
+
+  IndexPage.prototype.initFeedback = function() {
+    return $(".submit").click((function(_this) {
+      return function(ev) {
+        var feedbacktype, mail, name, text;
+        ev.stopPropagation();
+        ev.preventDefault();
+        name = $(".feedbackform .name").val();
+        mail = $(".feedbackform .email").val();
+        feedbacktype = $('.feedbackform .option').find(":selected").attr("value");
+        text = $(".feedbackform textarea").val();
+        if (!_this.needBeComplete(name, mail, text)) {
+          return;
+        }
+        if (!_this.validateEmail(mail)) {
+          return;
+        }
+        return $.post("/feedback", {
+          email: mail,
+          name: name,
+          feedbacktype: feedbacktype,
+          text: text
+        }, function(data) {
+          console.log(data);
+          if (data.indexOf("OK") === 0) {
+            $("input").val("");
+            $("textarea").val("");
+            $(".feedbackform .submit").css({
+              "background-color": "green"
+            });
+            return $(".feedbackform .submit").attr("value", "OK. Danke!");
+          }
+        });
+      };
+    })(this));
+  };
+
   return IndexPage;
 
 })(ChildPage);
@@ -885,6 +959,7 @@ ContentViewer = (function() {
     this.open = __bind(this.open, this);
     this.core = window.core;
     this.contentObj = null;
+    this.core.exportFunction("ContentViewer.close", this.close);
   }
 
   ContentViewer.prototype.open = function(contentObj) {
@@ -892,6 +967,9 @@ ContentViewer = (function() {
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
     this.contentObj = contentObj;
+    $cnt.css({
+      "background": "#1a171a"
+    });
     this.ensureNoDuplicates();
     if (!this.contentObj.height) {
       this.contentObj.height = function() {
@@ -900,6 +978,11 @@ ContentViewer = (function() {
     }
     if (this.contentObj.scrollTo) {
       $.scrollTo(this.contentObj.scrollTo.offset().top - this.contentObj.top(), 500);
+    }
+    if (this.contentObj.bgColor) {
+      $cnt.css({
+        "background": this.contentObj.bgColor
+      });
     }
     $cnt.removeClass("nodisplay");
     if (this.contentObj.animate) {
@@ -969,8 +1052,11 @@ ContentViewer = (function() {
     });
   };
 
-  ContentViewer.prototype.close = function(revertHash) {
+  ContentViewer.prototype.close = function(revertHash, noAnimationOverride) {
     var $cnt;
+    if (noAnimationOverride == null) {
+      noAnimationOverride = false;
+    }
     $cnt = $(".content-viewer");
     console.log("contentViewer: close");
     $("#content-viewer-exit-button").addClass("nodisplay");
@@ -987,7 +1073,7 @@ ContentViewer = (function() {
       this.core.registerTaker("dontHandle", true);
       window.location.hash = revertHash;
     }
-    if (this.contentObj.animate) {
+    if (this.contentObj.animate && !noAnimationOverride) {
       $cnt.css({
         left: this.contentObj.startingPos.left,
         width: this.contentObj.startingPos.width,
@@ -1063,7 +1149,7 @@ ImageViewer = (function() {
     this.close = __bind(this.close, this);
     this.open = __bind(this.open, this);
     this.state = this.CLOSED;
-    window.core.exportFunction("ImageViewer.forceClose", this.close);
+    window.core.exportFunction("ContentViewer.forceClose", this.close);
   }
 
   ImageViewer.prototype.open = function(conf) {

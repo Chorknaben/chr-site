@@ -8,7 +8,11 @@ Uberuns = (function(_super) {
 
   function Uberuns() {
     this.core = window.core;
-    this.core.state["uberuns-doesnothing"] = true;
+    window.core.requestFunction("ContentViewer.requestInstance", (function(_this) {
+      return function(cView) {
+        return _this.contentViewer = cView();
+      };
+    })(this));
   }
 
   Uberuns.prototype.onDOMVisible = function() {
@@ -23,11 +27,41 @@ Uberuns = (function(_super) {
     });
   };
 
-  Uberuns.prototype.notifyHashChange = function(newHash) {};
+  Uberuns.prototype.notifyHashChange = function(newHash) {
+    var hRef, oRef, wRef;
+    hRef = $(".hiddentext").height();
+    wRef = $(".hiddentext").width();
+    oRef = $(".hiddentext").offset();
+    if (newHash === "/chorknabe-werden") {
+      return this.contentViewer.open({
+        left: function() {
+          return oRef.left;
+        },
+        top: function() {
+          return oRef.top;
+        },
+        width: function() {
+          return wRef;
+        },
+        height: function() {
+          return hRef;
+        },
+        chapter: false,
+        bgColor: "#4b77be",
+        title: "Chorknabe werden.",
+        caption: "",
+        revertHash: "#!/uberuns/",
+        content: $("#chorknabe-werden").html()
+      });
+    }
+  };
 
   Uberuns.prototype.onLoad = function() {
     $(".hiddentext").addClass("visible");
     $(".icon-container").click(function(event) {
+      if (!$(".content-viewer").hasClass("nodisplay")) {
+        this.contentViewer.close(-1, true);
+      }
       $("#uberuns").css({
         "margin-left": -($(window).width() * 0.06 + $(".deadcenter").width() - 50)
       });

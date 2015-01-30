@@ -1,7 +1,8 @@
 class Uberuns extends ChildPage
     constructor: ->
         @core = window.core
-        @core.state["uberuns-doesnothing"] = true
+        window.core.requestFunction "ContentViewer.requestInstance",
+            (cView) => @contentViewer = cView()
 
     onDOMVisible: ->
         #if window.ie
@@ -10,6 +11,21 @@ class Uberuns extends ChildPage
             $(".ie8-fallback-tile").css display:"initial"
 
     notifyHashChange: (newHash) ->
+        hRef = $(".hiddentext").height()
+        wRef = $(".hiddentext").width()
+        oRef = $(".hiddentext").offset()
+        if newHash == "/chorknabe-werden"
+            @contentViewer.open
+                left:   -> oRef.left
+                top:    -> oRef.top
+                width:  -> wRef
+                height: -> hRef
+                chapter: false
+                bgColor: "#4b77be"
+                title: "Chorknabe werden."
+                caption: ""
+                revertHash: "#!/uberuns/"
+                content: $("#chorknabe-werden").html()
 
     onLoad: ->
         # User accesses information text mainly by hovering over the image
@@ -18,6 +34,10 @@ class Uberuns extends ChildPage
         # We're going to to a little animation with these buttons,
         # so attach onclick events to them
         $(".icon-container").click (event) ->
+            if not $(".content-viewer").hasClass("nodisplay")
+                # ContentViewer still open
+                @contentViewer.close(-1, true)
+
             $("#uberuns").css {"margin-left" : - ( $(window).width() * 0.06 + $(".deadcenter").width() - 50 )}
             setTimeout( =>
                 location.hash = $(this).attr("href")

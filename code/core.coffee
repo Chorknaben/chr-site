@@ -57,6 +57,13 @@ class Core
             @delegateChildPage("", "#!/kalender")
             return
 
+        # ContentViewer is still open as it will stay open
+        # while loading the next page. force close it
+        if not $(".content-viewer").hasClass("nodisplay")
+            @requestFunction "ContentViewer.close", (funcPtr) =>
+                funcPtr(-1, true)
+
+
         # Top priority: test if Hash can be resolved to a route.
         # Only the relevant part, that is, everything after #!/ will
         # be tested for being a route.
@@ -333,6 +340,8 @@ class IndexPage extends ChildPage
         @initNewsRotator()
         @imgRotator(10000)
 
+        @initFeedback()
+
         @c.exportFunction("ImgRotator.pauseImgRotator", @pauseImgRotator)
 
 
@@ -580,6 +589,54 @@ class IndexPage extends ChildPage
         if @contentViewerOpen
             @contentViewer.close("#!/")
 
+    needBeComplete: (text...) ->
+        for i in text
+            if i == ""
+                $(".submit").css "background-color":"red"
+                $(".submit").val("Alle Felder ausfüllen.")
+                return false
+        return true
+
+    validateEmail: (email) ->
+        re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if not re.test email
+            $(".submit").css "background-color":"red"
+            $(".submit").val("Korrekte E-Mail angeben.")
+            return false
+        return true
+
+
+    initFeedback: ->
+
+        $(".submit").click (ev) =>
+            ev.stopPropagation()
+            ev.preventDefault()
+
+            name = $(".feedbackform .name").val()
+            mail = $(".feedbackform .email").val()
+            feedbacktype = $('.feedbackform .option').find(":selected").attr("value");
+            text = $(".feedbackform textarea").val()
+
+            if not @needBeComplete(name,mail,text)
+                return
+                
+            if not @validateEmail(mail)
+                return
+
+            $.post "/feedback", 
+                 email: mail
+                 name: name
+                 feedbacktype: feedbacktype
+                 text: text
+                 , (data) ->
+                    console.log(data)
+                    if data.indexOf("OK") == 0
+                        $("input").val("")
+                        $("textarea").val("")
+                        $(".feedbackform .submit").css "background-color":"green"
+                        $(".feedbackform .submit").attr("value", "OK. Danke!")
+
+
 class Navigation
     @preState = null
     constructor: (element) ->
@@ -641,11 +698,16 @@ class ContentViewer
         @core = window.core
         @contentObj = null
 
+        @core.exportFunction "ContentViewer.close", @close
+
     open: (contentObj) =>
         $cnt = $(".content-viewer")
         console.log "contentViewer: open"
 
         @contentObj = contentObj
+
+        # Reset background
+        $cnt.css "background" : "#1a171a"
 
         @ensureNoDuplicates()
 
@@ -654,6 +716,9 @@ class ContentViewer
 
         if @contentObj.scrollTo
             $.scrollTo(@contentObj.scrollTo.offset().top-@contentObj.top(), 500)
+
+        if @contentObj.bgColor
+            $cnt.css "background" : @contentObj.bgColor
 
         $cnt.removeClass("nodisplay")
         if @contentObj.animate
@@ -722,7 +787,7 @@ class ContentViewer
             height: @contentObj.height()
             
 
-    close: (revertHash) =>
+    close: (revertHash, noAnimationOverride=false) =>
         $cnt = $(".content-viewer")
         console.log "contentViewer: close"
 
@@ -740,7 +805,7 @@ class ContentViewer
             @core.registerTaker("dontHandle", true)
             window.location.hash = revertHash
 
-        if @contentObj.animate
+        if @contentObj.animate and not noAnimationOverride
             # revert contentViewer to original position
             $cnt.css
                 left: @contentObj.startingPos.left
@@ -800,7 +865,7 @@ class ImageViewer
     OPEN:   0x01
     constructor: ->
         @state = @CLOSED
-        window.core.exportFunction "ImageViewer.forceClose",
+        window.core.exportFunction "ContentViewer.forceClose",
             @close
 
     open: (conf) =>
