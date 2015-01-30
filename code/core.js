@@ -959,11 +959,13 @@ ContentViewer = (function() {
     this.open = __bind(this.open, this);
     this.core = window.core;
     this.contentObj = null;
+    this.OPEN = false;
     this.core.exportFunction("ContentViewer.close", this.close);
   }
 
   ContentViewer.prototype.open = function(contentObj) {
     var $cnt, pos;
+    this.OPEN = true;
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
     this.contentObj = contentObj;
@@ -1093,7 +1095,8 @@ ContentViewer = (function() {
               opacity: 0
             });
             window.location.hash = revertHash;
-            return _this.reset();
+            _this.reset();
+            return _this.OPEN = false;
           }, 400);
         };
       })(this), 600);
@@ -1119,7 +1122,7 @@ ContentViewer = (function() {
   };
 
   ContentViewer.prototype.ensureNoDuplicates = function() {
-    if (!$(".content-viewer").hasClass("nodisplay")) {
+    if (!$(".content-viewer").hasClass("nodisplay") || this.OPEN) {
       console.log("Contentviewer: Duplicate Instance detected. Closing.");
       this.contentObj.animate = false;
       return this.close(-1);

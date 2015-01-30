@@ -697,10 +697,12 @@ class ContentViewer
     constructor: ->
         @core = window.core
         @contentObj = null
+        @OPEN = false
 
         @core.exportFunction "ContentViewer.close", @close
 
     open: (contentObj) =>
+        @OPEN = true
         $cnt = $(".content-viewer")
         console.log "contentViewer: open"
 
@@ -825,6 +827,7 @@ class ContentViewer
                     $(".content-viewer-padding").css opacity:0
                     window.location.hash = revertHash
                     @reset()
+                    @OPEN = false
                 , 400)
             , 600)
                 
@@ -849,7 +852,7 @@ class ContentViewer
     ensureNoDuplicates: ->
         # Is another Contentviewer open?
         # If so, we must take several precautions and reset the Contentviewers DOM
-        if not $(".content-viewer").hasClass("nodisplay")
+        if not $(".content-viewer").hasClass("nodisplay") or @OPEN
             console.log "Contentviewer: Duplicate Instance detected. Closing."
             @contentObj.animate = false
             @close(-1)
