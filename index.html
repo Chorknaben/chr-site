@@ -83,10 +83,10 @@
 <body>
 
 <div id="bg"></div>
-<div itemscope itemtype="http://schema.org/Organization" class="header" id="hMain">
+<div class="header" id="hMain">
     <div class="imgcontainer">
         <a href="#!/">
-            <img itemprop="logo" id="header-img" width="40" height="40" src="img/header-icon.jpg"/>
+            <img src="/img/header-icon.jpg" id="header-img" width="40" height="40" />
         </a>
     </div>
     <a itemprop="name" class="ctitle" href="#!/">
@@ -264,6 +264,8 @@
                     <span itemprop="streetAddress">Kirchplatz 4</span><br>
                     <span itemprop="addressLocality">88400 Biberach</span><br>
                 </div>
+                <img src="/img/header-icon.jpg" itemprop="logo" />
+                <span itemprop="url" content="http://chorknaben-biberach.de"></span>
                 <table>
                     <tr>
                         <td>Telefon</td><td>Fax</td><td>E-Mail</td>
@@ -311,14 +313,12 @@
     </div>
 </div>
 <div itemprop="location">
-  <span itemscope itemtype="http://schema.org/Place">
     <div itemprop="geo">
       <span itemscope itemtype="http://schema.org/GeoCoordinates">
-        <span property="latitude" content="48.0989177"></span>
-        <span property="longitude" content="9.7896049"></span>
+        <meta itemprop="latitude" content="48.0989177" />
+        <meta itemprop="longitude" content="9.7896049" />
       </span>
     </div>
-  </span>
 </div>
 <div class="content-viewer nodisplay">
     <div class="nodisplay" id="content-viewer-exit-button">
