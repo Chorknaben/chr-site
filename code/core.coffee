@@ -57,13 +57,6 @@ class Core
             @delegateChildPage("", "#!/kalender")
             return
 
-        # ContentViewer is still open as it will stay open
-        # while loading the next page. force close it
-        if not $(".content-viewer").hasClass("nodisplay")
-            @requestFunction "ContentViewer.close", (funcPtr) =>
-                funcPtr(-1, true)
-
-
         # Top priority: test if Hash can be resolved to a route.
         # Only the relevant part, that is, everything after #!/ will
         # be tested for being a route.
@@ -105,7 +98,12 @@ class Core
                         # Child page is already loaded
                         @delegateChildPage(route, usefulHash)
                     else
-                        #@ensureImageViewerClosed()
+                        # When the user clicks on another link on the page before properly
+                        # exiting the ContentViewer, we'll have to close it manually.
+                        # TODO: test if still required
+                        if not $(".content-viewer").hasClass("nodisplay")
+                            @requestFunction "ContentViewer.close", (funcPtr) =>
+                                funcPtr(-1, true)
                         @requestFunction "Tile.load", (load) =>
                             load route, true, =>
                                 @delegateChildPage(route, usefulHash)
@@ -702,16 +700,18 @@ class ContentViewer
         @core.exportFunction "ContentViewer.close", @close
 
     open: (contentObj) =>
+        @ensureNoDuplicates()
+
         @OPEN = true
+
         $cnt = $(".content-viewer")
         console.log "contentViewer: open"
 
         @contentObj = contentObj
 
-        # Reset background
-        $cnt.css "background" : "#1a171a"
+        # Reset Style
+        $cnt.attr("style", "")
 
-        @ensureNoDuplicates()
 
         if not @contentObj.height
             @contentObj.height = -> "initial"
@@ -899,10 +899,6 @@ class ImageViewer
                 # An Indicator that there arent any more Pics available can be added HERE!!!
                 $(".arrright").attr "href", @conf.toRightHash(@currentEl-1)
         
-        if @conf.arrowKeys and @conf.navigation
-            # set up left and right arrow keys
-            $(window).on("keydown", @imageViewerKeyPress)
-
         #lock scrolling
         if @conf.lockScrolling
             @currentScrollPos = $(window).scrollTop()
@@ -1011,24 +1007,7 @@ class ImageViewer
         $("body").css
         @timeout = setTimeout(=>
             $(".bar").addClass("fade")
-        , 2000)
-
-    imageViewerKeyPress: (ev) =>
-        keyCode = ev.keyCode
-        # left arrow press
-        if keyCode is 37 and @currentEl > @conf.minImage
-            if @conf.nextChapterScreen
-                if @conf.positionInChapter == "1"
-                    location.hash = "#!/bilder/kategorie/#{@conf.chapterID}"
-            else
-                location.hash = @conf.toLeftHash(@currentEl)
-        # right arrow press
-        if keyCode is 39 and @currentEl < @conf.maxImage 
-            if @conf.nextChapterScreen
-                if @conf.positionInChapter == @conf.chapterTotalLength
-                    location.hash = "#!/bilder/kategorie/#{@conf.chapterID+1}"
-            else
-                location.hash = @conf.toRightHash(@currentEl)
+        , 3500)
 
 
 class Tile

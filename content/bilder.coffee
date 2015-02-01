@@ -17,8 +17,6 @@ class Bilder extends ChildPage
         @core.requestFunction "ImageViewer.requestInstance",
             (imgView) => @imageViewer = imgView()
 
-    isCategory: (newHash) ->
-
     notifyHashChange: (newHash) ->
         # Bilder hat 2 Funktionen: /element/ und /category/.
         # Beide können in externen Links oder als onclick-events
@@ -99,7 +97,7 @@ class Bilder extends ChildPage
                 @imageViewer.close()
 
             # Für den Fall, die Kategorie wird extern aufgerufen
-            @adjustPos()
+            #@adjustPos()
 
             # Positionierungsvariablen
             rightElem = @findRightMost()
@@ -129,7 +127,7 @@ class Bilder extends ChildPage
                 $(".arrleft").removeClass("arrow-inactive")
 
                 previousAttr = chapter.prev().attr("href")
-                $(".arrleft").attr("href", previousAttr)
+                $(".arrleft").attr("href", previousAttr.substring(1))
             else
                 $(".arrleft").addClass("arrow-inactive")
 
@@ -137,7 +135,7 @@ class Bilder extends ChildPage
                 $(".arrleft").removeClass("arrow-inactive")
 
                 nextAttr = chapter.next().attr("href")
-                $(".arrright").attr("href", nextAttr)
+                $(".arrright").attr("href", nextAttr.substring(1))
             else
                 $("arrleft").addClass("arrow-inactive")
 
@@ -208,7 +206,6 @@ class Bilder extends ChildPage
                 for i in [((@currentLoadingIndex-1) * @loadNumImageInBatch)..(@currentLoadingIndex*@loadNumImageInBatch)]
                     console.log i
                     $(".img-image").eq(i).children("img").attr("src","/images/thumbs/#{i}")
-                console.log "triggered"
 
         # Inhalte Generieren.
         $.ajax({
@@ -228,10 +225,26 @@ class Bilder extends ChildPage
     onDOMVisible: ->
         @adjustPos()
         $(window).on("resize", @adjustPos)
+        $("body").on "keydown", (ev) =>
+            if $("#arrow-container").hasClass("nodisplay")
+                # User has not yet initialized ImageViewer at least once.
+                # Maybe start with first one here.
+                return
+            if ev.keyCode == 37
+                # Left
+                if not $(".content-viewer").hasClass("nodisplay")
+                    @contentViewer.close(-1)
+                location.hash = $(".arrleft").attr("href")
+            else if ev.keyCode == 39
+                # Right
+                if not $(".content-viewer").hasClass("nodisplay")
+                    @contentViewer.close(-1)
+                location.hash = $(".arrright").attr("href")
 
     onUnloadChild: ->
         $(window).off("resize", @adjustPos)
         $(".image-viewer").addClass("nodisplay")
+        $("body").off("keydown")
 
 
     adjustPos: =>

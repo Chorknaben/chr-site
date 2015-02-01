@@ -64,13 +64,6 @@ Core = (function() {
       this.delegateChildPage("", "#!/kalender");
       return;
     }
-    if (!$(".content-viewer").hasClass("nodisplay")) {
-      this.requestFunction("ContentViewer.close", (function(_this) {
-        return function(funcPtr) {
-          return funcPtr(-1, true);
-        };
-      })(this));
-    }
     matching = this.resolveLocator(hash);
     switch (matching.msg) {
       case "match":
@@ -101,6 +94,11 @@ Core = (function() {
             if ($(".scrolled").attr("id") === route) {
               return _this.delegateChildPage(route, usefulHash);
             } else {
+              if (!$(".content-viewer").hasClass("nodisplay")) {
+                _this.requestFunction("ContentViewer.close", function(funcPtr) {
+                  return funcPtr(-1, true);
+                });
+              }
               return _this.requestFunction("Tile.load", function(load) {
                 return load(route, true, function() {
                   return _this.delegateChildPage(route, usefulHash);
@@ -965,14 +963,12 @@ ContentViewer = (function() {
 
   ContentViewer.prototype.open = function(contentObj) {
     var $cnt, pos;
+    this.ensureNoDuplicates();
     this.OPEN = true;
     $cnt = $(".content-viewer");
     console.log("contentViewer: open");
     this.contentObj = contentObj;
-    $cnt.css({
-      "background": "#1a171a"
-    });
-    this.ensureNoDuplicates();
+    $cnt.attr("style", "");
     if (!this.contentObj.height) {
       this.contentObj.height = function() {
         return "initial";
@@ -1147,7 +1143,6 @@ ImageViewer = (function() {
   ImageViewer.prototype.OPEN = 0x01;
 
   function ImageViewer() {
-    this.imageViewerKeyPress = __bind(this.imageViewerKeyPress, this);
     this.fadeOutInfo = __bind(this.fadeOutInfo, this);
     this.close = __bind(this.close, this);
     this.open = __bind(this.open, this);
@@ -1181,9 +1176,6 @@ ImageViewer = (function() {
       } else {
         $(".arrright").attr("href", this.conf.toRightHash(this.currentEl - 1));
       }
-    }
-    if (this.conf.arrowKeys && this.conf.navigation) {
-      $(window).on("keydown", this.imageViewerKeyPress);
     }
     if (this.conf.lockScrolling) {
       this.currentScrollPos = $(window).scrollTop();
@@ -1289,30 +1281,7 @@ ImageViewer = (function() {
       return function() {
         return $(".bar").addClass("fade");
       };
-    })(this), 2000);
-  };
-
-  ImageViewer.prototype.imageViewerKeyPress = function(ev) {
-    var keyCode;
-    keyCode = ev.keyCode;
-    if (keyCode === 37 && this.currentEl > this.conf.minImage) {
-      if (this.conf.nextChapterScreen) {
-        if (this.conf.positionInChapter === "1") {
-          location.hash = "#!/bilder/kategorie/" + this.conf.chapterID;
-        }
-      } else {
-        location.hash = this.conf.toLeftHash(this.currentEl);
-      }
-    }
-    if (keyCode === 39 && this.currentEl < this.conf.maxImage) {
-      if (this.conf.nextChapterScreen) {
-        if (this.conf.positionInChapter === this.conf.chapterTotalLength) {
-          return location.hash = "#!/bilder/kategorie/" + (this.conf.chapterID + 1);
-        }
-      } else {
-        return location.hash = this.conf.toRightHash(this.currentEl);
-      }
-    }
+    })(this), 3500);
   };
 
   return ImageViewer;

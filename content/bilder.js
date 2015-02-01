@@ -31,8 +31,6 @@ Bilder = (function(_super) {
     })(this));
   }
 
-  Bilder.prototype.isCategory = function(newHash) {};
-
   Bilder.prototype.notifyHashChange = function(newHash) {
     var cTitle, category, chapter, chapterID, counter, el, elem, firstChapt, id, image, inTitle, nextAttr, previousAttr, rightElem, rightPt, _i, _j, _len, _len1, _ref, _ref1;
     if (newHash.indexOf("/element/") === 0) {
@@ -110,7 +108,6 @@ Bilder = (function(_super) {
       if (this.imageViewer.state === this.imageViewer.OPEN) {
         this.imageViewer.close();
       }
-      this.adjustPos();
       rightElem = this.findRightMost();
       rightPt = rightElem.offset().left + rightElem.width();
       firstChapt = $(".image-container").children().eq(0).offset();
@@ -136,14 +133,14 @@ Bilder = (function(_super) {
       if (chapterID !== 0) {
         $(".arrleft").removeClass("arrow-inactive");
         previousAttr = chapter.prev().attr("href");
-        $(".arrleft").attr("href", previousAttr);
+        $(".arrleft").attr("href", previousAttr.substring(1));
       } else {
         $(".arrleft").addClass("arrow-inactive");
       }
       if (chapterID !== this.catCount) {
         $(".arrleft").removeClass("arrow-inactive");
         nextAttr = chapter.next().attr("href");
-        $(".arrright").attr("href", nextAttr);
+        $(".arrright").attr("href", nextAttr.substring(1));
       } else {
         $("arrleft").addClass("arrow-inactive");
       }
@@ -258,7 +255,7 @@ Bilder = (function(_super) {
   Bilder.prototype.onLoad = function() {
     $(window).on("scroll", (function(_this) {
       return function() {
-        var curMaxHeight, curScrPos, error, i, _i, _ref, _ref1;
+        var curMaxHeight, curScrPos, error, i, _i, _ref, _ref1, _results;
         try {
           curMaxHeight = $(".img-image").eq(_this.currentLoadingIndex * _this.loadNumImageInBatch).offset().top;
         } catch (_error) {
@@ -269,11 +266,12 @@ Bilder = (function(_super) {
         curScrPos = $(window).scrollTop() + $(window).height() - 200;
         if (curScrPos / curMaxHeight >= 0.7) {
           _this.currentLoadingIndex++;
+          _results = [];
           for (i = _i = _ref = (_this.currentLoadingIndex - 1) * _this.loadNumImageInBatch, _ref1 = _this.currentLoadingIndex * _this.loadNumImageInBatch; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
             console.log(i);
-            $(".img-image").eq(i).children("img").attr("src", "/images/thumbs/" + i);
+            _results.push($(".img-image").eq(i).children("img").attr("src", "/images/thumbs/" + i));
           }
-          return console.log("triggered");
+          return _results;
         }
       };
     })(this));
@@ -302,12 +300,31 @@ Bilder = (function(_super) {
 
   Bilder.prototype.onDOMVisible = function() {
     this.adjustPos();
-    return $(window).on("resize", this.adjustPos);
+    $(window).on("resize", this.adjustPos);
+    return $("body").on("keydown", (function(_this) {
+      return function(ev) {
+        if ($("#arrow-container").hasClass("nodisplay")) {
+          return;
+        }
+        if (ev.keyCode === 37) {
+          if (!$(".content-viewer").hasClass("nodisplay")) {
+            _this.contentViewer.close(-1);
+          }
+          return location.hash = $(".arrleft").attr("href");
+        } else if (ev.keyCode === 39) {
+          if (!$(".content-viewer").hasClass("nodisplay")) {
+            _this.contentViewer.close(-1);
+          }
+          return location.hash = $(".arrright").attr("href");
+        }
+      };
+    })(this));
   };
 
   Bilder.prototype.onUnloadChild = function() {
     $(window).off("resize", this.adjustPos);
-    return $(".image-viewer").addClass("nodisplay");
+    $(".image-viewer").addClass("nodisplay");
+    return $("body").off("keydown");
   };
 
   Bilder.prototype.adjustPos = function() {
