@@ -81,14 +81,15 @@
 </head>
 
 <body>
+
 <div id="bg"></div>
-<div class="header" id="hMain">
+<div itemscope itemtype="http://schema.org/Organization" class="header" id="hMain">
     <div class="imgcontainer">
         <a href="#!/">
-            <img id="header-img" width="40" height="40" src="img/header-icon.jpg"/>
+            <img itemprop="logo" id="header-img" width="40" height="40" src="img/header-icon.jpg"/>
         </a>
     </div>
-    <a class="ctitle" href="#!/">
+    <a itemprop="name" class="ctitle" href="#!/">
         St.-Martins-Chorknaben Biberach
     </a>
 
@@ -257,19 +258,25 @@
     <div id="feedback" class="nodisplay">
         <h1>Impressum</h1>
         <div class="impressum">
-            St.-Martins-Chorknaben Biberach<br>
-            Kirchplatz 4<br>
-            D-88400 Biberach<br>
-            <table>
-            <tr>
-            <td>Telefon</td><td>Fax</td><td>E-Mail</td>
-            </tr>
-            <tr>
-            <td>+49 (0) 7351 / 76559</td>
-            <td>+49 (0) 7351 / 76559</td>
-            <td><a class="bluelink" href="mailto:info@chorknaben-biberach.de">info@chorknaben-biberach.de</a></td>
-            </tr>
-            </table>
+            <div itemscope itemtype="http://schema.org/Organization">
+                <span itemprop="name">St.-Martins-Chorknaben Biberach</span><br>
+                <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                    <span itemprop="streetAddress">Kirchplatz 4</span><br>
+                    <span itemprop="addressLocality">88400 Biberach</span><br>
+                </div>
+                <table>
+                    <tr>
+                        <td>Telefon</td><td>Fax</td><td>E-Mail</td>
+                    </tr>
+                    <tr>
+                        <td><span itemprop="telephone">+49 (0) 7351 / 76559</span></td>
+                        <td>+49 (0) 7351 / 76559</td>
+                        <td>
+                            <a class="bluelink" href="mailto:info@chorknaben-biberach.de">info@chorknaben-biberach.de</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <br/>
             Hauptverantwortlicher: Georg Grab<br><br>
             <div class="kleingedrucktes">
@@ -303,6 +310,16 @@
         </div>
     </div>
 </div>
+<div itemprop="location">
+  <span itemscope itemtype="http://schema.org/Place">
+    <div itemprop="geo">
+      <span itemscope itemtype="http://schema.org/GeoCoordinates">
+        <span property="latitude" content="48.0989177"></span>
+        <span property="longitude" content="9.7896049"></span>
+      </span>
+    </div>
+  </span>
+</div>
 <div class="content-viewer nodisplay">
     <div class="nodisplay" id="content-viewer-exit-button">
         <img src="/img/close-thin.png" alt="Schlie&szlig;en" />
@@ -316,7 +333,7 @@
 <div class="image-viewer nodisplay">
     <div class="opacity"></div>
     <div class="bar">
-        <span id="image-title">Der Titel des Bildes</span>
+        <span id="image-title"></span>
         <p id="chapter-info">
             <span id="chapter-name">
                 <span id="chapter-name-main"></span>
