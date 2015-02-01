@@ -297,6 +297,7 @@ Core = (function() {
     }
     if (lang.indexOf("de") === -1) {
       console.log("Stub: Browser does not seem to accept de: Setting en");
+      window.currentLanguage = "en";
       return this.setLanguage(window.translationObj.en);
     }
   };

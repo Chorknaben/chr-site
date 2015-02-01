@@ -243,6 +243,7 @@ class Core
             lang = navigator.language || navigator.userLanguage
         if lang.indexOf("de") == -1
             console.log "Stub: Browser does not seem to accept de: Setting en"
+            window.currentLanguage = "en"
             @setLanguage(window.translationObj.en)
 
     updateTranslations: ->
