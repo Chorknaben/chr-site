@@ -227,6 +227,8 @@ class Core
     initializeTranslationEngine: ->
         $.getJSON "/data/json/translation_deploy.json", (data) =>
             window.translationObj = data        
+            @attemptAutoSetLanguage()
+
             $("#de").click => 
                 window.currentLanguage = "de"
                 @setLanguage(window.translationObj.de)
@@ -235,10 +237,13 @@ class Core
                 @setLanguage(window.translationObj.en)
 
     attemptAutoSetLanguage: ->
-        $.getJSON "http://ipinfo.io", (response) ->
-            if response.country isnt "DE"
-                console.log "Country: #{response.country}"
-                @setLanguage(window.translationObj.en)
+        if navigator.languages
+            lang = navigator.languages[0]
+        else
+            lang = navigator.language || navigator.userLanguage
+        if lang.indexOf("de") == -1
+            console.log "Stub: Browser does not seem to accept de: Setting en"
+            @setLanguage(window.translationObj.en)
 
     updateTranslations: ->
         if window.currentLanguage == "de"
@@ -1144,7 +1149,6 @@ $ ->
     c.insertChildPage(new IndexPage())
 
     c.initializeTranslationEngine()
-    c.attemptAutoSetLanguage()
 
     c.handleHash()
 

@@ -275,6 +275,7 @@ Core = (function() {
     return $.getJSON("/data/json/translation_deploy.json", (function(_this) {
       return function(data) {
         window.translationObj = data;
+        _this.attemptAutoSetLanguage();
         $("#de").click(function() {
           window.currentLanguage = "de";
           return _this.setLanguage(window.translationObj.de);
@@ -288,12 +289,16 @@ Core = (function() {
   };
 
   Core.prototype.attemptAutoSetLanguage = function() {
-    return $.getJSON("http://ipinfo.io", function(response) {
-      if (response.country !== "DE") {
-        console.log("Country: " + response.country);
-        return this.setLanguage(window.translationObj.en);
-      }
-    });
+    var lang;
+    if (navigator.languages) {
+      lang = navigator.languages[0];
+    } else {
+      lang = navigator.language || navigator.userLanguage;
+    }
+    if (lang.indexOf("de") === -1) {
+      console.log("Stub: Browser does not seem to accept de: Setting en");
+      return this.setLanguage(window.translationObj.en);
+    }
   };
 
   Core.prototype.updateTranslations = function() {
@@ -1465,7 +1470,6 @@ $(function() {
   c.initializeHashNavigation();
   c.insertChildPage(new IndexPage());
   c.initializeTranslationEngine();
-  c.attemptAutoSetLanguage();
   c.handleHash();
   return window.onhashchange = c.handleHash;
 });
