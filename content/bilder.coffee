@@ -111,14 +111,10 @@ class Bilder extends ChildPage
                 for category in @tree
                     cTitle = category.category.title.toLowerCase().replace(" ", "-")
                     inTitle = chapterID.substr(9, chapterID.length).toLowerCase().replace(" ", "-")
-                    console.log cTitle
-                    console.log inTitle
                     if cTitle == inTitle
                         break
                     counter++
                 chapterID = counter
-                console.log chapterID
-
 
             # Das Chapter Element
             chapter = $(".img-chapter").eq(chapterID)
@@ -127,7 +123,8 @@ class Bilder extends ChildPage
                 $(".arrleft").removeClass("arrow-inactive")
 
                 previousAttr = chapter.prev().attr("href")
-                $(".arrleft").attr("href", previousAttr.substring(1))
+                if previousAttr
+                    $(".arrleft").attr("href", previousAttr.substring(1))
             else
                 $(".arrleft").addClass("arrow-inactive")
 
@@ -135,7 +132,8 @@ class Bilder extends ChildPage
                 $(".arrleft").removeClass("arrow-inactive")
 
                 nextAttr = chapter.next().attr("href")
-                $(".arrright").attr("href", nextAttr.substring(1))
+                if nextAttr
+                    $(".arrright").attr("href", nextAttr.substring(1))
             else
                 $("arrleft").addClass("arrow-inactive")
 

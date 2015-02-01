@@ -119,28 +119,29 @@ Bilder = (function(_super) {
           category = _ref1[_j];
           cTitle = category.category.title.toLowerCase().replace(" ", "-");
           inTitle = chapterID.substr(9, chapterID.length).toLowerCase().replace(" ", "-");
-          console.log(cTitle);
-          console.log(inTitle);
           if (cTitle === inTitle) {
             break;
           }
           counter++;
         }
         chapterID = counter;
-        console.log(chapterID);
       }
       chapter = $(".img-chapter").eq(chapterID);
       if (chapterID !== 0) {
         $(".arrleft").removeClass("arrow-inactive");
         previousAttr = chapter.prev().attr("href");
-        $(".arrleft").attr("href", previousAttr.substring(1));
+        if (previousAttr) {
+          $(".arrleft").attr("href", previousAttr.substring(1));
+        }
       } else {
         $(".arrleft").addClass("arrow-inactive");
       }
       if (chapterID !== this.catCount) {
         $(".arrleft").removeClass("arrow-inactive");
         nextAttr = chapter.next().attr("href");
-        $(".arrright").attr("href", nextAttr.substring(1));
+        if (nextAttr) {
+          $(".arrright").attr("href", nextAttr.substring(1));
+        }
       } else {
         $("arrleft").addClass("arrow-inactive");
       }
