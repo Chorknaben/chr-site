@@ -287,7 +287,6 @@ body {
     height: 25px;
     display: inline;
     position: initial;
-    position: initial;
 }
 
 strong {
@@ -445,7 +444,7 @@ a {
 
     .event-listing{
         width:35%;
-        float:right;
+        display:table;
         display:table;
 
         .event-listing-title{
@@ -460,6 +459,7 @@ a {
             margin: 0 5px 5px 25px;
             padding: 5px 5px 5px 5px;
             transition: background-color 0.1s;
+            word-break: break-all;
             .event-item-name{
                 font-weight:bold;
             }
@@ -1922,7 +1922,8 @@ div .btngreen:hover{
             position:relative;
             // todo table-row
             margin-bottom:10px;
-            background-color:#1a171a;
+            background-color:#0b081c;
+            background-color:#0b081c;
             overflow:hidden;
             // img{
             //     position:absolute;
@@ -1938,6 +1939,9 @@ div .btngreen:hover{
                 bottom: 0;
                 margin: auto;
             }
+        }
+        .uberuns-active{
+            background-color:#4B77BE;
         }
     }
 }
@@ -1963,7 +1967,8 @@ div .btngreen:hover{
 .testblock{
     height:100%;
     cursor:pointer;
-    background: url("img/uberuns-uberuns.JPG") no-repeat center center;
+    background: url("img/uberuns-uberuns.JPG") no-repeat center center #4B77BE;
+    background-size: auto 100%;
     transition: opacity .35s;
 }
 
@@ -2185,6 +2190,7 @@ div .btngreen:hover{
     -webkit-transition: opacity 0.2s linear 0s;
     overflow:hidden;
     background-size:cover;
+    position:absolute;
     img{
         width:100%;
     }
@@ -2371,7 +2377,7 @@ div .btngreen:hover{
     top:0;
     width:100%;
     height:100%;
-    background-color: #1a171a;
+    background-color: #4B77BE;
     display:none;
     .ie8-fallback-cnt{
         height:55px;
@@ -2390,6 +2396,14 @@ div .btngreen:hover{
         }
     }
 }
+@media screen and (max-width:860px){
+    .ie8-fallback-tile .ie8-fallback-cnt{
+        height:30px;
+        div.ie8-fallback-text p{
+            font-size:30px;
+        }
+    }
+}
 
 @media screen and (max-width:1177px){
    .reise-tile{
@@ -2403,6 +2417,7 @@ div .btngreen:hover{
         left:0;
         right:0;
         float:none;
+        background-color:#4B77BE;
    } 
    .reise-tile:last-child{
         margin-bottom:100px;
