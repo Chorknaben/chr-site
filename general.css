@@ -2546,6 +2546,9 @@ div .btngreen:hover {
   .ie8-fallback-tile .ie8-fallback-cnt div.ie8-fallback-text p {
     font-size: 30px;
   }
+  #subpage-header {
+    font-size: 2em;
+  }
 }
 
 @media screen and (max-width: 1177px) {
