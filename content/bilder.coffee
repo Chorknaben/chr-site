@@ -97,12 +97,10 @@ class Bilder extends ChildPage
                 @imageViewer.close()
 
             # Für den Fall, die Kategorie wird extern aufgerufen
-            #@adjustPos()
 
             # Positionierungsvariablen
             rightElem = @findRightMost()
             rightPt = rightElem.offset().left + rightElem.width()
-            firstChapt = $(".image-container").children().eq(0).offset()
 
             # chapterID is either a number or a name
             chapterID = newHash.substr(11,newHash.length)
@@ -137,11 +135,13 @@ class Bilder extends ChildPage
             else
                 $("arrleft").addClass("arrow-inactive")
 
+            console.log chapter.offset()
             @contentViewer.open
-                left:  -> firstChapt.left
-                top:   -> firstChapt.top
-                right: -> $(window).width() - rightPt + 30
+                left:  -> chapter.offset().left 
+                top:   -> chapter.offset().top 
+                width: -> (chapter.width() * 2)
                 height:-> "100%"
+                bgColor: "#4B77BE"
                 scrollTo: chapter
                 title: @tree[chapterID].category.title
                 caption: @tree[chapterID].category.caption

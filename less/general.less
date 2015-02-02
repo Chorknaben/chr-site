@@ -214,7 +214,9 @@ a {
 }
 
 .content-viewer{
-    position: fixed;
+    position: absolute;
+    overflow-x:auto;
+    overflow-y:hidden;
     left: 80px;
     top: 170px;
     z-index: 5;
@@ -245,6 +247,7 @@ a {
     -webkit-transition: opacity 0.2s ease .75s;
     -moz-transition: opacity 0.2s ease .75s;
     transition: opacity 0.2s ease .75s;
+    height:100%;
 }
 
 #content-viewer-exit-button{
@@ -716,6 +719,14 @@ margin: auto;
     .feedbackform {
         top: initial;
         margin-top: 20px;
+    }
+}
+
+@media screen and (max-width:600px){
+    .header .ctitle{
+        font-size:1.3em;
+        font-size:1.3em;
+        
     }
 }
 

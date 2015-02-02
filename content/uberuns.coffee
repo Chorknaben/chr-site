@@ -11,21 +11,24 @@ class Uberuns extends ChildPage
             $(".ie8-fallback-tile").css display:"initial"
 
     notifyHashChange: (newHash) ->
-        hRef = $(".hiddentext").height()
-        wRef = $(".hiddentext").width()
-        oRef = $(".hiddentext").offset()
+        h = $(".hiddentext")
         if newHash == "/chorknabe-werden"
             @contentViewer.open
-                left:   -> oRef.left
-                top:    -> oRef.top
-                width:  -> wRef
-                height: -> hRef
+                left:   -> h.offset().left
+                top:    -> h.offset().top
+                width:  -> h.width()
+                height: -> h.height()
+                minWidth: -> "500px"
                 chapter: false
                 bgColor: "#4b77be"
                 title: "Chorknabe werden."
                 caption: ""
                 revertHash: "#!/uberuns/"
                 content: $("#chorknabe-werden").html()
+
+    getDimText: ->
+        h = $(".hiddentext")
+        return [h.height(), h.width(), h.offset()]
 
     onLoad: ->
         # User accesses information text mainly by hovering over the image

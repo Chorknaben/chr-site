@@ -266,6 +266,12 @@
             font-style:italic;
         }
     }
+}
+
+@media screen and (max-width:1177px){
+    .image-container a.img-chapter{
+        background-color:#4B77BE;
+    }
 }@black: #1a171a;
 // general.less, for rules present on all child pages
 
@@ -483,7 +489,9 @@ a {
 }
 
 .content-viewer{
-    position: fixed;
+    position: absolute;
+    overflow-x:auto;
+    overflow-y:hidden;
     left: 80px;
     top: 170px;
     z-index: 5;
@@ -514,6 +522,7 @@ a {
     -webkit-transition: opacity 0.2s ease .75s;
     -moz-transition: opacity 0.2s ease .75s;
     transition: opacity 0.2s ease .75s;
+    height:100%;
 }
 
 #content-viewer-exit-button{
@@ -985,6 +994,14 @@ margin: auto;
     .feedbackform {
         top: initial;
         margin-top: 20px;
+    }
+}
+
+@media screen and (max-width:600px){
+    .header .ctitle{
+        font-size:1.3em;
+        font-size:1.3em;
+        
     }
 }
 
@@ -1546,6 +1563,25 @@ float:right;
 
 .scrubber .loaded{
     background:white;
+}
+
+@media screen and (max-width:1177px){
+    .outer .program{
+        background-color:#4B77BE;
+        .audiojs{
+            background-color:#4B77BE;
+        }
+        .playing{
+            background-color:#2a55a0;
+        }
+        .playlist li:hover{
+            background: #2a55a0;
+        }
+    }
+    .outer .cd{
+        background-color:#4B77BE;
+        background-color:#4B77BE;
+    }
 }.presse-container{
     margin-left:6%;
     margin-right:6%;
@@ -1694,6 +1730,12 @@ float:right;
 			margin-top: 10px;
 			display: block;
 		}
+	}
+}
+
+@media screen and (max-width:1177px){
+	.tile-shop{
+		background-color:#204580;
 	}
 }.stiftung-sidebar{
     width:350px;
@@ -1996,8 +2038,6 @@ div .btngreen:hover{
 #prettymargin{
     margin: 100px 20px 0 50px;
     text-align:left;
-    text-align:left;
-    width:90%;
 }
 #bitches{
     font-size: 3em;
@@ -2150,7 +2190,7 @@ div .btngreen:hover{
        bottom:0;
        height:60px;
        background:#1a171a;
-       opacity:0.97;
+       opacity:0.8;
        transition:background .2s, opacity .2s;
        line-height:60px;
        .reise-name{
@@ -2268,9 +2308,7 @@ div .btngreen:hover{
 .comingsoon-dimension{
     height:30%;
     max-height:250px;
-    opacity:0.95;
-    width:536px;
-    background: #1a171a;
+    width:300px;
     span{
         color:white;
         display:block;
@@ -2401,6 +2439,17 @@ div .btngreen:hover{
         height:30px;
         div.ie8-fallback-text p{
             font-size:30px;
+        }
+    }
+    #subpage-header{
+        font-size: 2em;
+    }
+    #content-viewer-exit-button{
+        top:5px;
+        right:5px;
+        img{
+            width:35px;
+            width:35px;
         }
     }
 }
@@ -2569,11 +2618,18 @@ line-height:25px;
         margin-bottom:10px;
     }
     #heading-takt{
-        font-size: 0.90em;
-        margin-top: 5px;
+        font-size: 0.80em;
     }
     #cnt-boost{
         font-size:0.95em;
     }
 }
 
+@media screen and (max-width:1177px){
+    .tile-unterstutzen{
+        h1{
+            font-size: 0.8em;
+        }
+        background-color:#204580;
+    }
+}

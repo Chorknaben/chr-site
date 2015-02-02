@@ -723,10 +723,13 @@ class ContentViewer
             @contentObj.height = -> "initial"
 
         if @contentObj.scrollTo
-            $.scrollTo(@contentObj.scrollTo.offset().top-@contentObj.top(), 500)
+            $.scrollTo(@contentObj.scrollTo.offset().top-100, 500)
 
         if @contentObj.bgColor
             $cnt.css "background" : @contentObj.bgColor
+
+        if @contentObj.minWidth
+            $("#ccnt").css "min-width" : @contentObj.minWidth
 
         $cnt.removeClass("nodisplay")
         if @contentObj.animate
@@ -808,6 +811,8 @@ class ContentViewer
 
         $("html").css cursor: "default"
         $cnt.css cursor: "default"
+
+        $("#ccnt").attr("style", "")
 
         unless revertHash is -1
             @core.registerTaker("dontHandle", true)
