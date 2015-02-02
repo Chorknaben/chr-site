@@ -47,7 +47,6 @@ class UberunsReise extends ChildPage
 
     onDOMVisible: =>
         unless window.ie or window.mobile()
-            debugger
             @reisehack()
             $(window).on("resize", @reisehack)
         @setupMap()

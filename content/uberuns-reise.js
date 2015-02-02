@@ -62,7 +62,6 @@ UberunsReise = (function(_super) {
 
   UberunsReise.prototype.onDOMVisible = function() {
     if (!(window.ie || window.mobile())) {
-      debugger;
       this.reisehack();
       $(window).on("resize", this.reisehack);
     }
