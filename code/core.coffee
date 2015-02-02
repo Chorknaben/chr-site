@@ -337,7 +337,7 @@ class IndexPage extends ChildPage
         @injectBackground()
         @injectTileBackgrounds()
 
-        unless window.mobile
+        unless window.mobile()
             @preloadImage()
         @footerLeftClick()
         @initNavDropDown()
@@ -539,15 +539,15 @@ class IndexPage extends ChildPage
             @template = _.template($("#calendar-template").html())
             @contentViewer.open
                 left:   -> 
-                    if window.mobile then return 0
+                    if window.mobile() then return 0
                     if minHgt then $(window).width() * 0.06 else 50
                 top:    -> 
                     if minHgt then $(".smalltiles").children().first().offset().top else 50 + 25
                 right:  -> 
-                    if window.mobile then return 0
+                    if window.mobile() then return 0
                     if minHgt then $(window).width() * 0.06 else 50
                 height: -> 
-                    if window.mobile then return $(window).height() - 75
+                    if window.mobile() then return $(window).height() - 75
                     if minHgt then $(".bigtile-content").height() + 10 + 40 else 
                         $(window).height() - 50 - 25 - 50
                 chapter: false
@@ -1041,7 +1041,7 @@ class Tile
                 @setLoadingScreen(true)
 
             # Insert background Image
-            unless window.mobile
+            unless window.mobile()
                 $(@core.state["blurredbg"]).appendTo("#blurbg")
 
             if not originalSite
@@ -1129,8 +1129,7 @@ $ ->
     moment.lang("de")
 
     unless window.ie
-        isMobile = window.matchMedia("only screen and (max-width: 1000px)")
-        if isMobile.matches then window.mobile = true
+        window.mobile = -> window.matchMedia("only screen and (max-width: 1177px)").matches
 
     if window.ie
         svgs = document.getElementsByTagName("img")

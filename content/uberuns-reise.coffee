@@ -46,14 +46,16 @@ class UberunsReise extends ChildPage
             ,-> $(this).find("h1").removeClass("fade"))
 
     onDOMVisible: =>
-        unless window.ie
+        unless window.ie or window.mobile()
+            debugger
             @reisehack()
             $(window).on("resize", @reisehack)
         @setupMap()
 
 
     onUnloadChild: ->
-        $(window).off("resize", @reisehack)
+        unless window.ie or window.mobile
+            $(window).off("resize", @reisehack)
 
     notifyHashChange: (newHash) ->
         if newHash.lastIndexOf("/info/", 0) is 0
@@ -115,7 +117,6 @@ class UberunsReise extends ChildPage
         wReiseTile = $(".reise-tile").eq(0).width()
         hReiseTile = $(".reise-tile").eq(0).height()
         $("#map").css height: hReiseTile, width:wReiseTile
-        console.log $("#map").width()
         $('#map').vectorMap
             map: 'europe_en',
             backgroundColor: "#1a171a",

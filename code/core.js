@@ -410,7 +410,7 @@ IndexPage = (function(_super) {
   IndexPage.prototype.onInsertion = function() {
     this.injectBackground();
     this.injectTileBackgrounds();
-    if (!window.mobile) {
+    if (!window.mobile()) {
       this.preloadImage();
     }
     this.footerLeftClick();
@@ -697,7 +697,7 @@ IndexPage = (function(_super) {
       this.template = _.template($("#calendar-template").html());
       this.contentViewer.open({
         left: function() {
-          if (window.mobile) {
+          if (window.mobile()) {
             return 0;
           }
           if (minHgt) {
@@ -714,7 +714,7 @@ IndexPage = (function(_super) {
           }
         },
         right: function() {
-          if (window.mobile) {
+          if (window.mobile()) {
             return 0;
           }
           if (minHgt) {
@@ -724,7 +724,7 @@ IndexPage = (function(_super) {
           }
         },
         height: function() {
-          if (window.mobile) {
+          if (window.mobile()) {
             return $(window).height() - 75;
           }
           if (minHgt) {
@@ -1329,7 +1329,7 @@ Tile = (function() {
         if (animate) {
           _this.setLoadingScreen(true);
         }
-        if (!window.mobile) {
+        if (!window.mobile()) {
           $(_this.core.state["blurredbg"]).appendTo("#blurbg");
         }
         if (!originalSite) {
@@ -1445,14 +1445,13 @@ window.core.exportFunction("ImageViewer.requestInstance", function() {
 });
 
 $(function() {
-  var attr, c, isMobile, svg, svgs, _i, _len;
+  var attr, c, svg, svgs, _i, _len;
   window.nav = new Navigation(".header-nav");
   moment.lang("de");
   if (!window.ie) {
-    isMobile = window.matchMedia("only screen and (max-width: 1000px)");
-    if (isMobile.matches) {
-      window.mobile = true;
-    }
+    window.mobile = function() {
+      return window.matchMedia("only screen and (max-width: 1177px)").matches;
+    };
   }
   if (window.ie) {
     svgs = document.getElementsByTagName("img");
