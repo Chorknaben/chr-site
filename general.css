@@ -778,6 +778,12 @@ a {
   top: 0;
 }
 
+#feedback #logo {
+  position: static;
+  display: inline;
+  width: 25px;
+}
+
 #footer {
   position: fixed;
   bottom: 0;
@@ -1063,6 +1069,16 @@ a {
 @media screen and (max-width: 600px) {
   .header .ctitle {
     font-size: 1.3em;
+  }
+}
+
+@media screen and (max-width: 1177px) {
+  .defaultdimension {
+    width: initial;
+    margin-left: 10px;
+  }
+  #hMain {
+    position: absolute;
   }
 }
 
@@ -2597,7 +2613,7 @@ div .btngreen:hover {
     display: none;
     float: none;
     width: 80%;
-    height: 40%;
+    height: 10cm;
     margin: auto;
     margin-top: 10px;
     overflow: auto;
@@ -2615,7 +2631,7 @@ div .btngreen:hover {
   }
   #uberuns-team .reise-tile {
     display: block;
-    height: 80%;
+    height: 15cm;
   }
 }
 
