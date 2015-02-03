@@ -89,11 +89,13 @@ Presse = (function(_super) {
   };
 
   Presse.prototype.onUnloadChild = function() {
+    window.core.revMetaDesc();
     $(window).off("resize", this.adjustPos);
     return $(".image-viewer").addClass("nodisplay");
   };
 
   Presse.prototype.onLoad = function() {
+    window.core.setMetaDesc("Aktuelle News", "News");
     return $.ajax({
       url: "/data/json/presse.json"
     }).done((function(_this) {

@@ -15,7 +15,9 @@ Stiftung = (function(_super) {
     this.nav = $(".stiftung-subnav").children();
   }
 
-  Stiftung.prototype.onLoad = function() {};
+  Stiftung.prototype.onLoad = function() {
+    return window.core.setMetaDesc("Die Stiftung St.-Martins-Chorknaben Biberach wurde im April 2010 gegr&uuml;ndet und hat das Ziel, die Finanzierung von Chorleitung und Stimmbildung nachhaltig zu sichern.", "Stiftung");
+  };
 
   Stiftung.prototype.nodisplay = function() {
     var i, _i, _len, _ref, _results;
@@ -53,7 +55,9 @@ Stiftung = (function(_super) {
     return fordervereinMainArea.addClass(col);
   };
 
-  Stiftung.prototype.onUnloadChild = function() {};
+  Stiftung.prototype.onUnloadChild = function() {
+    return window.core.revMetaDesc();
+  };
 
   Stiftung.prototype.notifyHashChange = function(newHash) {
     if (newHash === "/" || newHash === "") {

@@ -57,6 +57,7 @@ Uberuns = (function(_super) {
   };
 
   Uberuns.prototype.onLoad = function() {
+    this.core.setMetaDesc("Gemeinschaft leben, Gemeinschaft geben, gemeinsam singen.", "&Uuml;ber uns");
     $(".hiddentext").addClass("visible");
     $(".icon-container").click(function(event) {
       if (!$(".content-viewer").hasClass("nodisplay")) {
@@ -77,6 +78,10 @@ Uberuns = (function(_super) {
   };
 
   Uberuns.prototype.mouseEnter = function() {};
+
+  Uberuns.prototype.unUnloadChild = function() {
+    return this.core.revMetaDesc();
+  };
 
   return Uberuns;
 

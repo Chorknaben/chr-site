@@ -8,9 +8,13 @@ class Shop extends ChildPage
         @mode = ""
 
     onLoad : ->
+    	window.core.setMetaDesc("Chorknaben CD 'Cantate Domino', DVD 'Hinter den Stimmen' kaufen", "Shop")
     	$(".button").click ->
     		@contentViewer.close()
     		@contentViewer.reset()
+
+    onUnloadChild: ->
+    	window.core.revMetaDesc()
 
 
     notifyHashChange: (newHash) ->

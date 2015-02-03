@@ -27,16 +27,17 @@ Constants = (function() {
 Core = (function() {
   var debug;
 
-  function Core() {
-    this.resolveLocator = __bind(this.resolveLocator, this);
-    this.handleHash = __bind(this.handleHash, this);
-  }
-
   Core.prototype.state = {
     scrolledDown: false,
     currentURL: "null",
     currentPage: "null"
   };
+
+  function Core() {
+    this.resolveLocator = __bind(this.resolveLocator, this);
+    this.handleHash = __bind(this.handleHash, this);
+    this.origMetaDesc = $($("meta")[2]).attr("content");
+  }
 
   debug = function(msg) {
     return console.log("Core: " + msg);
@@ -128,6 +129,7 @@ Core = (function() {
 
   Core.prototype.raiseIndexPage = function() {
     if ((window.location.hash === "#!/" && this.requestTaker("pageChanged")) || (location.hash === "#!/kalender")) {
+      this.revMetaDesc();
       debug("Back to Index page");
       $(".tilecontainer").css({
         display: "initial"
@@ -296,9 +298,7 @@ Core = (function() {
       lang = navigator.language || navigator.userLanguage;
     }
     if (lang.indexOf("de") === -1) {
-      console.log("Stub: Browser does not seem to accept de: Setting en");
-      window.currentLanguage = "en";
-      return this.setLanguage(window.translationObj.en);
+      return console.log("Stub: Browser does not seem to accept de: Setting en");
     }
   };
 
@@ -308,6 +308,19 @@ Core = (function() {
     } else if (window.currentLanguage === "en") {
       return this.setLanguage(window.translationObj.en);
     }
+  };
+
+  Core.prototype.setMetaDesc = function(description, title) {
+    if (title == null) {
+      title = "";
+    }
+    $($("meta")[2]).attr("content", description);
+    return $("title").html("Chorknaben - " + title);
+  };
+
+  Core.prototype.revMetaDesc = function() {
+    $($("meta")[2]).attr("content", this.origMetaDesc);
+    return $("title").html("Chorknaben Biberach");
   };
 
   return Core;

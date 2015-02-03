@@ -58,12 +58,14 @@ class Presse extends ChildPage
         $(window).on("resize", @adjustPos)
 
     onUnloadChild: ->
+        window.core.revMetaDesc()
         $(window).off("resize", @adjustPos)
         # TODO: Investigate: put @imageViewer.close(true) here
         $(".image-viewer").addClass("nodisplay")
         #@imageViewer.close(true)
 
     onLoad: ->
+        window.core.setMetaDesc("Aktuelle News", "News")
         $.ajax({
             url: "/data/json/presse.json"
         }).done (tree) =>

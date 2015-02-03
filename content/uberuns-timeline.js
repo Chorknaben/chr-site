@@ -10,9 +10,13 @@ UberunsTimeline = (function(_super) {
     this.core = window.core;
   }
 
-  UberunsTimeline.prototype.onLoad = function() {};
+  UberunsTimeline.prototype.onLoad = function() {
+    return this.core.setMetaDesc("Chorgeschichte", "Chorgeschichte");
+  };
 
-  UberunsTimeline.prototype.onUnloadChild = function() {};
+  UberunsTimeline.prototype.onUnloadChild = function() {
+    return this.core.revMetaDesc();
+  };
 
   UberunsTimeline.prototype.notifyHashChange = function(newHash) {};
 

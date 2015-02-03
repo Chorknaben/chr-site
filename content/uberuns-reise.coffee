@@ -29,6 +29,7 @@ class UberunsReise extends ChildPage
         }
 
     onLoad: ->
+        window.core.setMetaDesc("Konzertreise", "Konzertreise")
         $.when(
             $.getScript("/code/jquery.vmap.js"),
             $.getScript("/code/jquery.vmap.europe.js"),
@@ -53,6 +54,7 @@ class UberunsReise extends ChildPage
 
 
     onUnloadChild: ->
+        window.core.revMetaDesc()
         unless window.ie or window.mobile
             $(window).off("resize", @reisehack)
 
@@ -141,7 +143,6 @@ class UberunsReise extends ChildPage
                 hu: "#199250"
                 si: "#199250"
                 hr: "#199250"
-                sl: "#199250"
                 lu: "#199250"
                 be: "#199250"
                 pl: "#199250"
@@ -171,7 +172,6 @@ class UberunsReise extends ChildPage
                 si: "#199250"
                 hr: "#199250"
                 us: "#199250"
-                sl: "#199250"
                 lu: "#199250"
                 be: "#199250"
                 pl: "#199250"

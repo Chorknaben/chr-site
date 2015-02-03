@@ -10,6 +10,14 @@ Unterstutzen = (function(_super) {
     Unterstutzen.__super__.constructor.call(this);
   }
 
+  Unterstutzen.prototype.onLoad = function() {
+    return window.core.setMetaDesc("M&ouml;glichkeiten der Unterst&ouml;tzung", "Unterst&uuml;tzen");
+  };
+
+  Unterstutzen.prototype.onUnloadChild = function() {
+    return window.core.revMetaDesc();
+  };
+
   return Unterstutzen;
 
 })(ChildPage);

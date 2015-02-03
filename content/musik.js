@@ -19,6 +19,7 @@ Musik = (function(_super) {
 
   Musik.prototype.onLoad = function() {
     var attr;
+    this.core.setMetaDesc("Hauptsache: Musik.", "Musik");
     if (window.ie) {
       attr = $(".cd img").attr("src");
       return $(".cd img").attr("src", attr + ".png");

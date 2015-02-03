@@ -254,6 +254,7 @@ Bilder = (function(_super) {
   };
 
   Bilder.prototype.onLoad = function() {
+    window.core.setMetaDesc("Bilder von Auftritten, Konzertreisen und mehr.", "Bilder");
     $(window).on("scroll", (function(_this) {
       return function() {
         var curMaxHeight, curScrPos, error, i, _i, _ref, _ref1, _results;
@@ -323,6 +324,7 @@ Bilder = (function(_super) {
   };
 
   Bilder.prototype.onUnloadChild = function() {
+    window.core.revMetaDesc();
     $(window).off("resize", this.adjustPos);
     $(".image-viewer").addClass("nodisplay");
     return $("body").off("keydown");

@@ -17,10 +17,15 @@ Shop = (function(_super) {
   }
 
   Shop.prototype.onLoad = function() {
+    window.core.setMetaDesc("Chorknaben CD 'Cantate Domino', DVD 'Hinter den Stimmen' kaufen", "Shop");
     return $(".button").click(function() {
       this.contentViewer.close();
       return this.contentViewer.reset();
     });
+  };
+
+  Shop.prototype.onUnloadChild = function() {
+    return window.core.revMetaDesc();
   };
 
   Shop.prototype.notifyHashChange = function(newHash) {

@@ -7,6 +7,7 @@ class Musik extends ChildPage
         console.log @contentViewer
 
     onLoad: ->
+        @core.setMetaDesc("Hauptsache: Musik.", "Musik")
         if window.ie
             attr = $(".cd img").attr("src")
             $(".cd img").attr("src", attr + ".png")

@@ -16,6 +16,12 @@ class UberunsTeam extends ChildPage
 
         @clickedPreviously = null
 
+    onLoad: ->
+        window.core.setMetaDesc("Eine starke Gemeinschaft", "Team")
+
+    onUnloadChild: ->
+        window.core.revMetaDesc()
+
     notifyHashChange: (newHash) ->
         for el in @linkIDMapper
             if "/#{el[0]}" is newHash

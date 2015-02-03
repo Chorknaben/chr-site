@@ -191,6 +191,7 @@ class Bilder extends ChildPage
         return true
 
     onLoad: =>
+        window.core.setMetaDesc("Bilder von Auftritten, Konzertreisen und mehr.", "Bilder")
         $(window).on "scroll", =>
             try
                 curMaxHeight = $(".img-image").eq(@currentLoadingIndex * @loadNumImageInBatch).offset().top
@@ -240,6 +241,7 @@ class Bilder extends ChildPage
                 location.hash = $(".arrright").attr("href")
 
     onUnloadChild: ->
+        window.core.revMetaDesc()
         $(window).off("resize", @adjustPos)
         $(".image-viewer").addClass("nodisplay")
         $("body").off("keydown")

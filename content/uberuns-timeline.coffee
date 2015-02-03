@@ -3,8 +3,10 @@ class UberunsTimeline extends ChildPage
         @core = window.core
 
     onLoad: ->
+    	@core.setMetaDesc("Chorgeschichte", "Chorgeschichte")
 
     onUnloadChild: ->
+    	@core.revMetaDesc()
 
     notifyHashChange: (newHash) ->
 

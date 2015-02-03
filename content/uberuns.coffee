@@ -28,6 +28,8 @@ class Uberuns extends ChildPage
                 content: $("#chorknabe-werden").html()
 
     onLoad: ->
+        @core.setMetaDesc("Gemeinschaft leben, Gemeinschaft geben, gemeinsam singen.", "&Uuml;ber uns")
+
         # User accesses information text mainly by hovering over the image
         $(".hiddentext").addClass("visible")
 
@@ -50,6 +52,9 @@ class Uberuns extends ChildPage
         window.core.release()
 
     mouseEnter: ->
+
+    unUnloadChild: ->
+        @core.revMetaDesc()
 
 
 window.core.insertChildPage(new Uberuns())

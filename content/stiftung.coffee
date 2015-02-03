@@ -23,6 +23,7 @@ class Stiftung extends ChildPage
 
 
     onLoad: ->
+        window.core.setMetaDesc("Die Stiftung St.-Martins-Chorknaben Biberach wurde im April 2010 gegr&uuml;ndet und hat das Ziel, die Finanzierung von Chorleitung und Stimmbildung nachhaltig zu sichern.", "Stiftung")
 
     nodisplay: ->
         for i in @contents
@@ -43,6 +44,7 @@ class Stiftung extends ChildPage
         fordervereinMainArea.addClass(col)
 
     onUnloadChild: ->
+        window.core.revMetaDesc()
 
     notifyHashChange: (newHash) ->
         if newHash is "/" or newHash is ""

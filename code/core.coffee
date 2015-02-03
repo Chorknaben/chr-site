@@ -30,6 +30,9 @@ class Core
         currentURL   : "null"
         currentPage  : "null"
 
+    constructor: ->
+        @origMetaDesc = $($("meta")[2]).attr("content")
+
     debug = (msg) -> console.log "Core: " + msg
         
     initializeHashNavigation: ->
@@ -123,6 +126,8 @@ class Core
 
     raiseIndexPage: ->
         if (window.location.hash is "#!/" and @requestTaker("pageChanged")) or (location.hash is "#!/kalender")
+            @revMetaDesc()
+
             debug "Back to Index page"
 
             #@ensureImageViewerClosed()
@@ -243,14 +248,22 @@ class Core
             lang = navigator.language || navigator.userLanguage
         if lang.indexOf("de") == -1
             console.log "Stub: Browser does not seem to accept de: Setting en"
-            window.currentLanguage = "en"
-            @setLanguage(window.translationObj.en)
+            #window.currentLanguage = "en"
+            #@setLanguage(window.translationObj.en)
 
     updateTranslations: ->
         if window.currentLanguage == "de"
             @setLanguage(window.translationObj.de)
         else if window.currentLanguage == "en"
             @setLanguage(window.translationObj.en)
+
+    setMetaDesc: (description, title="") ->
+        $($("meta")[2]).attr("content", description)
+        $("title").html("Chorknaben - #{title}")
+
+    revMetaDesc: ->
+        $($("meta")[2]).attr("content", @origMetaDesc)
+        $("title").html("Chorknaben Biberach")
 
 # Abstract Skeleton Class that any Child Page ought to implement
 class ChildPage

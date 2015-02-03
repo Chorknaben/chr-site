@@ -13,6 +13,14 @@ UberunsTeam = (function(_super) {
 
   UberunsTeam.clickedPreviously = null;
 
+  UberunsTeam.prototype.onLoad = function() {
+    return window.core.setMetaDesc("Eine starke Gemeinschaft", "Team");
+  };
+
+  UberunsTeam.prototype.onUnloadChild = function() {
+    return window.core.revMetaDesc();
+  };
+
   UberunsTeam.prototype.notifyHashChange = function(newHash) {
     var el, _i, _len, _ref;
     _ref = this.linkIDMapper;

@@ -44,6 +44,7 @@ UberunsReise = (function(_super) {
 
   UberunsReise.prototype.onLoad = function() {
     var i, _i, _results;
+    window.core.setMetaDesc("Konzertreise", "Konzertreise");
     $.when($.getScript("/code/jquery.vmap.js"), $.getScript("/code/jquery.vmap.europe.js"), $.getScript("/code/jquery.vmap.world.js"), $.Deferred(function(deferred) {
       return $(deferred.resolve);
     })).done(function() {
@@ -69,6 +70,7 @@ UberunsReise = (function(_super) {
   };
 
   UberunsReise.prototype.onUnloadChild = function() {
+    window.core.revMetaDesc();
     if (!(window.ie || window.mobile)) {
       return $(window).off("resize", this.reisehack);
     }
@@ -172,7 +174,6 @@ UberunsReise = (function(_super) {
         hu: "#199250",
         si: "#199250",
         hr: "#199250",
-        sl: "#199250",
         lu: "#199250",
         be: "#199250",
         pl: "#199250"
@@ -203,7 +204,6 @@ UberunsReise = (function(_super) {
         si: "#199250",
         hr: "#199250",
         us: "#199250",
-        sl: "#199250",
         lu: "#199250",
         be: "#199250",
         pl: "#199250"
