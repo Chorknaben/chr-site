@@ -65,6 +65,9 @@ Core = (function() {
       this.delegateChildPage("", "#!/kalender");
       return;
     }
+    if (hash === "#!/impressum") {
+      this.toggleImpressum;
+    }
     matching = this.resolveLocator(hash);
     switch (matching.msg) {
       case "match":
@@ -477,7 +480,7 @@ IndexPage = (function(_super) {
       return function(event) {
         event.preventDefault();
         event.stopPropagation();
-        return _this.toggleImpressum();
+        return IndexPage.toggleImpressum();
       };
     })(this));
     return $("#startst").click((function(_this) {
@@ -493,7 +496,7 @@ IndexPage = (function(_super) {
     var bot;
     bot = $("#footer").css("bottom");
     if (bot !== "300px" && bot !== "0px") {
-      this.toggleImpressum();
+      IndexPage.toggleImpressum();
       setTimeout((function(_this) {
         return function() {
           return _this.toggleInfo();
@@ -513,13 +516,13 @@ IndexPage = (function(_super) {
     }
   };
 
-  IndexPage.prototype.toggleImpressum = function() {
+  IndexPage.toggleImpressum = function() {
     var to;
     if ($("#footer").css("bottom") === "300px") {
       this.toggleInfo();
       setTimeout((function(_this) {
         return function() {
-          return _this.toggleImpressum();
+          return IndexPage.toggleImpressum();
         };
       })(this), 320);
     }

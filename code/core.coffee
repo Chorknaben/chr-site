@@ -60,6 +60,9 @@ class Core
             @delegateChildPage("", "#!/kalender")
             return
 
+        if hash is "#!/impressum"
+            @toggleImpressum
+
         # Top priority: test if Hash can be resolved to a route.
         # Only the relevant part, that is, everything after #!/ will
         # be tested for being a route.
@@ -396,7 +399,7 @@ class IndexPage extends ChildPage
         $("#btnimpressum").click (event) =>
             event.preventDefault()
             event.stopPropagation()
-            @toggleImpressum()
+            IndexPage.toggleImpressum()
 
         $("#startst").click =>
             $("#footer").css bottom: "0px"
@@ -405,7 +408,7 @@ class IndexPage extends ChildPage
         bot = $("#footer").css("bottom")
         if bot isnt "300px" and bot isnt "0px"
             # not open
-            @toggleImpressum()
+            IndexPage.toggleImpressum()
             setTimeout( =>
                 @toggleInfo()
             , 310)
@@ -416,12 +419,12 @@ class IndexPage extends ChildPage
         else
             $("#footer").css bottom: "0px"
 
-    toggleImpressum: ->
+    @toggleImpressum: ->
         # TODO already pressed
         if $("#footer").css("bottom") is "300px"
             @toggleInfo()
             setTimeout( =>
-                @toggleImpressum()
+                IndexPage.toggleImpressum()
             , 320)
 
         to = $(window).height() - 50 - 25
