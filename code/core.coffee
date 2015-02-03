@@ -849,7 +849,6 @@ class ContentViewer
                     $cnt.addClass("nodisplay")
                     $cnt.children("div").removeClass("nodisplay")
                     $(".content-viewer-padding").css opacity:0
-                    window.location.hash = revertHash
                     @reset()
                     @OPEN = false
                 , 400)

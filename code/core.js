@@ -1115,7 +1115,6 @@ ContentViewer = (function() {
             $(".content-viewer-padding").css({
               opacity: 0
             });
-            window.location.hash = revertHash;
             _this.reset();
             return _this.OPEN = false;
           }, 400);
