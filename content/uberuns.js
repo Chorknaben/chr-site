@@ -28,23 +28,24 @@ Uberuns = (function(_super) {
   };
 
   Uberuns.prototype.notifyHashChange = function(newHash) {
-    var hRef, oRef, wRef;
-    hRef = $(".hiddentext").height();
-    wRef = $(".hiddentext").width();
-    oRef = $(".hiddentext").offset();
+    var h;
+    h = $(".hiddentext");
     if (newHash === "/chorknabe-werden") {
       return this.contentViewer.open({
         left: function() {
-          return oRef.left;
+          return h.offset().left;
         },
         top: function() {
-          return oRef.top;
+          return h.offset().top;
         },
         width: function() {
-          return wRef;
+          return h.width();
         },
         height: function() {
-          return hRef;
+          return h.height();
+        },
+        minWidth: function() {
+          return "500px";
         },
         chapter: false,
         bgColor: "#4b77be",
@@ -54,6 +55,12 @@ Uberuns = (function(_super) {
         content: $("#chorknabe-werden").html()
       });
     }
+  };
+
+  Uberuns.prototype.getDimText = function() {
+    var h;
+    h = $(".hiddentext");
+    return [h.height(), h.width(), h.offset()];
   };
 
   Uberuns.prototype.onLoad = function() {

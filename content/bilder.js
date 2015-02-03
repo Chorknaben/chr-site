@@ -32,7 +32,7 @@ Bilder = (function(_super) {
   }
 
   Bilder.prototype.notifyHashChange = function(newHash) {
-    var cTitle, category, chapter, chapterID, counter, el, elem, firstChapt, id, image, inTitle, nextAttr, previousAttr, rightElem, rightPt, _i, _j, _len, _len1, _ref, _ref1;
+    var cTitle, category, chapter, chapterID, counter, el, elem, id, image, inTitle, nextAttr, previousAttr, rightElem, rightPt, _i, _j, _len, _len1, _ref, _ref1;
     if (newHash.indexOf("/element/") === 0) {
       id = parseInt(newHash.substr(9, newHash.length));
       _ref = $("a");
@@ -110,7 +110,6 @@ Bilder = (function(_super) {
       }
       rightElem = this.findRightMost();
       rightPt = rightElem.offset().left + rightElem.width();
-      firstChapt = $(".image-container").children().eq(0).offset();
       chapterID = newHash.substr(11, newHash.length);
       if (chapterID.indexOf("by-title/") === 0) {
         counter = 0;
@@ -145,19 +144,21 @@ Bilder = (function(_super) {
       } else {
         $("arrleft").addClass("arrow-inactive");
       }
+      console.log(chapter.offset());
       this.contentViewer.open({
         left: function() {
-          return firstChapt.left;
+          return chapter.offset().left;
         },
         top: function() {
-          return firstChapt.top;
+          return chapter.offset().top;
         },
-        right: function() {
-          return $(window).width() - rightPt + 30;
+        width: function() {
+          return chapter.width() * 2;
         },
         height: function() {
           return "100%";
         },
+        bgColor: "#4B77BE",
         scrollTo: chapter,
         title: this.tree[chapterID].category.title,
         caption: this.tree[chapterID].category.caption,

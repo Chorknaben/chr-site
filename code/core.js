@@ -994,11 +994,16 @@ ContentViewer = (function() {
       };
     }
     if (this.contentObj.scrollTo) {
-      $.scrollTo(this.contentObj.scrollTo.offset().top - this.contentObj.top(), 500);
+      $.scrollTo(this.contentObj.scrollTo.offset().top - 100, 500);
     }
     if (this.contentObj.bgColor) {
       $cnt.css({
         "background": this.contentObj.bgColor
+      });
+    }
+    if (this.contentObj.minWidth) {
+      $("#ccnt").css({
+        "min-width": this.contentObj.minWidth
       });
     }
     $cnt.removeClass("nodisplay");
@@ -1086,6 +1091,7 @@ ContentViewer = (function() {
     $cnt.css({
       cursor: "default"
     });
+    $("#ccnt").attr("style", "");
     if (revertHash !== -1) {
       this.core.registerTaker("dontHandle", true);
       window.location.hash = revertHash;

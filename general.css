@@ -299,6 +299,12 @@
   font-style: italic;
 }
 
+@media screen and (max-width: 1177px) {
+  .image-container a.img-chapter {
+    background-color: #4B77BE;
+  }
+}
+
 body {
   font-family: "Droid Sans", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   background: #1a171a;
@@ -515,11 +521,13 @@ a {
 }
 
 .content-viewer {
-  position: fixed;
+  position: absolute;
   top: 170px;
   left: 80px;
   z-index: 5;
   height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
   color: white;
   background: #1a171a;
   opacity: 0;
@@ -545,6 +553,7 @@ a {
 }
 
 .content-viewer-padding {
+  height: 100%;
   padding: 30px 50px 0 50px;
   opacity: 0;
   -webkit-transition: opacity 0.2s ease .75s;
@@ -1049,6 +1058,12 @@ a {
   .feedbackform {
     top: initial;
     margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header .ctitle {
+    font-size: 1.3em;
   }
 }
 
@@ -1645,6 +1660,24 @@ td {
   background: white;
 }
 
+@media screen and (max-width: 1177px) {
+  .outer .program {
+    background-color: #4B77BE;
+  }
+  .outer .program .audiojs {
+    background-color: #4B77BE;
+  }
+  .outer .program .playing {
+    background-color: #2a55a0;
+  }
+  .outer .program .playlist li:hover {
+    background: #2a55a0;
+  }
+  .outer .cd {
+    background-color: #4B77BE;
+  }
+}
+
 .presse-container {
   margin-right: 6%;
   margin-left: 6%;
@@ -1808,6 +1841,12 @@ td {
 #cdcontent .cdright #interessetext {
   display: block;
   margin-top: 10px;
+}
+
+@media screen and (max-width: 1177px) {
+  .tile-shop {
+    background-color: #204580;
+  }
 }
 
 .stiftung-sidebar {
@@ -2117,7 +2156,6 @@ div .btngreen:hover {
 }
 
 #prettymargin {
-  width: 90%;
   margin: 100px 20px 0 50px;
   text-align: left;
 }
@@ -2282,7 +2320,7 @@ div .btngreen:hover {
   color: white;
   text-align: center;
   background: #1a171a;
-  opacity: 0.97;
+  opacity: 0.8;
   transition: background .2s, opacity .2s;
 }
 
@@ -2424,6 +2462,7 @@ div .btngreen:hover {
   padding: 20px;
   margin: auto;
   color: white;
+  background-color: #1a171a;
 }
 
 .comingsoon-dimension span h1 {
@@ -2547,6 +2586,13 @@ div .btngreen:hover {
   }
   #subpage-header {
     font-size: 2em;
+  }
+  #content-viewer-exit-button {
+    top: 5px;
+    right: 5px;
+  }
+  #content-viewer-exit-button img {
+    width: 35px;
   }
 }
 
@@ -2716,10 +2762,18 @@ div .btngreen:hover {
     margin-bottom: 10px;
   }
   #heading-takt {
-    margin-top: 5px;
-    font-size: 0.90em;
+    font-size: 0.80em;
   }
   #cnt-boost {
     font-size: 0.95em;
+  }
+}
+
+@media screen and (max-width: 1177px) {
+  .tile-unterstutzen {
+    background-color: #204580;
+  }
+  .tile-unterstutzen h1 {
+    font-size: 0.8em;
   }
 }
