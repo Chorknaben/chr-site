@@ -91,7 +91,8 @@ Presse = (function(_super) {
   Presse.prototype.onUnloadChild = function() {
     window.core.revMetaDesc();
     $(window).off("resize", this.adjustPos);
-    return $(".image-viewer").addClass("nodisplay");
+    $(".image-viewer").addClass("nodisplay");
+    return $("#image-viewer-exit-button").addClass("nodisplay");
   };
 
   Presse.prototype.onLoad = function() {
@@ -112,47 +113,24 @@ Presse = (function(_super) {
     })(this));
   };
 
-  Presse.prototype.onScrollFinished = function() {};
-
   Presse.prototype.genArticle = function(article) {
     $(".presse-container").append($("<a>").addClass("img-presse").attr("href", "/#!/presse/artikel/" + this.articleCount).append($("<div>").addClass("presse-date").html(article.date)).append($("<img>").addClass("deadcenter").attr("src", "/data/presse/thumbs/" + (this.articleCount - 1))).append($("<span><h1>" + article.name + "</h1>" + article.caption + "</span>")));
     return this.articleCount++;
   };
 
   Presse.prototype.adjustPos = function() {
-    var delta, rightElem, rightPoint, width;
+    var distanceFromLeft, selPress, totalWidth, vertAxis, width;
     width = $(window).width();
-    rightElem = this.findRightMost();
-    rightPoint = rightElem.offset().left + rightElem.width();
-    delta = (width * 0.94 - rightPoint) / 2;
-    return $(".presse-container").css({
-      "margin-left": (width * 0.06) + delta
-    });
-  };
-
-  Presse.prototype.findRightMost = function() {
-    var error, firstOffset, leftIndex;
-    try {
-      firstOffset = $(".img-presse").first().offset().top;
-      leftIndex = -1;
-      $(".img-presse").each((function(_this) {
-        return function(index, obj) {
-          var $obj;
-          $obj = $(obj);
-          if ($obj.offset().top !== firstOffset) {
-            leftIndex = index - 1;
-            return false;
-          }
-        };
-      })(this));
-      if (leftIndex !== -1) {
-        return $(".img-presse").eq(leftIndex);
-      }
-      return false;
-    } catch (_error) {
-      error = _error;
-      return false;
+    selPress = $(".img-presse");
+    vertAxis = width / 2;
+    totalWidth = selPress.width();
+    if (selPress.eq(0).offset().top === selPress.eq(1).offset().top) {
+      totalWidth += selPress.width() + 10;
     }
+    distanceFromLeft = vertAxis - (totalWidth / 2);
+    return $(".presse-container").css({
+      "padding-left": distanceFromLeft
+    });
   };
 
   return Presse;

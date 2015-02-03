@@ -62,6 +62,7 @@ class Presse extends ChildPage
         $(window).off("resize", @adjustPos)
         # TODO: Investigate: put @imageViewer.close(true) here
         $(".image-viewer").addClass("nodisplay")
+        $("#image-viewer-exit-button").addClass("nodisplay")
         #@imageViewer.close(true)
 
     onLoad: ->
@@ -73,8 +74,6 @@ class Presse extends ChildPage
             for article in tree.presse
                 @genArticle(article)
             @c.release()
-
-    onScrollFinished: ->
 
     genArticle: (article) ->
         $(".presse-container").append(
@@ -88,26 +87,17 @@ class Presse extends ChildPage
     adjustPos: =>
         #Adjust the positioning of the image grid to be centered exactly.
         width = $(window).width()
-        rightElem = @findRightMost()
-        rightPoint = rightElem.offset().left + rightElem.width()
-        delta = (width * 0.94 - rightPoint) / 2
 
-        $(".presse-container").css "margin-left" : (width * 0.06) + delta
+        selPress = $(".img-presse")
 
-    findRightMost: ->
-        try
-            firstOffset = $(".img-presse").first().offset().top
-            leftIndex   = -1
-            $(".img-presse").each (index, obj) =>
-                $obj = $(obj)
-                if $obj.offset().top isnt firstOffset
-                    leftIndex = index - 1
-                    return false
-            if leftIndex isnt -1
-                return $(".img-presse").eq(leftIndex)
-            return false
-        catch error
-            return false
+        vertAxis = width / 2
 
+        totalWidth = selPress.width()
+        if selPress.eq(0).offset().top == selPress.eq(1).offset().top
+            # If two elements are displayed next to each other
+            totalWidth += selPress.width() + 10
+
+        distanceFromLeft = vertAxis - (totalWidth / 2)
+        $(".presse-container").css "padding-left" : distanceFromLeft
 
 window.core.insertChildPage(new Presse())

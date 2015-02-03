@@ -1,8 +1,3 @@
-.image-container {
-  margin-right: 6%;
-  margin-left: 6%;
-}
-
 .image-container a {
   float: left;
   width: 338px;
@@ -241,12 +236,12 @@
 }
 
 .arrleft {
-  left: 3%;
+  left: 1%;
   background: url(/img/arr_left.png) center center;
 }
 
 .arrright {
-  right: 3%;
+  right: 1%;
   background: url(/img/arr_right.png) center center;
 }
 
@@ -1680,11 +1675,6 @@ td {
   .outer .cd {
     background-color: #4B77BE;
   }
-}
-
-.presse-container {
-  margin-right: 6%;
-  margin-left: 6%;
 }
 
 .presse-container a.img-presse {

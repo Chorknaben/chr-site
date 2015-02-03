@@ -328,17 +328,29 @@ Bilder = (function(_super) {
     window.core.revMetaDesc();
     $(window).off("resize", this.adjustPos);
     $(".image-viewer").addClass("nodisplay");
+    $("#image-viewer-exit-button").addClass("nodisplay");
     return $("body").off("keydown");
   };
 
   Bilder.prototype.adjustPos = function() {
-    var delta, rightElem, rightPoint, width;
+    var distanceFromLeft, horizonalAxisElm, onHorizontalAxis, sels, totalWidth, vertAxis, width;
     width = $(window).width();
-    rightElem = this.findRightMost();
-    rightPoint = rightElem.offset().left + rightElem.width();
-    delta = (width * 0.94 - rightPoint) / 2;
+    sels = $(".image-container").children();
+    vertAxis = width / 2;
+    onHorizontalAxis = true;
+    horizonalAxisElm = 1;
+    while (onHorizontalAxis) {
+      if (sels.eq(horizonalAxisElm - 1).offset().top === sels.eq(horizonalAxisElm).offset().top) {
+        horizonalAxisElm++;
+      } else {
+        onHorizontalAxis = false;
+      }
+    }
+    console.log(horizonalAxisElm);
+    totalWidth = (sels.eq(0).width() * horizonalAxisElm) + (4 * horizonalAxisElm);
+    distanceFromLeft = vertAxis - (totalWidth / 2);
     return $(".image-container").css({
-      "margin-left": (width * 0.06) + delta
+      "padding-left": distanceFromLeft
     });
   };
 

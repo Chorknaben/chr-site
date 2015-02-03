@@ -244,6 +244,7 @@ class Bilder extends ChildPage
         window.core.revMetaDesc()
         $(window).off("resize", @adjustPos)
         $(".image-viewer").addClass("nodisplay")
+        $("#image-viewer-exit-button").addClass("nodisplay")
         $("body").off("keydown")
 
 
@@ -251,11 +252,24 @@ class Bilder extends ChildPage
         # Diese Funktion sorgt dafür, dass die Kacheln immer zentriert sind.
         # TODO: Pure CSS Lösung, wenigstens auf Browsern die es unterstützen.
         width = $(window).width()
-        rightElem = @findRightMost()
-        rightPoint = rightElem.offset().left + rightElem.width()
-        delta = (width * 0.94 - rightPoint) / 2
 
-        $(".image-container").css "margin-left" : (width * 0.06) + delta
+        sels = $(".image-container").children()
+
+        vertAxis = width / 2
+
+        onHorizontalAxis = true
+        horizonalAxisElm = 1
+        while onHorizontalAxis
+            if sels.eq(horizonalAxisElm-1).offset().top == sels.eq(horizonalAxisElm).offset().top
+                horizonalAxisElm++
+            else
+                onHorizontalAxis = false
+
+        console.log horizonalAxisElm
+
+        totalWidth = (sels.eq(0).width() * horizonalAxisElm) + (4 * horizonalAxisElm)
+        distanceFromLeft = vertAxis - (totalWidth / 2)
+        $(".image-container").css "padding-left" : distanceFromLeft
 
     findRightMost: ->
         # Hilfsfunktion adjustPos
