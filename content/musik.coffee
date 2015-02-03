@@ -6,28 +6,32 @@ class Musik extends ChildPage
             (cView) => @contentViewer = cView()
         console.log @contentViewer
 
+    acquireLoadingLock: ->
+        return true
+
     onLoad: ->
         @core.setMetaDesc("Hauptsache: Musik.", "Musik")
         if window.ie
             attr = $(".cd img").attr("src")
             $(".cd img").attr("src", attr + ".png")
+        $.when(
+            $.getScript("/code/audio.min.js"),
+            $.Deferred (deferred) ->
+                $(deferred.resolve)
+        ).done( =>
+            audiojs.events.ready =>
+                @audi = audiojs.createAll()[0]
+                window.core.release()
+        ) 
 
     onDOMVisible: ->
-        audio = document.getElementsByTagName('audio')
-        if audio[0] is null
-            #neces?
-            setTimeout(@onDOMVisible, 200)
-            return
-
-        audi = audiojs.create(audio[0])
-
         $.ajax({
             url: "/data/json/musik.json"
         }).done (json) =>
             for file in json.musik
                 @addMusicFile(file.displayname, file.pathname)
-            @clickEvents(audi)
-            @selectFirst(audi)
+            @clickEvents(@audi)
+            @selectFirst(@audi)
 
 
     addMusicFile: (display, path) ->
@@ -38,7 +42,6 @@ class Musik extends ChildPage
     selectFirst: (audiojs) ->
         first = $(".playlist li").first()
         first.addClass("playing")
-        console.log first
 
         audiojs.load("/data/musik/" + first.attr("data-src"))
 

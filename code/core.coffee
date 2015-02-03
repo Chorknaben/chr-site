@@ -1158,9 +1158,6 @@ $ ->
             if attr.indexOf(".svg", attr.length - 4) != -1
                 svg.setAttribute("src",attr+".png");
 
-    audiojs.events.ready ->
-        audiojs.createAll()
-
     # Important initialization code
     c = window.core
     #

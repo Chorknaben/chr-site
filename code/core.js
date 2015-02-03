@@ -1484,9 +1484,6 @@ $(function() {
       }
     }
   }
-  audiojs.events.ready(function() {
-    return audiojs.createAll();
-  });
   c = window.core;
   c.initializeHashNavigation();
   c.insertChildPage(new IndexPage());

@@ -17,23 +17,30 @@ Musik = (function(_super) {
     console.log(this.contentViewer);
   }
 
+  Musik.prototype.acquireLoadingLock = function() {
+    return true;
+  };
+
   Musik.prototype.onLoad = function() {
     var attr;
     this.core.setMetaDesc("Hauptsache: Musik.", "Musik");
     if (window.ie) {
       attr = $(".cd img").attr("src");
-      return $(".cd img").attr("src", attr + ".png");
+      $(".cd img").attr("src", attr + ".png");
     }
+    return $.when($.getScript("/code/audio.min.js"), $.Deferred(function(deferred) {
+      return $(deferred.resolve);
+    })).done((function(_this) {
+      return function() {
+        return audiojs.events.ready(function() {
+          _this.audi = audiojs.createAll()[0];
+          return window.core.release();
+        });
+      };
+    })(this));
   };
 
   Musik.prototype.onDOMVisible = function() {
-    var audi, audio;
-    audio = document.getElementsByTagName('audio');
-    if (audio[0] === null) {
-      setTimeout(this.onDOMVisible, 200);
-      return;
-    }
-    audi = audiojs.create(audio[0]);
     return $.ajax({
       url: "/data/json/musik.json"
     }).done((function(_this) {
@@ -44,8 +51,8 @@ Musik = (function(_super) {
           file = _ref[_i];
           _this.addMusicFile(file.displayname, file.pathname);
         }
-        _this.clickEvents(audi);
-        return _this.selectFirst(audi);
+        _this.clickEvents(_this.audi);
+        return _this.selectFirst(_this.audi);
       };
     })(this));
   };
@@ -60,7 +67,6 @@ Musik = (function(_super) {
     var first;
     first = $(".playlist li").first();
     first.addClass("playing");
-    console.log(first);
     return audiojs.load("/data/musik/" + first.attr("data-src"));
   };
 
