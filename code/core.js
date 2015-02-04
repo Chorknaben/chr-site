@@ -409,7 +409,7 @@ IndexPage = (function(_super) {
     })(this));
     $.getJSON("/data/json/events.json", (function(_this) {
       return function(events) {
-        var ev, _i, _len, _ref;
+        var closestNeighbor, currentMonth, day, ev, evsThisMonth, today, _i, _j, _len, _len1, _ref;
         _ref = events.events;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           ev = _ref[_i];
@@ -417,11 +417,35 @@ IndexPage = (function(_super) {
         }
         window.ev = events.events;
         if (_this.clndr) {
-          return _this.clndr.setEvents(events.events);
+          _this.clndr.setEvents(events.events);
         }
+        currentMonth = parseInt(moment().format("MM"));
+        evsThisMonth = window.ev.filter(function(obj) {
+          if (parseInt(moment(obj.date, "YYYY-MM-DD").format("MM")) === currentMonth) {
+            return obj;
+          }
+        });
+        today = parseInt(moment().format("DD"));
+        closestNeighbor = _this.toDay(evsThisMonth[0].date);
+        for (_j = 0, _len1 = evsThisMonth.length; _j < _len1; _j++) {
+          ev = evsThisMonth[_j];
+          day = _this.toDay(ev.date);
+          if (day < closestNeighbor && day > today) {
+            closestNeighbor = day;
+          }
+        }
+        return _this.setCalendarIcon(closestNeighbor);
       };
     })(this));
   }
+
+  IndexPage.prototype.toDay = function(date) {
+    return parseInt(moment(date, "YYYY-MM-DD").format("DD"));
+  };
+
+  IndexPage.prototype.setCalendarIcon = function(id) {
+    return $("#icon-kalender").attr("src", "/img/kalender/" + id + ".svg");
+  };
 
   IndexPage.prototype.onInsertion = function() {
     this.injectBackground();

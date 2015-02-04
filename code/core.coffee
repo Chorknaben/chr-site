@@ -349,6 +349,26 @@ class IndexPage extends ChildPage
             if @clndr
                 @clndr.setEvents(events.events)
 
+            currentMonth = parseInt(moment().format("MM"))
+            evsThisMonth = window.ev.filter (obj) ->
+                if parseInt(moment(obj.date, "YYYY-MM-DD").format("MM")) == currentMonth
+                    return obj
+
+            today = parseInt(moment().format("DD"))
+            closestNeighbor = @toDay(evsThisMonth[0].date)
+            for ev in evsThisMonth
+                day = @toDay(ev.date)
+                if day < closestNeighbor and day > today
+                    closestNeighbor = day
+
+            @setCalendarIcon(closestNeighbor)  
+
+    toDay: (date) ->
+        parseInt(moment(date, "YYYY-MM-DD").format("DD"))
+
+    setCalendarIcon: (id) ->
+        $("#icon-kalender").attr("src", "/img/kalender/#{id}.svg")
+
     onInsertion: =>
         @injectBackground()
         @injectTileBackgrounds()
