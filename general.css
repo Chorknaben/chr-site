@@ -474,7 +474,8 @@ a {
 }
 
 .clndr .clndr-grid .days .event .day-number {
-  border-bottom: 3px solid #40c07e;
+  padding: 14px 67px;
+  border: 2px solid #40c07e;
 }
 
 .clndr .clndr-grid .days .event:hover {
