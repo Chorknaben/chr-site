@@ -497,7 +497,7 @@ a {
 }
 
 .clndr .event-listing .event-item {
-  padding: 5px 5px 5px 5px;
+  padding: 5px;
   margin: 0 5px 5px 25px;
   word-break: break-all;
   transition: background-color 0.1s;
@@ -1369,31 +1369,6 @@ td {
   height: 100%;
 }
 
-#link-bilder img {
-  width: 100%;
-  height: auto;
-  min-height: 100%;
-  margin-left: 0;
-  -webkit-filter: opacity(1);
-     -moz-filter: opacity(1);
-      -ms-filter: opacity(1);
-       -o-filter: opacity(1);
-          filter: opacity(1);
-  -webkit-transition: all 2s ease-in-out;
-     -moz-transition: all 2s ease-in-out;
-      -ms-transition: all 2s ease-in-out;
-       -o-transition: all 2s ease-in-out;
-          transition: all 2s ease-in-out;
-}
-
-#link-bilder img.luminanz {
-  -webkit-filter: opacity(0);
-     -moz-filter: opacity(0);
-      -ms-filter: opacity(0);
-       -o-filter: opacity(0);
-          filter: opacity(0);
-}
-
 @media screen and (max-width: 1177px) {
   .stdtile {
     width: 275px;
@@ -1523,6 +1498,20 @@ td {
 
 .btn-forderverein:hover {
   background: #4B77BE;
+}
+
+#link-bilder .imageslider-img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  margin: auto;
+  transition: left 1s ease, right .75s ease, top .75s ease, bottom .75s ease;
 }
 
 #musik-cnt {

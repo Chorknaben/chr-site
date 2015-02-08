@@ -197,33 +197,6 @@ float:right;
     }
 }
 
-#link-bilder{
-    img {
-        margin-left:0;
-        width:100%;
-        height:auto;
-        min-height:100%;
-         -webkit-transition: all 2s ease-in-out;
-         -moz-transition: all 2s ease-in-out;
-         -ms-transition: all 2s ease-in-out;
-         -o-transition: all 2s ease-in-out;
-         transition: all 2s ease-in-out;
-         //that is the bug of death
-         -webkit-filter: opacity(1);
-         -moz-filter: opacity(1);
-         -ms-filter: opacity(1);
-         -o-filter: opacity(1);
-         filter: opacity(1);
-    }
-    img.luminanz{
-         -webkit-filter: opacity(0);
-         -moz-filter: opacity(0);
-         -ms-filter: opacity(0);
-         -o-filter: opacity(0);
-         filter: opacity(0);
-    }
-}
-
 @media screen and (max-width: 1177px) {
     .stdtile{
         width:275px;
@@ -340,4 +313,20 @@ float:right;
 }
 .btn-forderverein:hover{
     background:#4B77BE;
+}
+
+
+// IMAGESLIDER
+#link-bilder .imageslider-img{
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height:100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+    transition:left 1s ease, right .75s ease, top .75s ease, bottom .75s ease;
 }

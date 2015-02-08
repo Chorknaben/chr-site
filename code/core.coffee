@@ -378,7 +378,8 @@ class IndexPage extends ChildPage
         @footerLeftClick()
         @initNavDropDown()
         @initNewsRotator()
-        @imgRotator(10000)
+        #@imgRotator(10000)
+        @initImageSlider()
 
         @initFeedback()
 
@@ -456,26 +457,42 @@ class IndexPage extends ChildPage
         else
             $("#footer").css bottom: "0px"
 
-    imgRotator: (waitFor) ->
-        if @currentRotatorImgID is 0
-            console.log "imgRotator: init"
-            @makeImage(->
-                $("#link-bilder").append(@imgObj))
-            @imgRotator(15000)
-        else
-            #TODO gradual transfer
-            setTimeout(=>
-                $("#link-bilder img").addClass("luminanz")
-                setTimeout(=>
-                    $("#link-bilder img").remove()
-                    if @currentRotatorImgID > @maxRotatorImgID
-                        @currentRotatorImgID = 1
-                    @makeImage((image) =>
-                        $("#link-bilder").append(image)
-                        @imgRotator(15000)
-                    , false)
-                , 2000)
-            , waitFor)
+    initImageSlider: ->
+        tileEm = document.getElementById("imageslider");
+        opt = {
+            interval: 4000;
+            src: []
+        }
+
+        slider = new ImageSlider(tileEm, opt);
+
+        # First 50 Images
+        for i in [0..50]
+            slider.addImage("/images/real/#{i}")
+
+        slider.start()
+
+
+    # imgRotator: (waitFor) ->
+    #     if @currentRotatorImgID is 0
+    #         console.log "imgRotator: init"
+    #         @makeImage(->
+    #             $("#link-bilder").append(@imgObj))
+    #         @imgRotator(15000)
+    #     else
+    #         #TODO gradual transfer
+    #         setTimeout(=>
+    #             $("#link-bilder img").addClass("luminanz")
+    #             setTimeout(=>
+    #                 $("#link-bilder img").remove()
+    #                 if @currentRotatorImgID > @maxRotatorImgID
+    #                     @currentRotatorImgID = 1
+    #                 @makeImage((image) =>
+    #                     $("#link-bilder").append(image)
+    #                     @imgRotator(15000)
+    #                 , false)
+    #             , 2000)
+    #         , waitFor)
 
     initNewsRotator: ->
         $.getJSON "/data/json/newsticker.json", (data) =>
