@@ -568,17 +568,17 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.initImageSlider = function() {
-    var i, opt, slider, tileEm, _i;
+    var i, opt, tileEm, _i;
     tileEm = document.getElementById("imageslider");
     opt = {
-      interval: 4000,
+      interval: 7000,
       src: []
     };
-    slider = new ImageSlider(tileEm, opt);
+    this.slider = new ImageSlider(tileEm, opt);
     for (i = _i = 0; _i <= 50; i = ++_i) {
-      slider.addImage("/images/real/" + i);
+      this.slider.addImage("/img/imageslider/" + i + ".jpg");
     }
-    return slider.start();
+    return this.slider.start();
   };
 
   IndexPage.prototype.initNewsRotator = function() {
@@ -652,7 +652,13 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.pauseImgRotator = function(state) {
-    return this.imgRotatorEnabled = state;
+    if (!state) {
+      console.log("slider stoppin");
+      return this.slider.stop();
+    } else {
+      console.log("slider poppin");
+      return this.slider.start();
+    }
   };
 
   IndexPage.prototype.makeImage = function(onload, lum) {

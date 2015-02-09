@@ -460,17 +460,20 @@ class IndexPage extends ChildPage
     initImageSlider: ->
         tileEm = document.getElementById("imageslider");
         opt = {
-            interval: 4000;
+            interval: 7000;
             src: []
         }
 
-        slider = new ImageSlider(tileEm, opt);
+        @slider = new ImageSlider(tileEm, opt);
 
         # First 50 Images
         for i in [0..50]
-            slider.addImage("/images/real/#{i}")
+            # Displaying the huge Images in /images/real will cause the sliding to stutter,
+            # The Images in /image/thumbs are way too small. So, take images from this
+            # location, instead.
+            @slider.addImage("/img/imageslider/#{i}.jpg")
 
-        slider.start()
+        @slider.start()
 
 
     # imgRotator: (waitFor) ->
@@ -543,7 +546,12 @@ class IndexPage extends ChildPage
 
 
     pauseImgRotator: (state) =>
-        @imgRotatorEnabled = state
+        if not state
+            console.log "slider stoppin"
+            @slider.stop()
+        else 
+            console.log "slider poppin"
+            @slider.start()
 
     makeImage: (onload,lum) ->
         @imgObj = new Image()
