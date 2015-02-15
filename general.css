@@ -11,7 +11,7 @@
 .image-container a.img-chapter {
   display: block;
   text-align: center;
-  text-decoration: initial;
+  text-decoration: none;
   background-color: #1a171a;
   -webkit-transition: all 0.2s ease-in-out;
      -moz-transition: all 0.2s ease-in-out;
@@ -93,7 +93,7 @@
   line-height: 22px;
   color: white;
   text-align: center;
-  text-decoration: initial;
+  text-decoration: none;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
   -webkit-transition: all 0.2s ease-in-out;
      -moz-transition: all 0.2s ease-in-out;
@@ -475,6 +475,7 @@ a {
 
 .clndr .clndr-grid .days .event .day-number {
   display: block;
+  margin-top: -2px;
   border: 2px solid #40c07e;
 }
 
