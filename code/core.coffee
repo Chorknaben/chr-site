@@ -51,6 +51,7 @@ class Core
 
 
         if hash is "#!/"
+            @ensureContentViewerClosed()
             @raiseIndexPage()
             return
 
@@ -106,10 +107,8 @@ class Core
                     else
                         # When the user clicks on another link on the page before properly
                         # exiting the ContentViewer, we'll have to close it manually.
-                        # TODO: test if still required
-                        if not $(".content-viewer").hasClass("nodisplay")
-                            @requestFunction "ContentViewer.close", (funcPtr) =>
-                                funcPtr(-1, true)
+                        @ensureContentViewerClosed()
+
                         @requestFunction "Tile.load", (load) =>
                             load route, true, =>
                                 @delegateChildPage(route, usefulHash)
@@ -135,7 +134,7 @@ class Core
 
             #@ensureImageViewerClosed()
 
-            $(".tilecontainer").css display: "initial"
+            $(".tilecontainer").css display: "block"
             $(".scrolled").css display: "none"
             $(".scrolled").attr("id", "")
 
@@ -156,7 +155,6 @@ class Core
                 console.log "imgRotator: resume"
                 func(true))
         else
-            #TODO check calendar open
             @state["childPage"].closeCalendar()
             $(".tilecontainer").css display:"block"
             debug "Already at Index Page"
@@ -169,6 +167,14 @@ class Core
             (func) => 
                 func(true)
         @revokeFunction "ImageViewer.forceClose"
+
+    ensureContentViewerClosed: ->
+        # ContentViewer must be closed when taking certain actions
+        # such as clicking on a link going to a different part of the site,
+        # or returning to Index
+        if not $(".content-viewer").hasClass("nodisplay")
+            @requestFunction "ContentViewer.close", (funcPtr) =>
+                funcPtr(-1, true)
 
 
     executeOnce: (name, func) ->
@@ -842,7 +848,6 @@ class ContentViewer
         $("#content-viewer-exit-button").removeClass("nodisplay")
         $("#content-viewer-exit-button").on "click", => @close(@contentObj.revertHash)
 
-        $(document).bind("click.content", @closeClickHandler)
         $(".content-viewer").bind("click.content", @clickOnViewerHandler)
 
         $(window).on("resize", @update)
@@ -903,6 +908,7 @@ class ContentViewer
             , 600)
                 
         else
+            $cnt.attr("style", "")
             $cnt.addClass("nodisplay")
 
         $(window).off("resize", @update)
@@ -925,8 +931,7 @@ class ContentViewer
         # If so, we must take several precautions and reset the Contentviewers DOM
         if not $(".content-viewer").hasClass("nodisplay") or @OPEN
             console.log "Contentviewer: Duplicate Instance detected. Closing."
-            @contentObj.animate = false
-            @close(-1)
+            @close(-1, true)
 
     closeClickHandler: =>
         @close(@contentObj.revertHash)

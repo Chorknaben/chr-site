@@ -57,6 +57,7 @@ Core = (function() {
     hash = window.location.hash;
     this.ensureFooterDown();
     if (hash === "#!/") {
+      this.ensureContentViewerClosed();
       this.raiseIndexPage();
       return;
     }
@@ -98,11 +99,7 @@ Core = (function() {
             if ($(".scrolled").attr("id") === route) {
               return _this.delegateChildPage(route, usefulHash);
             } else {
-              if (!$(".content-viewer").hasClass("nodisplay")) {
-                _this.requestFunction("ContentViewer.close", function(funcPtr) {
-                  return funcPtr(-1, true);
-                });
-              }
+              _this.ensureContentViewerClosed();
               return _this.requestFunction("Tile.load", function(load) {
                 return load(route, true, function() {
                   return _this.delegateChildPage(route, usefulHash);
@@ -135,7 +132,7 @@ Core = (function() {
       this.revMetaDesc();
       debug("Back to Index page");
       $(".tilecontainer").css({
-        display: "initial"
+        display: "block"
       });
       $(".scrolled").css({
         display: "none"
@@ -183,6 +180,16 @@ Core = (function() {
       };
     })(this));
     return this.revokeFunction("ImageViewer.forceClose");
+  };
+
+  Core.prototype.ensureContentViewerClosed = function() {
+    if (!$(".content-viewer").hasClass("nodisplay")) {
+      return this.requestFunction("ContentViewer.close", (function(_this) {
+        return function(funcPtr) {
+          return funcPtr(-1, true);
+        };
+      })(this));
+    }
   };
 
   Core.prototype.executeOnce = function(name, func) {
@@ -1081,7 +1088,6 @@ ContentViewer = (function() {
         return _this.close(_this.contentObj.revertHash);
       };
     })(this));
-    $(document).bind("click.content", this.closeClickHandler);
     $(".content-viewer").bind("click.content", this.clickOnViewerHandler);
     return $(window).on("resize", this.update);
   };
@@ -1142,6 +1148,7 @@ ContentViewer = (function() {
         };
       })(this), 600);
     } else {
+      $cnt.attr("style", "");
       $cnt.addClass("nodisplay");
     }
     $(window).off("resize", this.update);
@@ -1165,8 +1172,7 @@ ContentViewer = (function() {
   ContentViewer.prototype.ensureNoDuplicates = function() {
     if (!$(".content-viewer").hasClass("nodisplay") || this.OPEN) {
       console.log("Contentviewer: Duplicate Instance detected. Closing.");
-      this.contentObj.animate = false;
-      return this.close(-1);
+      return this.close(-1, true);
     }
   };
 
