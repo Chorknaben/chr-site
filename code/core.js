@@ -155,7 +155,6 @@ Core = (function() {
       this.state["currentURL"] = void 0;
       window.nav.reset();
       return this.requestFunction("ImgRotator.pauseImgRotator", function(func) {
-        console.log("imgRotator: resume");
         return func(true);
       });
     } else {
@@ -226,10 +225,8 @@ Core = (function() {
     });
     pageObj.onInsertion();
     if (window.currentLanguage === "de") {
-      console.log("Applying language tpl: GERMAN");
       return this.setLanguage(window.translationObj.de);
     } else if (window.currentLanguage === "en") {
-      console.log("Applying language tpl: ENGLISH");
       return this.setLanguage(window.translationObj.en);
     }
   };
@@ -268,7 +265,6 @@ Core = (function() {
 
   Core.prototype.setLanguage = function(translationSubObj) {
     var translationCandidate, _i, _len, _results;
-    console.log("fired");
     _results = [];
     for (_i = 0, _len = translationSubObj.length; _i < _len; _i++) {
       translationCandidate = translationSubObj[_i];
@@ -301,15 +297,14 @@ Core = (function() {
   };
 
   Core.prototype.attemptAutoSetLanguage = function() {
-    var lang;
-    if (navigator.languages) {
-      lang = navigator.languages[0];
-    } else {
-      lang = navigator.language || navigator.userLanguage;
-    }
-    if (lang.indexOf("de") === -1) {
-      return console.log("Stub: Browser does not seem to accept de: Setting en");
-    }
+    return $.get("/langheader", (function(_this) {
+      return function(data) {
+        if (!data.split(",")[0].indexOf("de") !== -1) {
+          window.currentLanguage = "en";
+          return _this.setLanguage(window.translationObj.en);
+        }
+      };
+    })(this));
   };
 
   Core.prototype.updateTranslations = function() {
@@ -469,7 +464,6 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.injectBackground = function() {
-    console.log("injectBackground");
     return $("<img>", {
       src: this.bgSrc + "bg"
     }).load(function() {
@@ -619,7 +613,6 @@ IndexPage = (function(_super) {
 
   IndexPage.prototype.newsRotator = function(waitFor) {
     if (this.currentNewsID === 0) {
-      console.log("newsRotator: init");
       $(".right").children("p").html("+++ " + this.news[0] + " +++");
       $(".right").children("p").css({
         opacity: 1
@@ -660,10 +653,8 @@ IndexPage = (function(_super) {
 
   IndexPage.prototype.pauseImgRotator = function(state) {
     if (!state) {
-      console.log("slider stoppin");
       return this.slider.stop();
     } else {
-      console.log("slider poppin");
       return this.slider.start();
     }
   };
@@ -701,7 +692,6 @@ IndexPage = (function(_super) {
     return $(".header-nav-dropdown-icon").click((function(_this) {
       return function() {
         if (!_this.navDropDown) {
-          console.log("enter");
           nav.css({
             top: "50px"
           });
@@ -709,7 +699,6 @@ IndexPage = (function(_super) {
           _this.ignoreFirstShot = true;
           return $(document).on("click.nav", _this.leaveNavDropDown);
         } else {
-          console.log("leave");
           return _this.leaveNavDropDown();
         }
       };
@@ -721,7 +710,6 @@ IndexPage = (function(_super) {
       this.ignoreFirstShot = false;
       return;
     }
-    console.log("leave");
     $(".header-nav-dropdown").css({
       top: "-200px"
     });
@@ -731,7 +719,6 @@ IndexPage = (function(_super) {
 
   IndexPage.prototype.notifyHashChange = function(newHash) {
     var minHgt, pos;
-    console.log(newHash);
     if (newHash === "#!/kalender") {
       pos = $("#6").offset();
       minHgt = false;
@@ -808,7 +795,6 @@ IndexPage = (function(_super) {
             if (day.length !== 2) {
               day = "0" + day;
             }
-            console.log(day);
             return $(".event-item." + day).css({
               "background-color": "#0D0C0D"
             });
@@ -818,7 +804,6 @@ IndexPage = (function(_super) {
             if (day.length !== 2) {
               day = "0" + day;
             }
-            console.log(day);
             return $(".event-item." + day).css({
               "background-color": "#1a171a"
             });
@@ -886,7 +871,6 @@ IndexPage = (function(_super) {
           feedbacktype: feedbacktype,
           text: text
         }, function(data) {
-          console.log(data);
           if (data.indexOf("OK") === 0) {
             $("input").val("");
             $("textarea").val("");
@@ -979,7 +963,6 @@ Navigation = (function() {
   };
 
   Navigation.prototype.internalToggle = function(toggleThis) {
-    console.log(this.preState);
     if (this.preState !== void 0) {
       this.preState.css({
         "font-weight": "normal"
@@ -1013,7 +996,6 @@ ContentViewer = (function() {
     this.ensureNoDuplicates();
     this.OPEN = true;
     $cnt = $(".content-viewer");
-    console.log("contentViewer: open");
     this.contentObj = contentObj;
     $cnt.attr("style", "");
     if (!this.contentObj.height) {
@@ -1022,7 +1004,13 @@ ContentViewer = (function() {
       };
     }
     if (this.contentObj.scrollTo) {
-      $.scrollTo(this.contentObj.scrollTo.offset().top - 100, 500);
+      $.scrollTo(this.contentObj.scrollTo.offset().top - 100, 500, (function(_this) {
+        return function() {
+          if (_this.contentObj.scrollToCallback) {
+            return _this.contentObj.scrollToCallback();
+          }
+        };
+      })(this));
     }
     if (this.contentObj.bgColor) {
       $cnt.css({
@@ -1060,7 +1048,10 @@ ContentViewer = (function() {
         opacity: 1
       });
       $cnt.css({
-        opacity: 1
+        opacity: 1,
+        height: this.contentObj.height(),
+        left: this.contentObj.left(),
+        top: this.contentObj.top()
       });
       return this["continue"]($cnt);
     }
@@ -1107,7 +1098,6 @@ ContentViewer = (function() {
       noAnimationOverride = false;
     }
     $cnt = $(".content-viewer");
-    console.log("contentViewer: close");
     $("#content-viewer-exit-button").addClass("nodisplay");
     $(document).unbind("click");
     $(".content-viewer").unbind("click");
@@ -1171,7 +1161,6 @@ ContentViewer = (function() {
 
   ContentViewer.prototype.ensureNoDuplicates = function() {
     if (!$(".content-viewer").hasClass("nodisplay") || this.OPEN) {
-      console.log("Contentviewer: Duplicate Instance detected. Closing.");
       return this.close(-1, true);
     }
   };
@@ -1260,9 +1249,6 @@ ImageViewer = (function() {
       image = this.conf.image;
       $(image).addClass("link-cursor");
       $(image).prependTo($(".image-viewer"));
-    }
-    if (this.conf.enableDragging) {
-      console.log("imageViewer.enableDragging: stub");
     }
     $(".image-viewer img").first().click((function(_this) {
       return function() {
@@ -1394,8 +1380,6 @@ Tile = (function() {
         }))).done(function() {
           _this.core.state["childPage"].onLoad();
           if (_this.core.state["childPage"].acquireLoadingLock()) {
-            console.log("here");
-            console.log(_this.core.state["childPage"]);
             _this.core.registerTaker("pendingCallback", callback);
             return;
           }

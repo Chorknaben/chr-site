@@ -152,7 +152,6 @@ class Core
             window.nav.reset()
 
             @requestFunction("ImgRotator.pauseImgRotator", (func) -> 
-                console.log "imgRotator: resume"
                 func(true))
         else
             @state["childPage"].closeCalendar()
@@ -204,10 +203,8 @@ class Core
         pageObj.onInsertion()
 
         if window.currentLanguage is "de"
-            console.log "Applying language tpl: GERMAN"
             @setLanguage(window.translationObj.de)
         else if window.currentLanguage is "en"
-            console.log "Applying language tpl: ENGLISH"
             @setLanguage(window.translationObj.en)
 
     exportFunction: (name, func) ->
@@ -231,7 +228,6 @@ class Core
         if callback then callback()
 
     setLanguage: (translationSubObj) ->
-        console.log "fired"
         for translationCandidate in translationSubObj
             do (translationCandidate) ->
                 trc = $(translationCandidate.el)
@@ -251,14 +247,13 @@ class Core
                 @setLanguage(window.translationObj.en)
 
     attemptAutoSetLanguage: ->
-        if navigator.languages
-            lang = navigator.languages[0]
-        else
-            lang = navigator.language || navigator.userLanguage
-        if lang.indexOf("de") == -1
-            console.log "Stub: Browser does not seem to accept de: Setting en"
-            #window.currentLanguage = "en"
-            #@setLanguage(window.translationObj.en)
+        $.get("/langheader", (data) =>
+            if not data.split(",")[0].indexOf("de") != -1
+                # The HTTP Accept-Language Header does not ask
+                # for DE. Set Language to en.
+                window.currentLanguage = "en"
+                @setLanguage(window.translationObj.en)
+        )
 
     updateTranslations: ->
         if window.currentLanguage == "de"
@@ -395,7 +390,6 @@ class IndexPage extends ChildPage
     injectBackground: ->
         # Determine the resolution of the client and send it to the server.
         # The server will return a matching background image.
-        console.log "injectBackground"
         $ "<img>", src: @bgSrc + "bg"
             .load ->
                 $(@).appendTo("#bg")
@@ -525,7 +519,6 @@ class IndexPage extends ChildPage
 
     newsRotator: (waitFor) ->
         if @currentNewsID is 0
-            console.log "newsRotator: init"
             $(".right").children("p").html("+++ #{@news[0]} +++")
             $(".right").children("p").css opacity: 1
             if window.ie
@@ -553,10 +546,8 @@ class IndexPage extends ChildPage
 
     pauseImgRotator: (state) =>
         if not state
-            console.log "slider stoppin"
             @slider.stop()
         else 
-            console.log "slider poppin"
             @slider.start()
 
     makeImage: (onload,lum) ->
@@ -577,26 +568,22 @@ class IndexPage extends ChildPage
         nav = $(".header-nav-dropdown")
         $(".header-nav-dropdown-icon").click =>
             if not @navDropDown
-                console.log "enter"
                 nav.css top: "50px"
                 @navDropDown = true
                 @ignoreFirstShot = true
                 $(document).on("click.nav", @leaveNavDropDown)
             else
-                console.log "leave"
                 @leaveNavDropDown()
 
     leaveNavDropDown: =>
         if @ignoreFirstShot
             @ignoreFirstShot=false
             return
-        console.log "leave"
         $(".header-nav-dropdown").css top: "-200px"
         @navDropDown = false
         $(document).off("click.nav")
 
     notifyHashChange: (newHash) =>
-        console.log newHash
         if newHash is "#!/kalender"
             pos = $("#6").offset()
             # If the clients screen does not fit the calendar, open it fullscreen
@@ -643,12 +630,10 @@ class IndexPage extends ChildPage
                     $(".event").hover ->
                         day = $(this).children(".day-number").html()
                         if (day.length != 2) then day = "0" + day
-                        console.log day
                         $(".event-item." + day).css "background-color": "#0D0C0D"
                     , ->
                         day = $(this).children(".day-number").html()
                         if (day.length != 2) then day = "0" + day
-                        console.log day
                         $(".event-item." + day).css "background-color": "#1a171a"
 
 
@@ -700,7 +685,6 @@ class IndexPage extends ChildPage
                  feedbacktype: feedbacktype
                  text: text
                  , (data) ->
-                    console.log(data)
                     if data.indexOf("OK") == 0
                         $("input").val("")
                         $("textarea").val("")
@@ -757,7 +741,6 @@ class Navigation
             @preState.css "font-weight" : "normal"
 
     internalToggle: (toggleThis) ->
-        console.log @preState
         if @preState isnt undefined
             @preState.css "font-weight" : "normal"
         toggleThis.css    "font-weight" : "bold"
@@ -778,7 +761,6 @@ class ContentViewer
         @OPEN = true
 
         $cnt = $(".content-viewer")
-        console.log "contentViewer: open"
 
         @contentObj = contentObj
 
@@ -790,7 +772,10 @@ class ContentViewer
             @contentObj.height = -> "initial"
 
         if @contentObj.scrollTo
-            $.scrollTo(@contentObj.scrollTo.offset().top-100, 500)
+            $.scrollTo @contentObj.scrollTo.offset().top-100, 500, =>
+                if @contentObj.scrollToCallback
+                    @contentObj.scrollToCallback()
+                
 
         if @contentObj.bgColor
             $cnt.css "background" : @contentObj.bgColor
@@ -828,6 +813,9 @@ class ContentViewer
                 opacity: 1
             $cnt.css
                 opacity: 1
+                height: @contentObj.height()
+                left:   @contentObj.left()
+                top:    @contentObj.top()
             @continue($cnt)
 
 
@@ -866,7 +854,6 @@ class ContentViewer
 
     close: (revertHash, noAnimationOverride=false) =>
         $cnt = $(".content-viewer")
-        console.log "contentViewer: close"
 
         $("#content-viewer-exit-button").addClass("nodisplay")
 
@@ -930,7 +917,6 @@ class ContentViewer
         # Is another Contentviewer open?
         # If so, we must take several precautions and reset the Contentviewers DOM
         if not $(".content-viewer").hasClass("nodisplay") or @OPEN
-            console.log "Contentviewer: Duplicate Instance detected. Closing."
             @close(-1, true)
 
     closeClickHandler: =>
@@ -1010,10 +996,6 @@ class ImageViewer
             image = @conf.image
             $(image).addClass("link-cursor")
             $(image).prependTo($(".image-viewer"))
-
-        if @conf.enableDragging
-            #$(".image-viewer img").drags()
-            console.log "imageViewer.enableDragging: stub"
 
         # Click on Image -> Close    
         $(".image-viewer img").first().click =>
@@ -1135,8 +1117,6 @@ class Tile
                 # Execute onLoad of inserted Child Page
                 @core.state["childPage"].onLoad()
                 if @core.state["childPage"].acquireLoadingLock()
-                    console.log "here"
-                    console.log @core.state["childPage"]
                     # Continue showing loading screen until Child Page
                     # releases the lock
                     @core.registerTaker("pendingCallback", callback)

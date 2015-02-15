@@ -21,7 +21,6 @@ class Bilder extends ChildPage
         # Bilder hat 2 Funktionen: /element/ und /category/.
         # Beide können in externen Links oder als onclick-events
         # referenziert werden.
-
         if newHash.indexOf("/element/") == 0
             id = parseInt(
                     newHash.substr(
@@ -33,6 +32,12 @@ class Bilder extends ChildPage
                     el = $(elem)
                     break
             el.addClass("loading")
+
+            # Der ContentViewer könnte momentan offen sein,
+            # also bevor öffnen des ImageViewers sicher gehen,
+            # dass er geschlossen ist.
+            @core.ensureContentViewerClosed()
+
             if window.ie
                 # Internet Explorer 8 benötigt ein paar Ausnahmen in punkto
                 # Bildlademechanismen... siehe Handling des imagesource Attributs
@@ -96,8 +101,6 @@ class Bilder extends ChildPage
             if @imageViewer.state is @imageViewer.OPEN
                 @imageViewer.close()
 
-            # Für den Fall, die Kategorie wird extern aufgerufen
-
             # Positionierungsvariablen
             rightElem = @findRightMost()
             rightPt = rightElem.offset().left + rightElem.width()
@@ -135,7 +138,6 @@ class Bilder extends ChildPage
             else
                 $("arrleft").addClass("arrow-inactive")
 
-            console.log chapter.offset()
             @contentViewer.open
                 left:  -> chapter.offset().left 
                 top:   -> chapter.offset().top 
@@ -143,6 +145,8 @@ class Bilder extends ChildPage
                 height:-> "100%"
                 bgColor: "#4B77BE"
                 scrollTo: chapter
+                scrollToCallback: ->
+                    $("body").trigger("scroll")
                 title: @tree[chapterID].category.title
                 caption: @tree[chapterID].category.caption
                 revertHash: "#!/bilder"
@@ -155,7 +159,6 @@ class Bilder extends ChildPage
         for category in @tree
             for imgpair in category.category.childs
                 if imgpair[0] == id
-                    console.log imgpair[1]
                     return imgpair[1]
 
     id2chapID: (id) ->
@@ -203,7 +206,6 @@ class Bilder extends ChildPage
             if curScrPos / curMaxHeight >= 0.7
                 @currentLoadingIndex++
                 for i in [((@currentLoadingIndex-1) * @loadNumImageInBatch)..(@currentLoadingIndex*@loadNumImageInBatch)]
-                    console.log i
                     $(".img-image").eq(i).children("img").attr("src","/images/thumbs/#{i}")
 
         # Inhalte Generieren.
@@ -264,8 +266,6 @@ class Bilder extends ChildPage
                 horizonalAxisElm++
             else
                 onHorizontalAxis = false
-
-        console.log horizonalAxisElm
 
         totalWidth = (sels.eq(0).width() * horizonalAxisElm) + (4 * horizonalAxisElm)
         distanceFromLeft = vertAxis - (totalWidth / 2)

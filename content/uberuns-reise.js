@@ -106,20 +106,14 @@ UberunsReise = (function(_super) {
           return (w / 2) - (1000 / 2);
         },
         height: function() {
-          return 600;
+          return 600 + "px";
         },
         chapter: false,
         title: metaobj.title,
         caption: metaobj.caption,
         revertHash: "#!/uberuns/reise",
         content: $("#content-reise").html(),
-        animate: true,
-        startingPos: {
-          left: offs.left,
-          top: offs.top,
-          width: elem.width(),
-          height: elem.height()
-        }
+        animate: false
       });
       return this.populate(metaobj.textID, metaobj.linkBilder, metaobj.thumbnail);
     }

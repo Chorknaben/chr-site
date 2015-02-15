@@ -78,18 +78,13 @@ class UberunsReise extends ChildPage
                 left:   -> (w/2) - (1000/2)
                 top:    -> (h/2) - (600/2)
                 right:  -> (w/2) - (1000/2)
-                height: -> 600
+                height: -> 600+"px"
                 chapter: false
                 title: metaobj.title
                 caption: metaobj.caption
                 revertHash: "#!/uberuns/reise"
                 content: $("#content-reise").html()
-                animate:true
-                startingPos:
-                    left: offs.left
-                    top: offs.top
-                    width:elem.width()
-                    height:elem.height()
+                animate:false
 
             @populate(metaobj.textID, metaobj.linkBilder, metaobj.thumbnail)
 

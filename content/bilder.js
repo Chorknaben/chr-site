@@ -44,6 +44,7 @@ Bilder = (function(_super) {
         }
       }
       el.addClass("loading");
+      this.core.ensureContentViewerClosed();
       if (window.ie) {
         this.imageViewer.open({
           imagesource: "/images/real/" + id,
@@ -144,7 +145,6 @@ Bilder = (function(_super) {
       } else {
         $("arrleft").addClass("arrow-inactive");
       }
-      console.log(chapter.offset());
       this.contentViewer.open({
         left: function() {
           return chapter.offset().left;
@@ -160,6 +160,9 @@ Bilder = (function(_super) {
         },
         bgColor: "#4B77BE",
         scrollTo: chapter,
+        scrollToCallback: function() {
+          return $("body").trigger("scroll");
+        },
         title: this.tree[chapterID].category.title,
         caption: this.tree[chapterID].category.caption,
         revertHash: "#!/bilder",
@@ -179,7 +182,6 @@ Bilder = (function(_super) {
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         imgpair = _ref1[_j];
         if (imgpair[0] === id) {
-          console.log(imgpair[1]);
           return imgpair[1];
         }
       }
@@ -271,7 +273,6 @@ Bilder = (function(_super) {
           _this.currentLoadingIndex++;
           _results = [];
           for (i = _i = _ref = (_this.currentLoadingIndex - 1) * _this.loadNumImageInBatch, _ref1 = _this.currentLoadingIndex * _this.loadNumImageInBatch; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = _ref <= _ref1 ? ++_i : --_i) {
-            console.log(i);
             _results.push($(".img-image").eq(i).children("img").attr("src", "/images/thumbs/" + i));
           }
           return _results;
@@ -346,7 +347,6 @@ Bilder = (function(_super) {
         onHorizontalAxis = false;
       }
     }
-    console.log(horizonalAxisElm);
     totalWidth = (sels.eq(0).width() * horizonalAxisElm) + (4 * horizonalAxisElm);
     distanceFromLeft = vertAxis - (totalWidth / 2);
     return $(".image-container").css({
