@@ -23,8 +23,9 @@ ImageSlider.rebuild = function(el,src,callback){
 		if (el.childNodes.length > 1){
 			el.firstChild.style.left = "-" + el.offsetWidth + "px";
 			el.firstChild.classList.remove("active");
+			elImgSlide = this.el
 			el.firstChild.addEventListener("transitionend", function(){
-				this.parentNode.removeChild(this);
+				el.removeChild(el.firstChild);
 			},false)
 		}
 		callback();
@@ -52,6 +53,10 @@ ImageSlider.prototype.setOptions = function(optDict){
 
 ImageSlider.prototype.start = function(){
 	this.loadNext();
+	this.resume();
+}
+
+ImageSlider.prototype.resume = function(){
 	this.interval = setInterval((function(_this){
 		return function(){
 			_this.loadNext();

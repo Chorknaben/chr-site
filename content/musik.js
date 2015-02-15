@@ -14,7 +14,6 @@ Musik = (function(_super) {
         return _this.contentViewer = cView();
       };
     })(this));
-    console.log(this.contentViewer);
   }
 
   Musik.prototype.acquireLoadingLock = function() {

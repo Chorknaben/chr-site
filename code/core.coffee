@@ -151,8 +151,9 @@ class Core
 
             window.nav.reset()
 
-            @requestFunction("ImgRotator.pauseImgRotator", (func) -> 
-                func(true))
+            unless location.hash is "#!/kalender"
+                @requestFunction("ImgRotator.pauseImgRotator", (func) -> 
+                    func(true))
         else
             @state["childPage"].closeCalendar()
             $(".tilecontainer").css display:"block"
@@ -545,10 +546,11 @@ class IndexPage extends ChildPage
 
 
     pauseImgRotator: (state) =>
+        console.log("Performing: #{state}")
         if not state
             @slider.stop()
         else 
-            @slider.start()
+            @slider.resume()
 
     makeImage: (onload,lum) ->
         @imgObj = new Image()

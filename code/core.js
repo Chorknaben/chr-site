@@ -154,9 +154,11 @@ Core = (function() {
       this.state["currentPage"] = void 0;
       this.state["currentURL"] = void 0;
       window.nav.reset();
-      return this.requestFunction("ImgRotator.pauseImgRotator", function(func) {
-        return func(true);
-      });
+      if (location.hash !== "#!/kalender") {
+        return this.requestFunction("ImgRotator.pauseImgRotator", function(func) {
+          return func(true);
+        });
+      }
     } else {
       this.state["childPage"].closeCalendar();
       $(".tilecontainer").css({
@@ -652,10 +654,11 @@ IndexPage = (function(_super) {
   };
 
   IndexPage.prototype.pauseImgRotator = function(state) {
+    console.log("Performing: " + state);
     if (!state) {
       return this.slider.stop();
     } else {
-      return this.slider.start();
+      return this.slider.resume();
     }
   };
 

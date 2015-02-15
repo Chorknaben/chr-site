@@ -70,7 +70,6 @@ class Presse extends ChildPage
         $.ajax({
             url: "/data/json/presse.json"
         }).done (tree) =>
-            console.log tree
             for article in tree.presse
                 @genArticle(article)
             @c.release()

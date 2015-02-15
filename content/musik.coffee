@@ -4,7 +4,6 @@ class Musik extends ChildPage
         @core = window.core
         @core.requestFunction "ContentViewer.requestInstance",
             (cView) => @contentViewer = cView()
-        console.log @contentViewer
 
     acquireLoadingLock: ->
         return true
