@@ -321,13 +321,17 @@ Core = (function() {
     if (title == null) {
       title = "";
     }
-    $($("meta")[2]).attr("content", description);
-    return $("title").html("Chorknaben - " + title);
+    if (!window.ie) {
+      $($("meta")[2]).attr("content", description);
+      return $("title").html("Chorknaben - " + title);
+    }
   };
 
   Core.prototype.revMetaDesc = function() {
-    $($("meta")[2]).attr("content", this.origMetaDesc);
-    return $("title").html("Chorknaben Biberach");
+    if (!window.ie) {
+      $($("meta")[2]).attr("content", this.origMetaDesc);
+      return $("title").html("Chorknaben Biberach");
+    }
   };
 
   return Core;
@@ -423,22 +427,24 @@ IndexPage = (function(_super) {
         if (_this.clndr) {
           _this.clndr.setEvents(events.events);
         }
-        currentMonth = parseInt(moment().format("MM"));
-        evsThisMonth = window.ev.filter(function(obj) {
-          if (parseInt(moment(obj.date, "YYYY-MM-DD").format("MM")) === currentMonth) {
-            return obj;
+        if (!window.ie) {
+          currentMonth = parseInt(moment().format("MM"));
+          evsThisMonth = window.ev.filter(function(obj) {
+            if (parseInt(moment(obj.date, "YYYY-MM-DD").format("MM")) === currentMonth) {
+              return obj;
+            }
+          });
+          today = parseInt(moment().format("DD"));
+          closestNeighbor = _this.toDay(evsThisMonth[0].date);
+          for (_j = 0, _len1 = evsThisMonth.length; _j < _len1; _j++) {
+            ev = evsThisMonth[_j];
+            day = _this.toDay(ev.date);
+            if (day < closestNeighbor && day > today) {
+              closestNeighbor = day;
+            }
           }
-        });
-        today = parseInt(moment().format("DD"));
-        closestNeighbor = _this.toDay(evsThisMonth[0].date);
-        for (_j = 0, _len1 = evsThisMonth.length; _j < _len1; _j++) {
-          ev = evsThisMonth[_j];
-          day = _this.toDay(ev.date);
-          if (day < closestNeighbor && day > today) {
-            closestNeighbor = day;
-          }
+          return _this.setCalendarIcon(closestNeighbor);
         }
-        return _this.setCalendarIcon(closestNeighbor);
       };
     })(this));
   }
@@ -454,8 +460,10 @@ IndexPage = (function(_super) {
   IndexPage.prototype.onInsertion = function() {
     this.injectBackground();
     this.injectTileBackgrounds();
-    if (!window.mobile()) {
-      this.preloadImage();
+    if (!window.ie) {
+      if (!window.mobile()) {
+        this.preloadImage();
+      }
     }
     this.footerLeftClick();
     this.initNavDropDown();
@@ -1000,6 +1008,9 @@ ContentViewer = (function() {
     this.OPEN = true;
     $cnt = $(".content-viewer");
     this.contentObj = contentObj;
+    if (window.ie) {
+      this.contentObj.animate = false;
+    }
     $cnt.attr("style", "");
     if (!this.contentObj.height) {
       this.contentObj.height = function() {
@@ -1056,7 +1067,13 @@ ContentViewer = (function() {
         left: this.contentObj.left(),
         top: this.contentObj.top()
       });
-      return this["continue"]($cnt);
+      this["continue"]($cnt);
+      if (window.ie) {
+        $(".content-viewer-padding").css({
+          height: "auto"
+        });
+        return $(".content-viewer-padding").attr("filter", "");
+      }
     }
   };
 
@@ -1363,8 +1380,10 @@ Tile = (function() {
         if (animate) {
           _this.setLoadingScreen(true);
         }
-        if (!window.mobile()) {
-          $(_this.core.state["blurredbg"]).appendTo("#blurbg");
+        if (!window.ie) {
+          if (!window.mobile()) {
+            $(_this.core.state["blurredbg"]).appendTo("#blurbg");
+          }
         }
         if (!originalSite) {
           $(".scrolled").attr("id", urlWhat);

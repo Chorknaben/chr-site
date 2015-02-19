@@ -766,9 +766,9 @@ a {
   position: fixed;
   top: 6px;
   right: 1.5%;
-  left: initial;
+  left: auto;
   width: 40px;
-  margin: initial;
+  margin: 0;
 }
 
 .header #loading-img {

@@ -263,12 +263,14 @@ class Core
             @setLanguage(window.translationObj.en)
 
     setMetaDesc: (description, title="") ->
-        $($("meta")[2]).attr("content", description)
-        $("title").html("Chorknaben - #{title}")
+        unless window.ie
+            $($("meta")[2]).attr("content", description)
+            $("title").html("Chorknaben - #{title}")
 
     revMetaDesc: ->
-        $($("meta")[2]).attr("content", @origMetaDesc)
-        $("title").html("Chorknaben Biberach")
+        unless window.ie
+            $($("meta")[2]).attr("content", @origMetaDesc)
+            $("title").html("Chorknaben Biberach")
 
 # Abstract Skeleton Class that any Child Page ought to implement
 class ChildPage
@@ -351,19 +353,20 @@ class IndexPage extends ChildPage
             if @clndr
                 @clndr.setEvents(events.events)
 
-            currentMonth = parseInt(moment().format("MM"))
-            evsThisMonth = window.ev.filter (obj) ->
-                if parseInt(moment(obj.date, "YYYY-MM-DD").format("MM")) == currentMonth
-                    return obj
+            unless window.ie
+                currentMonth = parseInt(moment().format("MM"))
+                evsThisMonth = window.ev.filter (obj) ->
+                    if parseInt(moment(obj.date, "YYYY-MM-DD").format("MM")) == currentMonth
+                        return obj
 
-            today = parseInt(moment().format("DD"))
-            closestNeighbor = @toDay(evsThisMonth[0].date)
-            for ev in evsThisMonth
-                day = @toDay(ev.date)
-                if day < closestNeighbor and day > today
-                    closestNeighbor = day
+                today = parseInt(moment().format("DD"))
+                closestNeighbor = @toDay(evsThisMonth[0].date)
+                for ev in evsThisMonth
+                    day = @toDay(ev.date)
+                    if day < closestNeighbor and day > today
+                        closestNeighbor = day
 
-            @setCalendarIcon(closestNeighbor)  
+                @setCalendarIcon(closestNeighbor)  
 
     toDay: (date) ->
         parseInt(moment(date, "YYYY-MM-DD").format("DD"))
@@ -375,8 +378,10 @@ class IndexPage extends ChildPage
         @injectBackground()
         @injectTileBackgrounds()
 
-        unless window.mobile()
-            @preloadImage()
+        unless window.ie
+            unless window.mobile()
+                @preloadImage()
+
         @footerLeftClick()
         @initNavDropDown()
         @initNewsRotator()
@@ -766,6 +771,9 @@ class ContentViewer
 
         @contentObj = contentObj
 
+        if window.ie
+            @contentObj.animate = false
+
         # Reset Style
         $cnt.attr("style", "")
 
@@ -819,6 +827,10 @@ class ContentViewer
                 left:   @contentObj.left()
                 top:    @contentObj.top()
             @continue($cnt)
+            if window.ie
+                $(".content-viewer-padding").css
+                    height: "auto"
+                $(".content-viewer-padding").attr("filter", "")
 
 
     continue: ($cnt) ->
@@ -1095,8 +1107,9 @@ class Tile
                 @setLoadingScreen(true)
 
             # Insert background Image
-            unless window.mobile()
-                $(@core.state["blurredbg"]).appendTo("#blurbg")
+            unless window.ie
+                unless window.mobile()
+                    $(@core.state["blurredbg"]).appendTo("#blurbg")
 
             if not originalSite
                 $(".scrolled").attr("id", urlWhat)

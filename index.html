@@ -18,6 +18,7 @@
 <!--[if lte IE 8]><script src="code/ie-opacity-polyfill.js"></script>
 <link rel="stylesheet" type="text/css" href="ie.css"/>
 <script type="text/javascript" src="code/selectivizr-min.js"></script>
+<script type="text/javascript" src="code/classlist.polyfill.js"></script>
 <script src="svg.js"></script>
 <script>window.ie = true;
 (function (window, document) {
@@ -75,6 +76,47 @@
         style.styleSheet.cssText = '*{-ms-event-prototype:expression(!this.addEventListener&&(this.addEventListener=addEventListener)&&(this.removeEventListener=removeEventListener))}';
     }
 })(window, document) && scrollBy(0, 0);
+if (!Array.prototype.filter) {
+  Array.prototype.filter = function(fun/*, thisArg*/) {
+    'use strict';
+
+    if (this === void 0 || this === null) {
+      throw new TypeError();
+    }
+
+    var t = Object(this);
+    var len = t.length >>> 0;
+    if (typeof fun !== 'function') {
+      throw new TypeError();
+    }
+
+    var res = [];
+    var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+    for (var i = 0; i < len; i++) {
+      if (i in t) {
+        var val = t[i];
+
+        // NOTE: Technically this should Object.defineProperty at
+        //       the next index, as push can be affected by
+        //       properties on Object.prototype and Array.prototype.
+        //       But that method's new, and collisions should be
+        //       rare, so use the more-compatible alternative.
+        if (fun.call(thisArg, val, i, t)) {
+          res.push(val);
+        }
+      }
+    }
+
+    return res;
+  };
+}
+var $buoop = {vs:{i:8,f:15,o:12.1,s:5.1},c:2}; 
+function $buo_f(){ 
+ var e = document.createElement("script"); 
+ e.src = "//browser-update.org/update.js"; 
+ document.body.appendChild(e);
+};
+window.attachEvent("onload", $buo_f)
 
 </script>
 <![endif]-->
@@ -180,7 +222,7 @@
             <div id="6" class="tile-content">
                 <a href="#!/kalender">
                     <div class="hoveroverlay tileov"></div>
-                    <img id="icon-kalender" src="img/kalender.svg" alt="Kalender" />
+                    <img id="icon-kalender" src="img/kalender.svg.png" alt="Kalender" />
                 </a>
             </div>
         </div>
