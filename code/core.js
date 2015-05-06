@@ -285,7 +285,6 @@ Core = (function() {
     return $.getJSON("/data/json/translation_deploy.json", (function(_this) {
       return function(data) {
         window.translationObj = data;
-        _this.attemptAutoSetLanguage();
         $("#de").click(function() {
           window.currentLanguage = "de";
           return _this.setLanguage(window.translationObj.de);

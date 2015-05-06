@@ -238,7 +238,7 @@ class Core
     initializeTranslationEngine: ->
         $.getJSON "/data/json/translation_deploy.json", (data) =>
             window.translationObj = data        
-            @attemptAutoSetLanguage()
+            #@attemptAutoSetLanguage()
 
             $("#de").click => 
                 window.currentLanguage = "de"
