@@ -10,15 +10,15 @@ class Presse extends ChildPage
 
     notifyHashChange: (hash) ->
         if hash.lastIndexOf("/artikel/",0) is 0
-            id = parseInt(hash.substr(9, hash.length))
+            id = parseInt(hash.substr(hash.lastIndexOf('/')+1))
             if window.ie 
                 @imageViewer.open
-                    imagesource: "/data/presse/real/#{id-1}"
+                    imagesource: "/data/presse/real/#{id}"
                     handleImageLoading: true
                     navigation: true
                     minImage: 1
                     maxImage: @articleCount
-                    arrowKeys: true
+                    arrowKeys: false
                     getCurrentElement: ->
                         h = location.hash
                         parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
@@ -33,25 +33,25 @@ class Presse extends ChildPage
                     descriptionSetting: 1
             else
                 img = $("<img>").bind("load", =>
-                        @imageViewer.open
-                            image: img
-                            navigation: true
-                            minImage: 1
-                            maxImage: @articleCount
-                            arrowKeys: true
-                            getCurrentElement: ->
-                                h = location.hash
-                                parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
-                            toLeftHash: (currentEl) ->
-                                "#!/presse/artikel/#{currentEl-1}"
-                            toRightHash: (currentEl) ->
-                                "#!/presse/artikel/#{currentEl+1}"
-                            escapeKey: true
-                            lockScrolling: true
-                            revertHash: "#!/presse"
-                            enableDragging: true
-                            descriptionSetting: 1
-                    ).attr("src","/data/presse/real/#{id-1}")
+                    @imageViewer.open
+                        image: img
+                        navigation: true
+                        minImage: 1
+                        maxImage: @articleCount
+                        arrowKeys: false
+                        getCurrentElement: ->
+                            h = location.hash
+                            parseInt h.substr(h.lastIndexOf("/") + 1, h.length)
+                        toLeftHash: (currentEl) ->
+                            "#!/presse/artikel/#{currentEl-1}"
+                        toRightHash: (currentEl) ->
+                            "#!/presse/artikel/#{currentEl+1}"
+                        escapeKey: true
+                        lockScrolling: true
+                        revertHash: "#!/presse"
+                        enableDragging: true
+                        descriptionSetting: 1
+                ).attr("src","/data/presse/real/#{id}")
 
     onDOMVisible: ->
         @adjustPos()
@@ -75,10 +75,11 @@ class Presse extends ChildPage
             @c.release()
 
     genArticle: (article) ->
+        urlseg = article.url.substr(article.url.lastIndexOf('/')+1)
         $(".presse-container").append(
-            $("<a>").addClass("img-presse").attr("href","/#!/presse/artikel/#{@articleCount}")
+            $("<a>").addClass("img-presse").attr("href","/#!/presse/artikel/#{urlseg}")
                 .append($("<div>").addClass("presse-date").html(article.date))
-                .append($("<img>").addClass("deadcenter").attr("src","/data/presse/thumbs/#{@articleCount-1}"))
+                .append($("<img>").addClass("deadcenter").attr("src","/data/presse/thumbs/#{urlseg}"))
                 .append($("<span><h1>#{article.name}</h1>#{article.caption}</span>"))
         )
         @articleCount++

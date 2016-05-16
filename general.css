@@ -500,7 +500,6 @@ a {
 .clndr .event-listing .event-item {
   padding: 5px;
   margin: 0 5px 5px 25px;
-  word-break: break-all;
   transition: background-color 0.1s;
 }
 
