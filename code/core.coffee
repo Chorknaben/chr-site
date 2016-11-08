@@ -25,7 +25,7 @@ class Constants
 
 
 class Core
-    state: 
+    state:
         scrolledDown : false
         currentURL   : "null"
         currentPage  : "null"
@@ -34,7 +34,7 @@ class Core
         @origMetaDesc = $($("meta")[2]).attr("content")
 
     debug = (msg) -> console.log "Core: " + msg
-        
+
     initializeHashNavigation: ->
         # Initialize the hash
         if window.location.hash is ""
@@ -73,7 +73,7 @@ class Core
         switch matching.msg
             when "match"
                 # Then, in "match" it will be checked if the site is already loaded.
-                # If so, 
+                # If so,
                 #   If there is a remaining part of the hash
                 #       Delegate this Hash to the child page
                 # Else,
@@ -152,7 +152,7 @@ class Core
             window.nav.reset()
 
             unless location.hash is "#!/kalender"
-                @requestFunction("ImgRotator.pauseImgRotator", (func) -> 
+                @requestFunction("ImgRotator.pauseImgRotator", (func) ->
                     func(true))
         else
             @state["childPage"].closeCalendar()
@@ -164,7 +164,7 @@ class Core
 
     ensureImageViewerClosed: ->
         @requestFunction "ImageViewer.forceClose",
-            (func) => 
+            (func) =>
                 func(true)
         @revokeFunction "ImageViewer.forceClose"
 
@@ -237,13 +237,13 @@ class Core
 
     initializeTranslationEngine: ->
         $.getJSON "/data/json/translation_deploy.json", (data) =>
-            window.translationObj = data        
+            window.translationObj = data
             #@attemptAutoSetLanguage()
 
-            $("#de").click => 
+            $("#de").click =>
                 window.currentLanguage = "de"
                 @setLanguage(window.translationObj.de)
-            $("#en").click => 
+            $("#en").click =>
                 window.currentLanguage = "en"
                 @setLanguage(window.translationObj.en)
 
@@ -332,7 +332,7 @@ class IndexPage extends ChildPage
         w = $(window).width()
         if w > 1177
             @bgSrc = "/#{ $(window).width() }/#{ $(window).height() - 90 }/"
-        else 
+        else
             @bgSrc = "/1610/#{$(window).height()-90}/"
 
         @currentRotatorImgID = 0
@@ -343,7 +343,7 @@ class IndexPage extends ChildPage
         @navDropDown = false
         @ev = []
 
-        @contentViewer = @c.requestFunction "ContentViewer.requestInstance", 
+        @contentViewer = @c.requestFunction "ContentViewer.requestInstance",
             (cView) => @contentViewer = cView()
 
         $.getJSON "/data/json/events.json", (events) =>
@@ -366,7 +366,7 @@ class IndexPage extends ChildPage
                     if day < closestNeighbor and day > today
                         closestNeighbor = day
 
-                @setCalendarIcon(closestNeighbor)  
+                @setCalendarIcon(closestNeighbor)
 
     toDay: (date) ->
         parseInt(moment(date, "YYYY-MM-DD").format("DD"))
@@ -531,9 +531,9 @@ class IndexPage extends ChildPage
                 $(".right").children("p")[0].style.filter = "alpha(opacity=100)"
             @currentNewsID++
             @newsRotator(waitFor)
-            
+
         else
-            setTimeout(=> 
+            setTimeout(=>
                 $(".right").children("p").css opacity:0
                 if window.ie
                     $(".right").children("p")[0].style.filter = "alpha(opacity=0)"
@@ -554,7 +554,7 @@ class IndexPage extends ChildPage
         console.log("Performing: #{state}")
         if not state
             @slider.stop()
-        else 
+        else
             @slider.resume()
 
     makeImage: (onload,lum) ->
@@ -599,21 +599,21 @@ class IndexPage extends ChildPage
 
             @template = _.template($("#calendar-template").html())
             @contentViewer.open
-                left:   -> 
+                left:   ->
                     if window.mobile() then return 0
                     if minHgt then $(window).width() * 0.06 else 50
-                top:    -> 
+                top:    ->
                     if minHgt then $(".smalltiles").children().first().offset().top else 50 + 25
-                right:  -> 
+                right:  ->
                     if window.mobile() then return 0
                     if minHgt then $(window).width() * 0.06 else 50
-                height: -> 
+                height: ->
                     if window.mobile() then return $(window).height() - 75
-                    if minHgt then $(".bigtile-content").height() + 10 + 40 else 
+                    if minHgt then $(".bigtile-content").height() + 10 + 40 else
                         $(window).height() - 50 - 25 - 50
                 chapter: false
                 title: "Kalender"
-                caption: "Konzerte, Gottesdienste, Grillparties"
+                caption: "Konzerte und Gottesdienste"
                 revertHash: "#!/"
                 content: "<div id=\"calendar-full\"></div>"
                 animate: true
@@ -682,11 +682,11 @@ class IndexPage extends ChildPage
 
             if not @needBeComplete(name,mail,text)
                 return
-                
+
             if not @validateEmail(mail)
                 return
 
-            $.post "/feedback", 
+            $.post "/feedback",
                  email: mail
                  name: name
                  feedbacktype: feedbacktype
@@ -785,7 +785,7 @@ class ContentViewer
             $.scrollTo @contentObj.scrollTo.offset().top-100, 500, =>
                 if @contentObj.scrollToCallback
                     @contentObj.scrollToCallback()
-                
+
 
         if @contentObj.bgColor
             $cnt.css "background" : @contentObj.bgColor
@@ -798,16 +798,16 @@ class ContentViewer
             pos = @contentObj.startingPos
 
             # Spawn the Content-Viewer at the desired location
-            $cnt.css 
+            $cnt.css
                 left: pos.left
                 top: pos.top
-                width: pos.width 
+                width: pos.width
                 height: pos.height
                 "z-index" : 6
 
             $cnt.css
                 opacity: 1
-                width: 
+                width:
                     if not @contentObj.width
                         $(window).width() - @contentObj.right() - @contentObj.left()
                     else @contentObj.width()
@@ -864,7 +864,7 @@ class ContentViewer
                     $(window).width() - @contentObj.right() - @contentObj.left()
                 else @contentObj.width()
             height: @contentObj.height()
-            
+
 
     close: (revertHash, noAnimationOverride=false) =>
         $cnt = $(".content-viewer")
@@ -907,7 +907,7 @@ class ContentViewer
                     @OPEN = false
                 , 400)
             , 600)
-                
+
         else
             $cnt.attr("style", "")
             $cnt.addClass("nodisplay")
@@ -958,7 +958,7 @@ class ImageViewer
             unless (@currentEl) == @conf.minImage
                 $(".arrleft").attr "href", @conf.toLeftHash(@currentEl)
                 if @conf.nextChapterScreen
-                    if @conf.positionInChapter == "1" 
+                    if @conf.positionInChapter == "1"
                         $(".arrleft").attr "href", "#!/bilder/kategorie/#{@conf.chapterID}"
             else
                 # Stay at 0 if clicking left at 0
@@ -974,7 +974,7 @@ class ImageViewer
                 # Stay at maxImage if clicking right at 0
                 # An Indicator that there arent any more Pics available can be added HERE!!!
                 $(".arrright").attr "href", @conf.toRightHash(@currentEl-1)
-        
+
         #lock scrolling
         if @conf.lockScrolling
             @currentScrollPos = $(window).scrollTop()
@@ -990,13 +990,13 @@ class ImageViewer
             $("#chapter-progress").html("(Bild #{@conf.positionInChapter} von #{@conf.chapterTotalLength})")
 
         if @conf.chapterName
-            $("#chapter-name-main").html(@conf.chapterName[0]) 
+            $("#chapter-name-main").html(@conf.chapterName[0])
             $("#chapter-name-caption").html(@conf.chapterName[1])
 
         if @conf.descriptionSetting
             switch @conf.descriptionSetting
                 # disable bottom bar
-                when 1 
+                when 1
                     $(".bar").addClass "nodisplay"
 
 
@@ -1011,7 +1011,7 @@ class ImageViewer
             $(image).addClass("link-cursor")
             $(image).prependTo($(".image-viewer"))
 
-        # Click on Image -> Close    
+        # Click on Image -> Close
         $(".image-viewer img").first().click =>
             @close()
 
@@ -1156,7 +1156,7 @@ class Tile
 
     setLoadingScreen: (toggle) ->
         if toggle
-            #$("#loading-screen").css 
+            #$("#loading-screen").css
             #    opacity:0.5
             #    display:"block"
             $("#bg").css
@@ -1168,7 +1168,7 @@ class Tile
             , 400)
         else
             if not @animationEnded
-                setTimeout(=> 
+                setTimeout(=>
                     @setLoadingScreen(false)
                 , 50)
                 return

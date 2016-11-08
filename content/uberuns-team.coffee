@@ -9,7 +9,7 @@ class UberunsTeam extends ChildPage
         @linkIDMapper = [
             ["johannes", 0]
           , ["lechner", 1]
-          , ["noah", 2]
+          , ["lukas", 2]
           , ["orga", 3]
           , ["clt", 4]
           , ["choristen", 5]]
@@ -54,7 +54,7 @@ class UberunsTeam extends ChildPage
                 .children(".before-transition")
                 .removeClass("invisible")
 
-            #setTimeout( => 
+            #setTimeout( =>
             $(".reise-tile").eq(@clickedPreviously)
                 .children(".after-transition")
                 .css display: "none"
