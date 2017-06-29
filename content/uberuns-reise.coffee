@@ -6,25 +6,25 @@ class UberunsReise extends ChildPage
 
         @metadata = {
             r1: {
-                    title: "&Ouml;sterreich &amp; Ungarn"
-                    caption: "Konzertreise 2012"
-                    textID: "#osterreich"
-                    linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2012"
-                    thumbnail: "/img/ungarn.jpg"
-                },
-            r2: {
-                    title: "Deutschland &amp; Holland"
-                    caption: "Konzertreise 2013"
-                    textID: "#deutschland"
-                    thumbnail: "/img/deutschland.jpg"
-                    linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2013"
-                },
-            r3: {
                     title: "Spanien"
                     caption: "Konzertreise 2014"
                     textID: "#spanien"
                     thumbnail: "/img/spanien.jpg"
                     linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2014" 
+            }
+            r2: {
+                    title: "Tschechien und Polen"
+                    caption: "Konzertreise 2015"
+                    textID: "#tschechien-polen"
+                    linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2015"
+                    thumbnail: "/img/tschechien-polen.jpg"
+                },
+            r3: {
+                    title: "Frankreich, England, Guernsey"
+                    caption: "Konzertreise 2016"
+                    textID: "#frankreich-england"
+                    thumbnail: "/img/england-guernsey.jpg"
+                    linkBilder: "#!/bilder/kategorie/by-title/konzertreise-2016"
             }
         }
 
